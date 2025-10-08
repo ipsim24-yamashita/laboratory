@@ -289,10 +289,9 @@
         let idx = 0;
         for (let i = 0; i < sections.length; i++) {
           const r = sections[i].getBoundingClientRect();
-          const th = r.top + r.height * 0.7;
+          const th = r.top + r.height * 0.6; // ← 60%
           if (baseline >= th) idx = i + 1;
         }
-        // ✅ 最終ページは「下端が見えた時点で現在地」
         const last = sections[sections.length - 1].getBoundingClientRect();
         if (last.bottom <= window.innerHeight) idx = sections.length - 1;
         if (idx >= sections.length) idx = sections.length - 1;
@@ -357,14 +356,14 @@
       /* ========= 虫眼鏡 ========= */
       let zoomedFrame = null,
         magFrame = null;
-      function visibleVerticalBounds(frame) {
-        const fr = frame.getBoundingClientRect();
-        const topBound = Math.max(
-          0,
-          dockEl.getBoundingClientRect().bottom - fr.top
-        );
-        const bottomBound = Math.min(fr.height, window.innerHeight - fr.top);
-        return { top: topBound, bottom: bottomBound };
+      function visibleAreaBounds() {
+        return {
+          left: 0,
+          right: window.innerWidth,
+          top: document.getElementById("toc-dock").getBoundingClientRect()
+            .bottom,
+          bottom: window.innerHeight,
+        };
       }
       function setMagGradient(m, gL, gR, gT, gB) {
         const s = 0.4;
@@ -374,18 +373,20 @@
         m.style.setProperty("--gB", (gB * s).toFixed(3));
       }
       function positionMagnifier(frame, mag, left, top) {
-        const fr = frame.getBoundingClientRect();
+        const vb = visibleAreaBounds();
         const w = mag.offsetWidth,
           h = mag.offsetHeight;
-        left = Math.max(0, Math.min(fr.width - w, left));
-        const vb = visibleVerticalBounds(frame);
+        const minL = vb.left,
+          maxL = vb.right - w;
         const minT = vb.top,
-          maxT = Math.max(vb.top, vb.bottom - h);
+          maxT = vb.bottom - h;
+        left = Math.max(minL, Math.min(maxL, left));
         top = Math.max(minT, Math.min(maxT, top));
         mag.style.left = `${left}px`;
         mag.style.top = `${top}px`;
         const Z = 2,
           OVER = 256;
+        const fr = frame.getBoundingClientRect();
         mag.style.backgroundSize = `${fr.width * Z + OVER}px ${
           fr.height * Z + OVER
         }px`;
@@ -393,10 +394,10 @@
         const bgY = -Math.min(top * Z, fr.height * Z - h + OVER);
         mag.style.backgroundPosition = `${bgX}px ${bgY}px`;
         const th = 128;
-        const distL = left,
-          distR = fr.width - (left + w);
-        const distT = top - vb.top,
-          distB = vb.bottom - (top + h);
+        const distL = left - minL,
+          distR = maxL - (left + w);
+        const distT = top - minT,
+          distB = maxT - (top + h);
         setMagGradient(
           mag,
           Math.max(0, Math.min(1, 1 - distL / th)),
@@ -411,19 +412,18 @@
         const img = frame.querySelector("img");
         mag.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
         mag.style.display = "block";
-        const vb = visibleVerticalBounds(frame);
-        const left = (frame.clientWidth - mag.offsetWidth) / 2;
+        const vb = visibleAreaBounds();
+        const left = (vb.right - vb.left - mag.offsetWidth) / 2;
         const top = vb.top + (vb.bottom - vb.top - mag.offsetHeight) / 2;
         positionMagnifier(frame, mag, left, top);
         frame.style.touchAction = "none";
         let sx, sy, l0, t0;
         frame.onpointerdown = (e) => {
-          const r = mag.getBoundingClientRect(),
-            f = frame.getBoundingClientRect();
+          const r = mag.getBoundingClientRect();
           sx = e.clientX;
           sy = e.clientY;
-          l0 = r.left - f.left;
-          t0 = r.top - f.top;
+          l0 = r.left;
+          t0 = r.top;
           frame.setPointerCapture(e.pointerId);
         };
         frame.onpointermove = (e) => {
