@@ -2,62 +2,71 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8" />
-<!-- ピンチ禁止 / セーフエリア対応 -->
+<!-- ページピンチ禁止（ブラウザ拡大を抑止）。画像の2本指パンは独自実装で動きます -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-<title>GENESIS 解答ビューア（1本指スクロール／2本指パン／ダブル・トリプルタップ）</title>
+<title>GENESIS 解答ビューア</title>
 <style>
-  :root { --dock-h: 0px; --thumb-h: 92px; --gap: 10px; --bg:#0b1220; --panel:#0f172a; --accent:#22c55e; }
+  :root { --dock-h: 0px; }
 
-  /* ページスクロールのはずみ軽減 */
-  html, body { overscroll-behavior-y: contain; }
-  body { margin:0; font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif; color:#e5e7eb; background:var(--panel); }
+  html, body { margin:0; overscroll-behavior-y: contain; background:#0f172a; color:#e5e7eb;
+    font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif; }
+  .wrap { max-width:1200px; margin:0 auto; padding:0 12px; }
 
-  /* 固定カルーセル */
+  /* ===== 固定カルーセル（テキストのページチップ） ===== */
   .toc-dock{
     position:fixed; top:0; left:0; right:0; z-index:1000;
-    background:var(--bg); padding:8px 0 env(safe-area-inset-top) 0;
-    border-bottom:1px solid rgba(255,255,255,.06);
+    background:#0b1220; border-bottom:1px solid rgba(255,255,255,.06);
+    padding:8px 0 env(safe-area-inset-top) 0;
   }
-  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 12px; }
-
-  .toc-bar { display:flex; align-items:center; gap:10px; }
-  .btn{ width:38px; height:34px; border:1px solid rgba(255,255,255,.2); border-radius:999px; background:#0f1a32; cursor:pointer; color:#e5e7eb; }
+  .toc-bar{ display:flex; align-items:center; gap:10px; }
+  .btn{ width:38px; height:34px; border:1px solid rgba(255,255,255,.2); border-radius:999px; background:#0f1a32; color:#e5e7eb; }
   .btn.wide{ width:44px; }
-  .toc-container { flex:1 1 auto; overflow: clip; }
-  .strip { display:flex; gap:var(--gap); overflow:hidden; }
-  .thumb { height:var(--thumb-h); aspect-ratio:3/4; flex:0 0 auto; border-radius:10px; overflow:hidden; border:2px solid transparent; background:#111827; cursor:pointer; }
-  .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
-  .thumb[aria-current="true"]{ border-color: var(--accent); box-shadow:0 0 0 2px rgba(34,197,94,.25); }
+  .toc-container{ flex:1; overflow:hidden; }
+  .toc{ overflow-x:auto; overflow-y:hidden; white-space:nowrap; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .toc::-webkit-scrollbar{ display:none; }
+  .toc-list{ display:flex; gap:8px; padding:0; margin:0; list-style:none; }
+  .toc-list a{
+    display:inline-block; padding:6px 12px; border:1px solid #2a3858; border-radius:999px;
+    background:#0f1a32; color:#cfe3ff; text-decoration:none; user-select:none;
+  }
+  .toc-list a.active{ background:#17325f; border-color:#3a57a0; }
+  .toc-list a:focus-visible{ outline:3px solid #22c55e; outline-offset:2px; }
 
-  /* コンテンツ領域：カルーセル高さ分だけ下げる */
-  main { padding-top: calc(var(--dock-h) + 12px); padding-bottom: 48px; }
-  section { padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.05); scroll-margin-top: calc(var(--dock-h) + 8px); }
+  /* ===== 本文（縦セクション） ===== */
+  main{ padding-top: calc(var(--dock-h) + 12px); padding-bottom:48px; }
+  section{ padding:18px 0; border-bottom:1px solid rgba(255,255,255,.05);
+           scroll-margin-top: calc(var(--dock-h) + 8px); }
 
-  /* セクションヘッダとツール（画像上側・左揃え） */
-  .section-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:0 0 8px; }
-  .section-head h2 { font-size:.95rem; margin:0; color:#cbd5e1; }
-  .tools { display:flex; gap:8px; flex-wrap:wrap; margin:0; }
-  .tools a { font-size:.9rem; text-decoration:none; color:#111; padding:6px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; }
+  .section-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:0 0 8px; }
+  .section-head h2{ font-size:.95rem; margin:0; color:#cbd5e1; }
+  .tools{ display:flex; gap:8px; flex-wrap:wrap; }
+  .tools a{ font-size:.9rem; text-decoration:none; color:#111; padding:6px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; }
 
-  /* 画像部分：左右余白を viewer-inner に持たせて左右対称に */
-  .viewer-inner { padding: 0 12px 12px 12px; box-sizing: border-box; }
-  .frame { position:relative; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:#0b1220; touch-action: pan-y; }
-  .frame img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; transform-origin:0 0; will-change:transform; pointer-events:none; }
-  .hint { font-size:.85rem; color:#9ca3af; margin:6px 0 0; text-align:left; }
+  /* ===== 画像（左右余白を同量に） ===== */
+  .viewer-inner{ padding:0 12px 12px 12px; box-sizing:border-box; }
+  .frame{ position:relative; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:#0b1220;
+          /* 1本指＝縦スクロール優先。2本指のときはJSで pan に切替える */
+          touch-action: pan-y; }
+  .frame img{ display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none;
+              transform-origin:0 0; will-change:transform; pointer-events:none; }
+  .hint{ font-size:.85rem; color:#9ca3af; margin:6px 0 0; text-align:left; }
 
-  .badge { position:absolute; right:10px; bottom:10px; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12); padding:4px 8px; border-radius:8px; font-size:12px; color:#e5e7eb;}
+  .badge{ position:absolute; right:10px; bottom:10px; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12);
+          padding:4px 8px; border-radius:8px; font-size:12px; color:#e5e7eb; }
 </style>
 </head>
 <body>
-  <!-- 固定カルーセル -->
+  <!-- ===== カルーセル（テキスト） ===== -->
   <div class="toc-dock" id="toc-dock" role="region" aria-label="目次">
     <div class="wrap">
       <div class="toc-bar">
-        <button class="btn wide" id="car-prev" aria-label="カルーセルを左へ">≪</button>
+        <button class="btn wide" id="car-prev" aria-label="左へ">≪</button>
         <div class="toc-container">
-          <div class="strip" id="strip" role="listbox" aria-label="ページ一覧"></div>
+          <nav class="toc" id="toc" aria-label="ページリスト（横スクロール）">
+            <ul class="toc-list" id="toc-list"></ul>
+          </nav>
         </div>
-        <button class="btn wide" id="car-next" aria-label="カルーセルを右へ">≫</button>
+        <button class="btn wide" id="car-next" aria-label="右へ">≫</button>
       </div>
     </div>
   </div>
@@ -65,7 +74,7 @@
   <main class="wrap" id="content"></main>
 
 <script>
-/* ===== 画像リスト（BASE / groups / pad3） ===== */
+/* ========= 画像リスト ========= */
 const BASE = "docs/";
 const groups = [
   { prefix: "1-", start: 1, end: 15 },
@@ -75,23 +84,26 @@ const groups = [
 const pad3 = n => String(n).padStart(3, "0");
 const files = groups.flatMap(g => Array.from({length: g.end - g.start + 1}, (_,i)=>`${g.prefix}${pad3(g.start+i)}.jpeg`));
 
-/* ===== 要素 ===== */
-const dockEl = document.getElementById('toc-dock');
-const strip  = document.getElementById('strip');
-const content= document.getElementById('content');
+/* ========= 要素 ========= */
+const dockEl  = document.getElementById('toc-dock');
+const tocEl   = document.getElementById('toc');
+const tocList = document.getElementById('toc-list');
+const content = document.getElementById('content');
 
-/* ===== DOM生成 ===== */
+/* ========= DOM生成（カルーセル＝テキスト） ========= */
 files.forEach((name, idx) => {
-  // サムネ（カルーセル）
-  const b = document.createElement('button');
-  b.className = 'thumb'; b.setAttribute('role','option');
-  if (idx === 0) b.setAttribute('aria-current','true');
-  const im = document.createElement('img'); im.loading='lazy'; im.src = BASE + encodeURIComponent(name);
-  b.appendChild(im); b.addEventListener('click', () => scrollToSection(idx));
-  strip.appendChild(b);
+  // TOC チップ
+  const li = document.createElement('li');
+  const a  = document.createElement('a');
+  a.href = `#p-${name.replace(/\.[^.]+$/, "")}`;
+  a.dataset.index = idx;
+  a.textContent = name.replace('.jpeg','');
+  if (idx === 0) a.classList.add('active');
+  li.appendChild(a); tocList.appendChild(li);
 
-  // セクション本体
-  const sec = document.createElement('section'); sec.dataset.index = idx; sec.id = `p-${name.replace(/\.[^.]+$/, "")}`;
+  // セクション
+  const sec = document.createElement('section');
+  sec.dataset.index = idx; sec.id = `p-${name.replace(/\.[^.]+$/, "")}`;
   sec.innerHTML = `
     <div class="viewer-inner">
       <div class="section-head">
@@ -105,86 +117,24 @@ files.forEach((name, idx) => {
         <img src="${BASE}${encodeURIComponent(name)}" alt="${name}">
         <div class="badge">1.00×</div>
       </figure>
-      <p class="hint">操作：1本指ドラッグ＝ページ縦スクロール／2本指ドラッグ＝画像パン／ダブルタップ＝等倍／トリプルタップ＝3倍（1回のみ）</p>
+      <p class="hint">1本指ドラッグ＝ページ縦スクロール／2本指ドラッグ＝画像パン／ダブルタップ＝等倍／トリプルタップ＝3倍（1回のみ）</p>
     </div>
   `;
   content.appendChild(sec);
 });
 
-/* ===== カルーセル：高さを CSS 変数へ反映 ===== */
+/* ========= カルーセル高さを CSS 変数へ ========= */
 function applyDockH(){ document.documentElement.style.setProperty('--dock-h', (dockEl?.offsetHeight||0) + 'px'); }
-new ResizeObserver(applyDockH).observe(dockEl); window.addEventListener('resize', applyDockH); applyDockH();
+new ResizeObserver(applyDockH).observe(dockEl);
+window.addEventListener('resize', applyDockH);
+applyDockH();
 
-/* ===== 現在ページのハイライト ===== */
+/* ========= 現在ページ同期 ========= */
 const sections = Array.from(document.querySelectorAll('main section'));
-function markActive(idx){
-  strip.querySelectorAll('.thumb').forEach((t,i)=>{ if(i===idx)t.setAttribute('aria-current','true'); else t.removeAttribute('aria-current'); });
+const tocLinks = Array.from(document.querySelectorAll('#toc-list a'));
+function markActive(i){
+  tocLinks.forEach((el,idx)=>el.classList.toggle('active', idx===i));
 }
-
-/* ===== スクロール制御（今のページ内にクランプ） ===== */
-function getCurrentIndexByScroll(){
-  const h = dockEl?.offsetHeight || 0;
-  const y = window.scrollY + h + 8;
-  let bestIdx = 0, bestDist = Infinity;
-  for (let i=0;i<sections.length;i++){
-    const top = sections[i].offsetTop;
-    const d = Math.abs(top - y);
-    if (d < bestDist){ bestDist = d; bestIdx = i; }
-  }
-  return bestIdx;
-}
-function getScrollBoundsForIndex(idx) {
-  const hDock = dockEl?.offsetHeight || 0;
-  const sec = sections[idx];
-  if (!sec) return { min: 0, max: 0 };
-  const min = Math.max(0, sec.offsetTop - hDock - 8);
-  const viewportH = window.innerHeight;
-  const maxRaw = sec.offsetTop + sec.offsetHeight - viewportH;
-  const max = Math.max(min, maxRaw);
-  return { min, max };
-}
-function scrollByClamped(deltaY) {
-  const idx = getCurrentIndexByScroll();
-  const { min, max } = getScrollBoundsForIndex(idx);
-  const y = window.scrollY;
-  const target = Math.min(max, Math.max(min, y + deltaY));
-  if (target !== y + deltaY) {
-    window.scrollTo({ top: target, behavior: 'auto' });
-    return true;
-  }
-  return false;
-}
-function clampNow(){
-  const idx = getCurrentIndexByScroll();
-  const { min, max } = getScrollBoundsForIndex(idx);
-  const y = window.scrollY;
-  if (y < min) window.scrollTo({ top: min, behavior: 'auto' });
-  else if (y > max) window.scrollTo({ top: max, behavior: 'auto' });
-}
-window.addEventListener('resize', clampNow);
-window.addEventListener('load', clampNow);
-
-/* ホイール・タッチでクランプ（1本指ドラッグ時に前後ページが見えない） */
-window.addEventListener('wheel', (e) => {
-  const dy = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : 0;
-  if (!dy) return;
-  if (scrollByClamped(dy)) e.preventDefault();
-}, { passive:false });
-
-let touchStartY = null;
-window.addEventListener('touchstart', (e) => {
-  if (e.touches.length === 1) touchStartY = e.touches[0].clientY;
-}, { passive:true });
-window.addEventListener('touchmove', (e) => {
-  if (e.touches.length !== 1 || touchStartY == null) return;
-  const nowY = e.touches[0].clientY;
-  const dy = touchStartY - nowY;
-  if (scrollByClamped(dy)) e.preventDefault();
-  touchStartY = nowY;
-}, { passive:false });
-window.addEventListener('touchend', () => { touchStartY = null; }, { passive:true });
-
-/* ===== セクションへスクロール（カルーセルから） ===== */
 function scrollToSection(index, smooth=true){
   const target = sections[index]; if (!target) return;
   const h = dockEl?.offsetHeight || 0;
@@ -193,105 +143,152 @@ function scrollToSection(index, smooth=true){
   markActive(index);
   setTimeout(clampNow, 0);
 }
+tocLinks.forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    scrollToSection(Number(a.dataset.index));
+  });
+});
 
-/* カルーセル左右ページング（簡易実装） */
+/* ========= カルーセル左右 ========= */
 const carPrev = document.getElementById('car-prev');
 const carNext = document.getElementById('car-next');
-let stripStart = 0;
-function thumbW(){ return Math.round((parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-h')) || 92) * 0.75) + (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 10); }
-function visibleCount(){ return Math.max(1, Math.floor((document.documentElement.clientWidth - 96) / thumbW())); }
-function ensureThumbWindow(){
-  const count = visibleCount();
-  const maxStart = Math.max(0, files.length - count);
-  stripStart = Math.max(0, Math.min(stripStart, maxStart));
-  strip.querySelectorAll('.thumb').forEach((t,i)=>{ t.style.display = (i >= stripStart && i < stripStart + count) ? '' : 'none'; });
-}
-carPrev.addEventListener('click', ()=>{ stripStart = Math.max(0, stripStart - visibleCount()); ensureThumbWindow(); });
-carNext.addEventListener('click', ()=>{ stripStart = Math.min(Math.max(0, files.length - visibleCount()), stripStart + visibleCount()); ensureThumbWindow(); });
+function pageSize(){ return Math.max(200, tocEl.clientWidth * 0.8); }
+carPrev.addEventListener('click', ()=> tocEl.scrollBy({left:-pageSize(), behavior:'smooth'}));
+carNext.addEventListener('click', ()=> tocEl.scrollBy({left: pageSize(), behavior:'smooth'}));
 
-/* ===== 画像操作（ピンチ禁止／2本指ドラッグ＝パン／1本指はスクロールのみ／ダブル＆トリプルタップ） ===== */
+/* ========= “前後ページが見える”のを防ぐ：セクションクランプ ========= */
+function currentIndexByScroll(){
+  const h = dockEl?.offsetHeight || 0;
+  const y = window.scrollY + h + 8;
+  let bestIdx = 0, bestDist = Infinity;
+  for (let i=0;i<sections.length;i++){
+    const d = Math.abs(sections[i].offsetTop - y);
+    if (d < bestDist){ bestDist = d; bestIdx = i; }
+  }
+  return bestIdx;
+}
+function scrollBoundsFor(i){
+  const h = dockEl?.offsetHeight || 0;
+  const s = sections[i]; if (!s) return {min:0,max:0};
+  const min = Math.max(0, s.offsetTop - h - 8);
+  const max = Math.max(min, s.offsetTop + s.offsetHeight - window.innerHeight);
+  return {min,max};
+}
+function scrollByClamped(dy){
+  const idx = currentIndexByScroll();
+  const {min,max} = scrollBoundsFor(idx);
+  const y = window.scrollY;
+  const t = Math.min(max, Math.max(min, y + dy));
+  if (t !== y + dy){ window.scrollTo({top:t, behavior:'auto'}); return true; }
+  return false;
+}
+window.addEventListener('wheel', (e)=>{
+  const dy = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : 0;
+  if (!dy) return;
+  if (scrollByClamped(dy)) e.preventDefault();
+}, {passive:false});
+
+let touchStartY = null;
+window.addEventListener('touchstart', (e)=>{
+  if (e.touches.length === 1) touchStartY = e.touches[0].clientY;
+}, {passive:true});
+window.addEventListener('touchmove', (e)=>{
+  if (e.touches.length !== 1 || touchStartY==null) return;
+  const nowY = e.touches[0].clientY;
+  const dy = touchStartY - nowY;
+  if (scrollByClamped(dy)) e.preventDefault();
+  touchStartY = nowY;
+}, {passive:false});
+window.addEventListener('touchend', ()=>{ touchStartY=null; }, {passive:true});
+function clampNow(){
+  const idx = currentIndexByScroll();
+  const {min,max} = scrollBoundsFor(idx);
+  const y = window.scrollY;
+  if (y<min) window.scrollTo({top:min,behavior:'auto'});
+  else if (y>max) window.scrollTo({top:max,behavior:'auto'});
+}
+window.addEventListener('resize', clampNow);
+
+/* ========= 画像操作（ピンチ禁止／2本指パン／1本指はスクロール／ダブル＝等倍／トリプル＝3倍1回） ========= */
 document.querySelectorAll('[data-zoomable]').forEach(initZoomable);
 
 function initZoomable(frame){
   const img   = frame.querySelector('img');
   const badge = frame.querySelector('.badge');
 
-  let pointers = new Map();           // pointerId -> {x,y}
-  let baseScale = 1;                  // 1 or 2 or 3
-  let baseX = 0, baseY = 0;           // 確定パン
-  let liveX = 0, liveY = 0;           // 2本指パン差分
-  let naturalW = 0, naturalH = 0;
+  let pointers = new Map();     // pointerId -> {x,y}
+  let baseScale = 1;            // 1, 2, 3
+  let baseX = 0, baseY = 0;     // 確定パン
+  let liveX = 0, liveY = 0;     // 2本指ドラッグ中の一時差分
+  let naturalW=0, naturalH=0;
 
-  // タップ判定
+  // トリプルタップは1回のみ
+  let tripleDoneOnce = false;
   const TAP_MS = 300;
-  const taps = []; // {time, x, y}
-  let tripleDoneOnce = false; // 3倍は1回だけ
+  let taps = []; // 1本指タップ履歴
 
-  img.addEventListener('load', () => {
+  img.addEventListener('load', ()=>{
     naturalW = img.naturalWidth; naturalH = img.naturalHeight;
     resetFit();
   });
 
-  function resetFit(){ baseScale = 1; baseX = 0; baseY = 0; liveX = 0; liveY = 0; apply(); }
+  function resetFit(){ baseScale=1; baseX=0; baseY=0; liveX=0; liveY=0; apply(); }
   function apply(){ img.style.transform = `translate(${baseX+liveX}px, ${baseY+liveY}px) scale(${baseScale})`; badge.textContent = `${baseScale.toFixed(2)}×`; }
   function clampTranslate(){
     const vw = frame.clientWidth, vh = frame.clientHeight;
     const ar = naturalH / naturalW;
-    const baseW = vw, baseH = baseW * ar; // 横幅フィット基準
+    const baseW = vw, baseH = baseW * ar;         // 横幅フィット基準
     const dispW = baseW * baseScale, dispH = baseH * baseScale;
     const minX = Math.min(0, vw - dispW), maxX = 0;
     const minY = Math.min(0, vh - dispH), maxY = 0;
     baseX = Math.max(minX, Math.min(maxX, baseX));
     baseY = Math.max(minY, Math.min(maxY, baseY));
   }
-  function zoomAround(pointX, pointY, nextScale){
+  function zoomAround(clientX, clientY, next){
     const r = frame.getBoundingClientRect();
-    const px = pointX - r.left, py = pointY - r.top;
-    const k = nextScale / baseScale;
+    const px = clientX - r.left, py = clientY - r.top;
+    const k = next / baseScale;
     baseX = px - (px - baseX) * k;
     baseY = py - (py - baseY) * k;
-    baseScale = nextScale;
-    clampTranslate(); apply();
+    baseScale = next; clampTranslate(); apply();
   }
 
-  frame.addEventListener('pointerdown', (e) => {
+  frame.addEventListener('pointerdown', (e)=>{
     frame.setPointerCapture(e.pointerId);
     const rect = frame.getBoundingClientRect();
-    const pt = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    pointers.set(e.pointerId, pt);
+    pointers.set(e.pointerId, {x:e.clientX-rect.left, y:e.clientY-rect.top});
 
-    // 1本指タップ回数カウント
+    // 1本指タップ回数（ダブル・トリプル）判定
     if (pointers.size === 1) {
       const now = performance.now();
-      // 直近TAP_MS以内の履歴に追加して判定
-      taps.push({ time: now, x: e.clientX, y: e.clientY });
+      taps.push({time:now, x:e.clientX, y:e.clientY});
       while (taps.length && now - taps[0].time > TAP_MS) taps.shift();
 
       if (taps.length === 3 && !tripleDoneOnce) {
-        // トリプルタップ：3倍拡大（1回限り）
-        const t = taps[taps.length - 1];
+        // トリプル＝3倍（1回限定）
+        const t = taps[taps.length-1];
         zoomAround(t.x, t.y, 3);
         tripleDoneOnce = true;
-        taps.length = 0; // 消費
+        taps.length = 0;
         return;
       } else if (taps.length === 2) {
-        // ダブルタップ：等倍へ戻す
+        // ダブル＝等倍に戻す
         resetFit();
         taps.length = 0;
         return;
       }
     }
-  }, { passive:true });
+  }, {passive:true});
 
-  frame.addEventListener('pointermove', (e) => {
+  frame.addEventListener('pointermove', (e)=>{
     if (!pointers.has(e.pointerId)) return;
     const rect = frame.getBoundingClientRect();
-    const pt = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    pointers.set(e.pointerId, pt);
+    pointers.set(e.pointerId, {x:e.clientX-rect.left, y:e.clientY-rect.top});
 
     if (pointers.size >= 2) {
-      // 2本指ドラッグ＝画像パン（ピンチ拡大は禁止）
-      frame.style.touchAction = 'none';
+      // 2本指ドラッグ＝画像パン（ピンチ拡大はなし）
+      frame.style.touchAction = 'none';       // ページスクロール停止
       e.preventDefault();
       const vals = [...pointers.values()];
       const mid = (a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
@@ -301,10 +298,10 @@ function initZoomable(frame){
       liveY = (m.y - frame._startMid.y);
       apply();
     } else {
-      // 1本指＝ページ縦スクロール（画像固定）
+      // 1本指＝ページ縦スクロールのみ
       frame.style.touchAction = 'pan-y';
     }
-  }, { passive:false });
+  }, {passive:false});
 
   function endPointer(id){
     const wasTwo = pointers.size >= 2;
@@ -316,18 +313,16 @@ function initZoomable(frame){
     }
     if (pointers.size < 2) frame.style.touchAction = 'pan-y';
   }
-  frame.addEventListener('pointerup',     e => endPointer(e.pointerId));
-  frame.addEventListener('pointercancel', e => endPointer(e.pointerId));
+  frame.addEventListener('pointerup',     e=>endPointer(e.pointerId));
+  frame.addEventListener('pointercancel', e=>endPointer(e.pointerId));
 
-  // ピンチやズームジェスチャを完全抑止
-  frame.addEventListener('wheel', (e) => { e.preventDefault(); }, { passive:false });
+  // ブラウザのズーム系（ホイールジェスチャ等）を抑止
+  frame.addEventListener('wheel', (e)=>{ e.preventDefault(); }, {passive:false});
 }
 
-/* ===== 初期化 ===== */
+/* ========= 初期表示 ========= */
 function init(){
-  // カルーセル表示ウィンドウ（簡易）
-  ensureThumbWindow();
-  // 最初のセクションへ
+  // カルーセルの横スクロールボタンがあっても、リンクはテキストチップのまま
   scrollToSection(0, false);
   markActive(0);
 }
