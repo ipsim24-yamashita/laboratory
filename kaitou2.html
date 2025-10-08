@@ -3,420 +3,235 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PDF Viewer (Image Only / 1-finger Zoom & Pan)</title>
+<title>GENESIS 解答ビューア（スクロールなし／1本指）</title>
 <style>
-  :root {
-    --bg: #0b1220;
-    --fg: #0f172a;
-    --accent: #22c55e;
-    --thumb-h: 96px;       /* カルーセルの高さ */
-    --gap: 10px;
-  }
-  html, body {
-    height: 100%;
-    margin: 0;
-    background: var(--fg);
-    color: #e5e7eb;
-    overscroll-behavior: none;  /* iOSゴム戻り抑止 */
-  }
-  /* ページスクロール禁止 */
-  body {
-    overflow: hidden;
-  }
+  :root { --thumb-h: 92px; --gap: 10px; --bg:#0b1220; --panel:#0f172a; --accent:#22c55e; }
 
-  .app {
-    height: 100dvh; /* iOSでも安定 */
-    display: grid;
-    grid-template-rows: auto 1fr;
-    gap: 0;
-  }
+  /* 全画面アプリ。ページスクロールの概念を消す */
+  html, body { height:100%; margin:0; overflow:hidden; background:var(--panel); color:#e5e7eb; font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif; }
 
-  /* === カルーセル（以前と同等の横サムネ帯）=== */
-  .carousel {
-    position: relative;
-    padding: 8px 48px; /* 左右に矢印ボタン分の余白 */
-    background: #0b1220;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-    user-select: none;
-  }
-  .strip {
-    display: flex;
-    gap: var(--gap);
-    overflow: hidden;               /* 全体スクロールなし */
-    -webkit-overflow-scrolling: auto;
-  }
-  .thumb {
-    height: var(--thumb-h);
-    aspect-ratio: 3/4;
-    flex: 0 0 auto;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 2px solid transparent;
-    outline: none;
-    cursor: pointer;
-    background: #111827;
-  }
-  .thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .thumb[aria-current="true"] {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(34,197,94,.25);
-  }
-  .navBtn {
-    position: absolute;
-    inset-block: 0;
-    margin-block: auto;
-    height: 44px;
-    width: 44px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.15);
-    background: rgba(15,23,42,.85);
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  .navBtn:hover { background: rgba(15,23,42,.95); }
-  .navPrev { left: 6px; }
-  .navNext { right: 6px; }
+  .app { height:100dvh; display:grid; grid-template-rows:auto 1fr; }
 
-  /* === ビューア（画像のみ。ページスクロールなし） === */
-  .viewer {
-    position: relative;
-    height: calc(100dvh - (var(--thumb-h) + 16px + 1px)); /* 1pxはボーダー */
-    /* スクロールの概念を排除 */
-    overflow: hidden;
-    background: #0b1220;
-    touch-action: none; /* iPad: ブラウザのピンチ/2本指スクロールを停止 */
-  }
-  .stage {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center; /* 基本は中央配置 */
-  }
-  .stage img {
-    /* 基本は横幅にフィット */
-    width: 100%;
-    height: auto;
-    max-height: none;
-    will-change: transform;
-    transform-origin: 0 0; /* 変換は左上基準（座標計算しやすい） */
-    image-rendering: auto;
-    -webkit-user-drag: none;
-    user-select: none;
-    pointer-events: none; /* 操作はステージに対して行う */
-  }
+  /* ===== カルーセル（前と同じ帯。固定） ===== */
+  .carousel { position:relative; padding:8px 48px; background:var(--bg); border-bottom:1px solid rgba(255,255,255,.06); user-select:none; }
+  .strip { display:flex; gap:var(--gap); overflow:hidden; }
+  .thumb { height:var(--thumb-h); aspect-ratio:3/4; flex:0 0 auto; border-radius:10px; overflow:hidden; border:2px solid transparent; background:#111827; cursor:pointer; }
+  .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .thumb[aria-current="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(34,197,94,.25); }
+  .navBtn { position:absolute; inset-block:0; margin-block:auto; height:44px; width:44px; border-radius:50%; border:1px solid rgba(255,255,255,.15); background:rgba(15,23,42,.85); display:grid; place-items:center; cursor:pointer; }
+  .navPrev{ left:6px } .navNext{ right:6px }
 
-  .badge {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    background: rgba(0,0,0,.55);
-    border: 1px solid rgba(255,255,255,.12);
-    padding: 4px 8px;
-    border-radius: 8px;
-    font-size: 12px;
-  }
+  /* ===== ビューア（表示中の画像のみ操作） ===== */
+  .viewer { position:relative; background:var(--panel); touch-action:none; /* 標準ジェスチャ無効 */ }
+  /* 2行レイアウト：上にツール、下に画像キャンバス。高さは残り全て */
+  .viewer-inner { position:absolute; inset:0; display:grid; grid-template-rows:auto 1fr; }
+
+  /* 画像上側・左揃えのツール */
+  .tools { display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding:10px 12px; }
+  .tools .filename { font-weight:600; color:#cbd5e1; margin-right:4px; }
+  .tools a { font-size:.9rem; text-decoration:none; color:#111; padding:6px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; }
+
+  /* 実際に画像を描画するキャンバス領域 */
+  .stage { position:relative; overflow:hidden; margin:0 12px 12px 12px; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:#0b1220; }
+  .stage img { display:block; width:100%; height:auto; transform-origin:0 0; will-change:transform; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+
+  .badge { position:absolute; right:10px; bottom:10px; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12); padding:4px 8px; border-radius:8px; font-size:12px; }
 </style>
 </head>
 <body>
-  <div class="app" aria-label="PDF Image Viewer (No page scroll)">
-    <!-- ===== カルーセル ===== -->
+  <div class="app">
+    <!-- ===== 固定カルーセル ===== -->
     <div class="carousel" aria-label="ページ カルーセル">
-      <button class="navBtn navPrev" aria-label="前へ" type="button">❮</button>
+      <button class="navBtn navPrev" aria-label="サムネを左へ">❮</button>
       <div class="strip" id="strip" role="listbox" aria-label="ページ一覧"></div>
-      <button class="navBtn navNext" aria-label="次へ" type="button">❯</button>
+      <button class="navBtn navNext" aria-label="サムネを右へ">❯</button>
     </div>
 
-    <!-- ===== ビューア（画像だけを操作） ===== -->
-    <div class="viewer" id="viewer" aria-label="画像ビューア（1本指のみ、ダブルタップでズーム）">
-      <div class="stage" id="stage">
-        <img id="pageImage" alt="表示ページ" src="" />
+    <!-- ===== ビューア（スクロールなし・画像のみ操作） ===== -->
+    <div class="viewer" id="viewer">
+      <div class="viewer-inner">
+        <div class="tools" id="tools">
+          <span class="filename" id="fname">表示ページ</span>
+          <a id="btn-dl" href="#" download>画像をダウンロード</a>
+          <a id="btn-open" href="#" target="_blank" rel="noopener">原寸で開く</a>
+        </div>
+        <figure class="stage" id="stage"><img id="page" alt="表示ページ" src=""></figure>
+        <div class="badge" id="badge">1.00×</div>
       </div>
-      <div class="badge" id="badge">1.00×</div>
     </div>
   </div>
 
 <script>
 (() => {
-  // ====== 設定（必要に応じて差し替え）======
-  const images = [
-    "1-001.jpeg","1-002.jpeg","1-003.jpeg","1-004.jpeg","1-005.jpeg",
-    "1-006.jpeg","1-007.jpeg","1-008.jpeg","1-009.jpeg","1-010.jpeg"
+  /* ===== 画像リスト（あなたの方式） ===== */
+  const BASE = "docs/";
+  const groups = [
+    { prefix: "1-", start: 1, end: 15 },
+    { prefix: "2-", start: 1, end: 12 },
+    { prefix: "3-", start: 1, end: 11 },
   ];
-  const INITIAL_INDEX = 0;       // 初期は 1-001.jpeg
-  const ZOOM_IN_SCALE = 2;       // ダブルタップで2倍
-  const MIN_SCALE = 1;
-  const MAX_SCALE = 2;           // 仕様上は2倍固定にしておく
-  const DOUBLE_TAP_MS = 280;     // ダブルタップ判定時間
+  const pad3 = n => String(n).padStart(3,"0");
+  // ファイル名（拡張子込み）の配列
+  const files = groups.flatMap(g =>
+    Array.from({ length: g.end - g.start + 1 }, (_, i) =>
+      `${g.prefix}${pad3(g.start + i)}.jpeg`
+    )
+  );
 
-  // ====== 要素 ======
+  /* ===== 要素 ===== */
   const strip = document.getElementById('strip');
   const viewer = document.getElementById('viewer');
-  const stage = document.getElementById('stage');
-  const imgEl = document.getElementById('pageImage');
-  const badge = document.getElementById('badge');
-  const btnPrev = document.querySelector('.navPrev');
-  const btnNext = document.querySelector('.navNext');
+  const stage  = document.getElementById('stage');
+  const imgEl  = document.getElementById('page');
+  const badge  = document.getElementById('badge');
+  const fname  = document.getElementById('fname');
+  const btnDL  = document.getElementById('btn-dl');
+  const btnOPEN= document.getElementById('btn-open');
+  const btnPrev= document.querySelector('.navPrev');
+  const btnNext= document.querySelector('.navNext');
 
-  // ====== 状態 ======
-  let currentIndex = INITIAL_INDEX;
-  let scale = 1;                 // 表示倍率（1 = 横幅にフィット）
-  let tx = 0, ty = 0;            // 画像座標系（transform: translate）
-  let lastPointer = {x: 0, y: 0};
+  /* ===== 状態 ===== */
+  let current = 0;          // 現在のページIndex
+  let scale = 1, tx = 0, ty = 0;
+  let naturalW=0, naturalH=0;
+  let activePointers = new Set();
   let dragging = false;
-  let activePointers = new Set(); // 2本指以上は無効化
+  let lastPointer = {x:0,y:0};
   let lastTapTime = 0;
+  const DOUBLE_TAP_MS = 280;
+  const ZOOM_IN = 2, MIN=1, MAX=2;
 
-  // 画像の自然サイズ（読み込み後に更新）
-  let naturalW = 0, naturalH = 0;
-
-  // ====== ユーティリティ ======
-  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
-
-  function setThumbs() {
+  /* ===== サムネ生成（カルーセルは以前と同じ見た目） ===== */
+  function renderStrip(){
     strip.innerHTML = '';
-    images.forEach((src, i) => {
-      const li = document.createElement('button');
-      li.className = 'thumb';
-      li.setAttribute('role', 'option');
-      li.setAttribute('aria-label', `ページ ${i+1}`);
-      if (i === currentIndex) li.setAttribute('aria-current', 'true');
+    files.forEach((name, i) => {
+      const b = document.createElement('button');
+      b.className = 'thumb'; b.setAttribute('role','option');
+      if (i===current) b.setAttribute('aria-current','true');
       const im = document.createElement('img');
-      im.loading = 'lazy';
-      im.src = src;
-      li.appendChild(im);
-      li.addEventListener('click', () => goPage(i));
-      strip.appendChild(li);
+      im.loading='lazy'; im.src = BASE + encodeURIComponent(name);
+      b.appendChild(im);
+      b.addEventListener('click', () => go(i));
+      strip.appendChild(b);
+    });
+  }
+  function markActive(){
+    strip.querySelectorAll('.thumb').forEach((t, i) => {
+      if (i===current) t.setAttribute('aria-current','true'); else t.removeAttribute('aria-current');
     });
   }
 
-  function markActiveThumb() {
-    strip.querySelectorAll('.thumb').forEach((t, idx) => {
-      if (idx === currentIndex) t.setAttribute('aria-current', 'true');
-      else t.removeAttribute('aria-current');
-    });
+  /* ===== ページ切り替え ===== */
+  function go(i){
+    current = Math.max(0, Math.min(files.length-1, i));
+    const url = BASE + encodeURIComponent(files[current]);
+    imgEl.src = url;
+    fname.textContent = `${current+1}. ${files[current]}`;
+    btnDL.href = url; btnOPEN.href = url;
+    resetFit();
+    markActive();
+    ensureThumbVisible();
   }
 
-  function goPage(idx) {
-    currentIndex = clamp(idx, 0, images.length - 1);
-    imgEl.src = images[currentIndex];
-    markActiveThumb();
-    resetFit(); // 新しい画像は横幅フィット & 原点に戻す
-  }
+  /* ===== レイアウト／ズーム ===== */
+  function resetFit(){ scale=1; tx=0; ty=0; applyTransform(); }
+  function applyTransform(){ imgEl.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`; badge.textContent = `${scale.toFixed(2)}×`; }
 
-  function resetFit() {
-    // 画像はCSS上 width:100% なので、scale=1 が横幅フィット
-    scale = 1;
-    tx = 0;
-    ty = 0;
-    applyTransform();
-  }
-
-  function applyTransform() {
-    imgEl.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-    badge.textContent = `${scale.toFixed(2)}×`;
-  }
-
-  function getBaseRenderSize() {
-    // scale=1 のときの描画サイズ（横幅100%前提）
-    const vw = viewer.clientWidth;
+  function baseRenderSize(){
+    const vw = stage.clientWidth;
     const ar = naturalH / naturalW;
-    const baseW = vw;
-    const baseH = baseW * ar;
-    return { baseW, baseH };
+    return { baseW: vw, baseH: vw * ar }; // 横幅フィット
   }
-
-  function clampTranslate() {
-    // 画像の“描画ベースサイズ × scale”を基にパン制限
-    const { baseW, baseH } = getBaseRenderSize();
-    const dispW = baseW * scale;
-    const dispH = baseH * scale;
-    const vw = viewer.clientWidth;
-    const vh = viewer.clientHeight;
-
-    // 横幅フィットなので baseW === vw。高さ方向はレター/ピラーの可能性あり。
-    // 余白が出ても“ページは動かさない”ため、min/max を計算
-    const minX = Math.min(0, vw - dispW);
-    const maxX = 0;
-    const minY = Math.min(0, vh - dispH);
-    const maxY = 0;
-
-    tx = clamp(tx, minX, maxX);
-    ty = clamp(ty, minY, maxY);
+  function clampTranslate(){
+    const { baseW, baseH } = baseRenderSize();
+    const dispW = baseW * scale, dispH = baseH * scale;
+    const vw = stage.clientWidth, vh = stage.clientHeight;
+    const minX = Math.min(0, vw - dispW), maxX = 0;
+    const minY = Math.min(0, vh - dispH), maxY = 0;
+    tx = Math.max(minX, Math.min(maxX, tx));
+    ty = Math.max(minY, Math.min(maxY, ty));
   }
-
-  function zoomAroundPoint(nextScale, clientX, clientY) {
-    nextScale = clamp(nextScale, MIN_SCALE, MAX_SCALE);
-    const rect = viewer.getBoundingClientRect();
-    const px = clientX - rect.left;
-    const py = clientY - rect.top;
-
-    // 現在の平行移動(tx,ty)と倍率(scale)があって、
-    // ポインタ下の点を不動点にするズーム（同位置に留める）
-    // newT = p - (p - oldT) * (next/prev)
-    const k = nextScale / scale;
+  function zoomAround(pointX, pointY, next){
+    next = Math.max(MIN, Math.min(MAX, next));
+    const r = stage.getBoundingClientRect();
+    const px = pointX - r.left, py = pointY - r.top;
+    const k = next / scale;
     tx = px - (px - tx) * k;
     ty = py - (py - ty) * k;
-    scale = nextScale;
-
-    clampTranslate();
-    applyTransform();
+    scale = next; clampTranslate(); applyTransform();
   }
 
-  function handleDoubleTap(e) {
-    const now = Date.now();
-    const delta = now - lastTapTime;
-    lastTapTime = now;
-
-    // 2本指以上なら何もしない
-    if (activePointers.size >= 2) return false;
-
-    if (delta < DOUBLE_TAP_MS) {
-      // ダブルタップ（またはダブルクリック）
-      if (scale === 1) {
-        zoomAroundPoint(ZOOM_IN_SCALE, e.clientX, e.clientY);
-      } else {
-        zoomAroundPoint(1, e.clientX, e.clientY);
-      }
-      return true;
-    }
-    return false;
-  }
-
-  function onPointerDown(e) {
-    // 2本指以上は操作禁止
+  /* ===== 1本指のみの操作（ダブルタップで2倍→戻す、ドラッグでパン） ===== */
+  viewer.addEventListener('pointerdown', (e) => {
     activePointers.add(e.pointerId);
-    if (activePointers.size >= 2) {
-      // 2本目以降の入力は無視（標準ジェスチャも殺す）
-      e.preventDefault();
-      return;
+    if (activePointers.size >= 2) { e.preventDefault(); return; } // 2本以上は無効
+    const now = Date.now();
+    if (now - lastTapTime < DOUBLE_TAP_MS) {
+      zoomAround(e.clientX, e.clientY, scale === 1 ? ZOOM_IN : 1);
+      lastTapTime = 0;
+      e.preventDefault(); return;
     }
-
-    // ダブルタップ判定（1本指のみ）
-    if (handleDoubleTap(e)) {
-      e.preventDefault();
-      return;
-    }
-
+    lastTapTime = now;
     dragging = true;
-    lastPointer.x = e.clientX;
-    lastPointer.y = e.clientY;
+    lastPointer.x = e.clientX; lastPointer.y = e.clientY;
     e.preventDefault();
-  }
+  }, { passive:false });
 
-  function onPointerMove(e) {
-    if (!dragging) return;
-    if (activePointers.size >= 2) return; // 念のため
-
-    // 1本指ドラッグのみ有効
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging || activePointers.size !== 1) return;
     const dx = e.clientX - lastPointer.x;
     const dy = e.clientY - lastPointer.y;
-    lastPointer.x = e.clientX;
-    lastPointer.y = e.clientY;
-
-    // scale=1 でもドラッグを許すと誤操作が増えるため、1のときは固定
+    lastPointer.x = e.clientX; lastPointer.y = e.clientY;
     if (scale > 1) {
-      tx += dx;
-      ty += dy;
-      clampTranslate();
-      applyTransform();
+      tx += dx; ty += dy; clampTranslate(); applyTransform();
     }
     e.preventDefault();
-  }
+  }, { passive:false });
 
-  function onPointerUp(e) {
-    activePointers.delete(e.pointerId);
-    dragging = false;
+  window.addEventListener('pointerup', (e) => {
+    activePointers.delete(e.pointerId); dragging = false; e.preventDefault();
+  }, { passive:false });
+
+  viewer.addEventListener('wheel', (e) => {
+    // トラックパッドのスクロールも禁止（1本指のみ仕様）
     e.preventDefault();
-  }
+  }, { passive:false });
 
-  function onWheel(e) {
-    // トラックパッド/ホイールによるズームは封印（1本指のみの仕様）
-    // 垂直・水平スクロールも抑止
-    e.preventDefault();
-  }
+  imgEl.addEventListener('load', () => {
+    naturalW = imgEl.naturalWidth; naturalH = imgEl.naturalHeight;
+    resetFit();
+  });
 
-  function centerActiveThumb() {
-    // 選択中のサムネイルを中央近くに
-    const active = strip.querySelector('.thumb[aria-current="true"]');
-    if (!active) return;
-    const { left: sL, width: sW } = strip.getBoundingClientRect();
-    const { left: aL, width: aW } = active.getBoundingClientRect();
-    const delta = (aL + aW / 2) - (sL + sW / 2);
-    // スクロールコンテナではないので transformで動かす手もあるが、
-    // ここでは簡易に「矢印ボタン」で移動する方式とし、プログラムからは何もしない。
-    // （スクロール禁止仕様に沿うため、stripはoverflow:hiddenのまま）
-  }
+  window.addEventListener('resize', () => { clampTranslate(); applyTransform(); ensureThumbWindow(); });
 
-  // 矢印ボタンはサムネ行を「仮想ページング」：N枚ずつ表示切替
+  /* ===== カルーセル左右（表示ウィンドウをページング） ===== */
   let stripStart = 0;
-  const VISIBLE_THUMBS = () => Math.max(1, Math.floor((viewer.clientWidth - 96) / (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-h')) * 0.75 + parseInt(getComputedStyle(document.documentElement).getPropertyValue('--gap')))));
+  const GAP = () => parseInt(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 10;
+  const thumbW = () => Math.round((parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-h')) || 92) * 0.75) + GAP();
 
-  function renderStripWindow() {
-    // 画面幅に応じて見せる範囲を切り替える簡易実装
-    const count = VISIBLE_THUMBS();
-    strip.querySelectorAll('.thumb').forEach((t, idx) => {
-      const visible = idx >= stripStart && idx < stripStart + count;
-      t.style.display = visible ? '' : 'none';
+  function visibleCount(){ return Math.max(1, Math.floor((viewer.clientWidth - 96) / thumbW())); }
+  function ensureThumbWindow(){
+    const count = visibleCount();
+    const maxStart = Math.max(0, files.length - count);
+    stripStart = Math.max(0, Math.min(stripStart, maxStart));
+    strip.querySelectorAll('.thumb').forEach((t, i) => {
+      t.style.display = (i >= stripStart && i < stripStart + count) ? '' : 'none';
     });
   }
-
-  btnPrev.addEventListener('click', () => {
-    const count = VISIBLE_THUMBS();
-    stripStart = Math.max(0, stripStart - count);
-    renderStripWindow();
-  });
-  btnNext.addEventListener('click', () => {
-    const count = VISIBLE_THUMBS();
-    stripStart = Math.min(Math.max(0, images.length - count), stripStart + count);
-    renderStripWindow();
-  });
-
-  // ====== イベント束ね ======
-  function attachPointerEvents() {
-    viewer.addEventListener('pointerdown', onPointerDown, { passive: false });
-    window.addEventListener('pointermove', onPointerMove, { passive: false });
-    window.addEventListener('pointerup', onPointerUp, { passive: false });
-    // Macトラックパッドのホイールも禁止
-    viewer.addEventListener('wheel', onWheel, { passive: false });
-    // コンテキストメニュー抑止（長押し誤爆を減らす）
-    viewer.addEventListener('contextmenu', e => e.preventDefault());
+  function ensureThumbVisible(){
+    const count = visibleCount();
+    if (current < stripStart) { stripStart = current; ensureThumbWindow(); }
+    else if (current >= stripStart + count) { stripStart = current - count + 1; ensureThumbWindow(); }
   }
+  document.querySelector('.navPrev').addEventListener('click', () => { stripStart = Math.max(0, stripStart - visibleCount()); ensureThumbWindow(); });
+  document.querySelector('.navNext').addEventListener('click', () => { stripStart = Math.min(Math.max(0, files.length - visibleCount()), stripStart + visibleCount()); ensureThumbWindow(); });
 
-  function onImageLoad() {
-    naturalW = imgEl.naturalWidth;
-    naturalH = imgEl.naturalHeight;
-    resetFit(); // 読み込み直後は横幅フィット
+  /* ===== 初期化 ===== */
+  function init(){
+    renderStrip();
+    ensureThumbWindow();
+    go(0); // 初期値：横幅フィットで 1-001.jpeg を表示
   }
-
-  function onResize() {
-    // レイアウトが変わったら、現在倍率を維持したまま軽く補正
-    clampTranslate();
-    applyTransform();
-    // サムネ可視範囲を調整
-    renderStripWindow();
-  }
-
-  // ====== 初期化 ======
-  function init() {
-    setThumbs();
-    imgEl.addEventListener('load', onImageLoad);
-    goPage(INITIAL_INDEX);
-
-    attachPointerEvents();
-    window.addEventListener('resize', onResize);
-
-    // 初回のサムネ表示ウィンドウを整える
-    renderStripWindow();
-  }
-
   init();
 })();
 </script>
