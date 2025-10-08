@@ -6,7 +6,7 @@
   content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <title>GENESIS 解答ビューア</title>
 <style>
-  :root { --dock-h: 0px; --gap: 10px; }
+  :root { --dock-h: 0px; }
 
   html, body{
     margin:0; background:#fff; color:#111;
@@ -53,33 +53,44 @@
   main{ padding-top: calc(var(--dock-h) + 12px); padding-bottom:48px; }
   section{ padding:18px 0; border-bottom:1px solid #f0f0f0; }
 
-  /* 画像枠：画面幅いっぱい（フルブリード） */
+  /* 画像フレーム：画面幅いっぱい */
   .frame{
     position:relative; overflow:hidden;
     width:100vw; max-width:100vw;
     margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
     border:1px solid #e5e7eb; border-radius:12px; background:#fff;
-    touch-action: pan-y; /* 通常は縦スクロールOK（拡大・虫眼鏡中はJSでnoneに切替） */
+    touch-action: pan-y; /* 1倍時は縦スクロールOK（ズーム/虫眼鏡時はJSでnoneへ） */
   }
   .frame img{
     display:block; width:100%; height:auto;
     user-select:none; -webkit-user-drag:none; pointer-events:none;
     transform-origin:0 0; will-change:transform;
   }
-  .badge{
-    position:absolute; right:10px; bottom:10px;
-    background:rgba(0,0,0,.55); color:#fff; border:1px solid rgba(255,255,255,.12);
-    padding:4px 8px; border-radius:8px; font-size:12px;
-  }
 
-  /* ===== 虫眼鏡：背景画像をズラす方式（正確に2倍） ===== */
+  /* ===== 虫眼鏡（背景オフセット＋エッジ・グラデーション） ===== */
   .magnifier{
     position:absolute; display:none; pointer-events:none;
-    width:20vw; height:20vh; /* 画面の5分の1 */
+    width:20vw; height:20vh;           /* 画面の1/5 */
     border:2px solid #22c55e; border-radius:8px; overflow:hidden;
     box-shadow:0 2px 6px rgba(0,0,0,.25);
     background-repeat:no-repeat;
     /* background-image / size / position はJSで設定 */
+  }
+  /* 常時わずかな内側フェザー（視認性UP） */
+  .magnifier::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%),
+      linear-gradient(to left,  rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%),
+      linear-gradient(to bottom,rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%),
+      linear-gradient(to top,   rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%);
+    mix-blend-mode: multiply;
+  }
+  /* 左端に寄ったときは左側だけ強めのフェザーで端の文字を見やすく */
+  .magnifier.edge-left::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background: linear-gradient(to right, rgba(255,255,255,.35), rgba(255,255,255,0) 24px);
+    mix-blend-mode: multiply;
   }
 </style>
 </head>
@@ -144,9 +155,8 @@ files.forEach((name,idx)=>{
   const sec=document.createElement('section');
   sec.dataset.index=idx; sec.id=`p-${name.replace(/\.[^.]+$/,'')}`;
   sec.innerHTML=`
-    <figure class="frame" data-zoomable>
+    <figure class="frame">
       <img src="${BASE}${encodeURIComponent(name)}" alt="">
-      <div class="badge">1.00×</div>
       <div class="magnifier"></div>
     </figure>`;
   content.appendChild(sec);
@@ -157,49 +167,39 @@ const dockEl=document.getElementById('toc-dock');
 function applyDockH(){ document.documentElement.style.setProperty('--dock-h',(dockEl?.offsetHeight||0)+'px'); }
 new ResizeObserver(applyDockH).observe(dockEl); window.addEventListener('resize',applyDockH); applyDockH();
 
-/* ========= 現在ページ追跡（IOで堅牢） ========= */
+/* ========= 現在ページ追跡 ========= */
 const sections=Array.from(document.querySelectorAll('main section'));
 const tocLinks=Array.from(document.querySelectorAll('#toc-list a'));
 let currentIndex=0;
-
-const io=new IntersectionObserver(entries=>{
-  // 画面中央付近に一番近いものを current に
-  let bestIdx=currentIndex, bestDelta=Infinity;
-  const mid=window.innerHeight/2;
-  for(const e of entries){
-    if(!e.isIntersecting) continue;
-    const r=e.target.getBoundingClientRect();
-    const delta=Math.abs(r.top - mid);
-    const idx=Number(e.target.dataset.index);
-    if(delta<bestDelta){ bestDelta=delta; bestIdx=idx; }
-  }
-  if(bestIdx!==currentIndex){ setActive(bestIdx); }
-},{root:null, threshold:[0,1], rootMargin:`-40% 0px -40% 0px`});
-sections.forEach(s=>io.observe(s));
-
 function setActive(i){
   currentIndex=i;
   tocLinks.forEach((el,idx)=>el.classList.toggle('active', idx===i));
   const img=sections[i]?.querySelector('img');
   if(img) btnOpen.href=img.currentSrc||img.src;
-  updatePgButtons();
+  pgPrev.disabled = (i<=0);
+  pgNext.disabled = (i>=sections.length-1);
 }
-function updatePgButtons(){
-  pgPrev.disabled=currentIndex<=0;
-  pgNext.disabled=currentIndex>=sections.length-1;
-}
+const io=new IntersectionObserver(entries=>{
+  let best=currentIndex, bestDelta=Infinity, mid=window.innerHeight/2;
+  for(const e of entries){
+    if(!e.isIntersecting) continue;
+    const idx=Number(e.target.dataset.index);
+    const delta=Math.abs(e.target.getBoundingClientRect().top - mid);
+    if(delta<bestDelta){ bestDelta=delta; best=idx; }
+  }
+  if(best!==currentIndex) setActive(best);
+},{root:null, threshold:[0,1], rootMargin:`-40% 0px -40% 0px`});
+sections.forEach(s=>io.observe(s));
+
 function scrollToSection(i, smooth=true){
   const s=sections[i]; if(!s) return;
   window.scrollTo({ top:s.offsetTop, behavior: smooth?'smooth':'auto' });
 }
 tocLinks.forEach(a=>a.addEventListener('click',e=>{
-  e.preventDefault();
-  const i=Number(a.dataset.index);
-  scrollToSection(i);
+  e.preventDefault(); scrollToSection(Number(a.dataset.index));
 }));
-
-pgPrev.addEventListener('click', ()=>{ if(currentIndex>0) scrollToSection(currentIndex-1); });
-pgNext.addEventListener('click', ()=>{ if(currentIndex<sections.length-1) scrollToSection(currentIndex+1); });
+pgPrev.addEventListener('click',()=>{ if(currentIndex>0) scrollToSection(currentIndex-1); });
+pgNext.addEventListener('click',()=>{ if(currentIndex<sections.length-1) scrollToSection(currentIndex+1); });
 
 /* ========= カルーセル左右（ダブルクリック禁止＋末尾クランプ） ========= */
 let lastClickTime=0;
@@ -213,32 +213,43 @@ tocEl.addEventListener('scroll', ()=>{
   else if (tocEl.scrollLeft > max) tocEl.scrollLeft=max;
 }, {passive:true});
 
-/* ========= 2倍拡大（トグル） ========= */
+/* ========= 排反制御のユーティリティ ========= */
 let zoomedFrame=null;
+let magActive=false, magFrame=null;
+function disablePageScroll(){ document.documentElement.style.overflowY='hidden'; document.body.style.overflowY='hidden'; }
+function enablePageScroll(){ document.documentElement.style.overflowY='auto';   document.body.style.overflowY='auto';   }
+
+/* ========= 2倍拡大（トグル、虫眼鏡と排反） ========= */
 function enterZoom(frame){
-  const img=frame.querySelector('img'), badge=frame.querySelector('.badge');
+  // 先に虫眼鏡をオフ（排反）
+  if (magActive) exitMagnifier(magFrame);
+
+  const img=frame.querySelector('img');
   img.style.transform=`translate(0px,0px) scale(2)`;
-  badge.textContent='2.00×';
-  // ページスクロール停止・画像だけパン
-  document.documentElement.style.overflowY='hidden'; document.body.style.overflowY='hidden';
+
+  disablePageScroll();
   frame.style.touchAction='none';
+
   let dragging=false, sx=0, sy=0, ox=0, oy=0;
+  function onDown(e){ e.preventDefault(); dragging=true; frame.setPointerCapture(e.pointerId); sx=e.clientX; sy=e.clientY; const m=/translate\(([-\d.]+)px,\s*([-\d.]+)px\)\s*scale\(\s*2\s*\)/.exec(img.style.transform); ox=m?parseFloat(m[1]):0; oy=m?parseFloat(m[2]):0; }
+  function onMove(e){ if(!dragging) return; e.preventDefault(); const nx=ox+(e.clientX-sx), ny=oy+(e.clientY-sy); img.style.transform=`translate(${nx}px,${ny}px) scale(2)`; }
+  function onUp(e){ dragging=false; try{ frame.releasePointerCapture(e.pointerId);}catch(_){ } }
+
   frame.addEventListener('pointerdown', onDown, {passive:false});
   frame.addEventListener('pointermove', onMove, {passive:false});
   frame.addEventListener('pointerup', onUp, {passive:false});
   frame.addEventListener('pointercancel', onUp, {passive:false});
-  function onDown(e){ e.preventDefault(); dragging=true; frame.setPointerCapture(e.pointerId); sx=e.clientX; sy=e.clientY; const m=/translate\(([-\d.]+)px,\s*([-\d.]+)px\) scale\(2\)/.exec(img.style.transform); ox=m?parseFloat(m[1]):0; oy=m?parseFloat(m[2]):0; }
-  function onMove(e){ if(!dragging) return; e.preventDefault(); const nx=ox+(e.clientX-sx), ny=oy+(e.clientY-sy); img.style.transform=`translate(${nx}px,${ny}px) scale(2)`; }
-  function onUp(e){ dragging=false; try{ frame.releasePointerCapture(e.pointerId);}catch(_){ } }
   frame._zoomHandlers={onDown,onMove,onUp};
   zoomedFrame=frame;
   btnZoom.textContent='1倍';
 }
 function exitZoom(frame){
-  const img=frame.querySelector('img'), badge=frame.querySelector('.badge');
-  img.style.transform='scale(1)'; badge.textContent='1.00×';
-  document.documentElement.style.overflowY='auto'; document.body.style.overflowY='auto';
+  const img=frame.querySelector('img');
+  img.style.transform='scale(1)';
+
+  enablePageScroll();
   frame.style.touchAction='pan-y';
+
   if(frame._zoomHandlers){
     frame.removeEventListener('pointerdown', frame._zoomHandlers.onDown, {passive:false});
     frame.removeEventListener('pointermove', frame._zoomHandlers.onMove, {passive:false});
@@ -246,8 +257,8 @@ function exitZoom(frame){
     frame.removeEventListener('pointercancel',frame._zoomHandlers.onUp,  {passive:false});
     frame._zoomHandlers=null;
   }
-  btnZoom.textContent='2倍';
   zoomedFrame=null;
+  btnZoom.textContent='2倍';
 }
 btnZoom.addEventListener('click', ()=>{
   const frame=sections[currentIndex]?.querySelector('.frame'); if(!frame) return;
@@ -255,79 +266,75 @@ btnZoom.addEventListener('click', ()=>{
   if (btnZoom.textContent==='2倍') enterZoom(frame); else exitZoom(frame);
 });
 
-/* ========= 虫眼鏡（2倍・画面の5分の1サイズ・スクロール禁止） ========= */
-let magActive=false, magFrame=null;
-
-function positionMagnifier(frame, x, y){
-  const mag=frame.querySelector('.magnifier');
+/* ========= 虫眼鏡（2倍、排反・スクロール停止・端まで正しく映す） ========= */
+function positionMagnifier(frame, mag, left, top){
   const fr=frame.getBoundingClientRect();
   const w=mag.offsetWidth, h=mag.offsetHeight;
 
-  // レンズの左上を計算（中心を x,y に）
-  let left=x - w/2, top=y - h/2;
-  // フレーム内にクランプ
+  // クランプ（レンズの左上をframe内に収める）
   left=Math.max(0, Math.min(fr.width - w, left));
   top =Math.max(0, Math.min(fr.height - h, top));
-  mag.style.left=`${left}px`; mag.style.top=`${top}px`;
 
-  // 背景の2倍拡大位置（frame座標系）
-  const cx = left + w/2;
-  const cy = top  + h/2;
-  const zoom = 2;
-  const bgX = - (cx*zoom - w/2);
-  const bgY = - (cy*zoom - h/2);
-  mag.style.backgroundPosition = `${bgX}px ${bgY}px`;
+  // 位置反映（frame内の相対px）
+  mag.style.left=`${left}px`;
+  mag.style.top =`${top}px`;
+
+  // 背景の2倍拡大（frame全体を2倍にして、そのleft/topに対応させる）
+  const zoom=2;
+  mag.style.backgroundPosition = `${-(left*zoom)}px ${-(top*zoom)}px`;
+
+  // 端寄りのグラデーション（左端近いときに強化）
+  if (left <= 2) mag.classList.add('edge-left'); else mag.classList.remove('edge-left');
 }
 
 function enterMagnifier(frame){
-  // 2倍拡大がONなら干渉するので先に解除
+  // 先に2倍をオフ（排反）
   if (zoomedFrame) exitZoom(zoomedFrame);
+
   const mag=frame.querySelector('.magnifier');
   const img=frame.querySelector('img');
 
-  // レンズサイズは 20vw x 20vh（動的に反映）
-  mag.style.width = '20vw';
-  mag.style.height= '20vh';
-
-  // 背景に元画像（表示サイズの2倍）
-  mag.style.backgroundImage = `url("${img.currentSrc||img.src}")`;
-  mag.style.backgroundSize  = `${frame.clientWidth*2}px ${frame.clientHeight*2}px`;
+  // レンズサイズ（20vw/20vh）と背景（frameの2倍サイズ）
+  mag.style.width='20vw'; mag.style.height='20vh';
+  mag.style.backgroundImage=`url("${img.currentSrc||img.src}")`;
+  mag.style.backgroundSize = `${frame.clientWidth*2}px ${frame.clientHeight*2}px`;
   mag.style.display='block';
 
-  // 初期位置：フレーム中央
-  positionMagnifier(frame, frame.clientWidth/2, frame.clientHeight/2);
+  // 初期位置＝中央
+  positionMagnifier(frame, mag, (frame.clientWidth - mag.offsetWidth)/2, (frame.clientHeight - mag.offsetHeight)/2);
 
-  // ページスクロール禁止・画像エリアのジェスチャはドラッグのみ
-  document.documentElement.style.overflowY='hidden';
-  document.body.style.overflowY='hidden';
+  // スクロール停止、ジェスチャ切替
+  disablePageScroll();
   frame.style.touchAction='none';
 
-  // 1本指ドラッグで移動
-  let dragging=false;
+  let dragging=false, sx=0, sy=0, startLeft=0, startTop=0;
+  function onDown(e){
+    e.preventDefault(); dragging=true; frame.setPointerCapture(e.pointerId);
+    const r=mag.getBoundingClientRect(), fr=frame.getBoundingClientRect();
+    sx=e.clientX; sy=e.clientY; startLeft=r.left-fr.left; startTop=r.top-fr.top;
+  }
+  function onMove(e){
+    if(!dragging) return;
+    e.preventDefault();
+    const dx=e.clientX - sx, dy=e.clientY - sy;
+    positionMagnifier(frame, mag, startLeft + dx, startTop + dy);
+  }
+  function onUp(e){ dragging=false; try{ frame.releasePointerCapture(e.pointerId);}catch(_){ } }
+
   frame.addEventListener('pointerdown', onDown, {passive:false});
   frame.addEventListener('pointermove', onMove, {passive:false});
   frame.addEventListener('pointerup', onUp, {passive:false});
   frame.addEventListener('pointercancel', onUp, {passive:false});
-  function onDown(e){ e.preventDefault(); dragging=true; frame.setPointerCapture(e.pointerId); }
-  function onMove(e){
-    if(!dragging) return;
-    e.preventDefault();
-    const fr=frame.getBoundingClientRect();
-    const x=e.clientX - fr.left;
-    const y=e.clientY - fr.top;
-    positionMagnifier(frame, x, y);
-  }
-  function onUp(e){ dragging=false; try{ frame.releasePointerCapture(e.pointerId);}catch(_){ } }
-
   frame._magHandlers={onDown,onMove,onUp};
-  btnMag.textContent='オフ';
-  magActive=true; magFrame=frame;
+
+  magFrame=frame; magActive=true; btnMag.textContent='オフ';
 }
 function exitMagnifier(frame){
   const mag=frame.querySelector('.magnifier');
   mag.style.display='none';
-  document.documentElement.style.overflowY='auto';
-  document.body.style.overflowY='auto';
+  mag.classList.remove('edge-left');
+
+  enablePageScroll();
   frame.style.touchAction='pan-y';
 
   if(frame._magHandlers){
@@ -337,29 +344,16 @@ function exitMagnifier(frame){
     frame.removeEventListener('pointercancel',frame._magHandlers.onUp,  {passive:false});
     frame._magHandlers=null;
   }
-  btnMag.textContent='虫眼鏡';
-  magActive=false; magFrame=null;
+  magFrame=null; magActive=false; btnMag.textContent='虫眼鏡';
 }
+
 btnMag.addEventListener('click', ()=>{
   const frame=sections[currentIndex]?.querySelector('.frame'); if(!frame) return;
-  if(magActive && magFrame===frame) exitMagnifier(frame);
+  if (magActive && magFrame===frame) exitMagnifier(frame);
   else {
     if (magActive && magFrame && magFrame!==frame) exitMagnifier(magFrame);
     enterMagnifier(frame);
   }
-});
-
-// ウィンドウサイズ変更時も虫眼鏡サイズ・背景サイズを更新
-window.addEventListener('resize', ()=>{
-  if(!magActive || !magFrame) return;
-  const frame=magFrame;
-  const mag=frame.querySelector('.magnifier');
-  const img=frame.querySelector('img');
-  mag.style.width='20vw'; mag.style.height='20vh';
-  mag.style.backgroundImage=`url("${img.currentSrc||img.src}")`;
-  mag.style.backgroundSize=`${frame.clientWidth*2}px ${frame.clientHeight*2}px`;
-  // 位置は中央に寄せ直し（必要ならコメントアウト）
-  positionMagnifier(frame, frame.clientWidth/2, frame.clientHeight/2);
 });
 
 /* ========= ダブルタップ拡大の無効化（iOS対策） ========= */
@@ -372,9 +366,8 @@ document.addEventListener('touchend',(e)=>{
 
 /* ========= 初期化 ========= */
 (function init(){
-  // 初期アクティブ
+  // TOC生成後に setActive(0)
   setActive(0);
-  // カルーセル末尾クランプはスクロールイベントで効く
 })();
 </script>
 </body>
