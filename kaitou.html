@@ -62,6 +62,10 @@
   .btn{ width:38px; height:34px; border:1px solid #ddd; border-radius:999px; background:#fff; cursor:pointer; line-height:1; font-size:16px; color:#333; user-select:none; }
   .btn:disabled{ opacity:.35; cursor:default; }
   .btn.wide{ width:44px; } /* ≪/≫ */
+
+  /* 既存のどこかに追加（重複OK） */
+html, body { overscroll-behavior-y: contain; } /* iOSのゴム戻り軽減 */
+
 </style>
 </head>
 <body>
@@ -347,6 +351,85 @@
       schedule();
     }, { passive:false });
   }
+
+  /* ====== 縦スクロールのクランプ（現在セクションの上下で止める） ====== */
+
+/** 現在インデックスのスクロール許容範囲（window.scrollY）の下限min/上限maxを返す */
+function getScrollBoundsForIndex(idx) {
+  const hDock = dockEl?.offsetHeight || 0;
+  const sec = sections[idx];
+  if (!sec) return { min: 0, max: 0 };
+
+  // セクション先頭が画面上端（カルーセル分を差し引く）に来る位置
+  const min = Math.max(0, sec.offsetTop - hDock - 8);
+
+  // 画面下端がセクション末尾に一致する位置（＝これより下は見せない）
+  const viewportH = window.innerHeight;
+  const maxRaw = sec.offsetTop + sec.offsetHeight - viewportH;
+  const max = Math.max(min, maxRaw); // セクションが画面より低い場合は min==max
+
+  return { min, max };
+}
+
+/** 指定スクロール量を現在セクション範囲にクランプしてスクロール。超過分は食べる */
+function scrollByClamped(deltaY) {
+  const idx = getCurrentIndexByScroll();
+  const { min, max } = getScrollBoundsForIndex(idx);
+  const y = window.scrollY;
+  const target = Math.min(max, Math.max(min, y + deltaY));
+
+  // クランプで実際の移動量が変化するなら、自前スクロールに置き換え
+  if (target !== y + deltaY) {
+    window.scrollTo({ top: target, behavior: 'auto' });
+    return true; // デフォルトはキャンセルしたい
+  }
+  return false;
+}
+
+/* --- Wheel（マウス/トラックパッド）: クランプ --- */
+window.addEventListener('wheel', (e) => {
+  // 水平スクロールは無視し、垂直だけ扱う
+  const dy = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : 0;
+  if (!dy) return;
+  if (scrollByClamped(dy)) e.preventDefault();
+}, { passive: false });
+
+/* --- Touch（iOS）: クランプ --- */
+let touchStartY = null;
+window.addEventListener('touchstart', (e) => {
+  if (e.touches.length !== 1) return; // 1本指のみ
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+window.addEventListener('touchmove', (e) => {
+  if (e.touches.length !== 1 || touchStartY == null) return;
+  const nowY = e.touches[0].clientY;
+  const dy = touchStartY - nowY; // 下へスワイプで正
+  if (scrollByClamped(dy)) e.preventDefault();
+  // 位置更新（連続クランプ用）
+  touchStartY = nowY;
+}, { passive: false });
+
+window.addEventListener('touchend', () => { touchStartY = null; }, { passive: true });
+
+/* --- ページ移動時・リサイズ時の補正 ---
+   セクション切替（TOCクリック/←→ボタン）直後や画面回転時に
+   画面外へはみ出していたら範囲内に戻す */
+function clampNow() {
+  const idx = getCurrentIndexByScroll();
+  const { min, max } = getScrollBoundsForIndex(idx);
+  const y = window.scrollY;
+  if (y < min) window.scrollTo({ top: min, behavior: 'auto' });
+  else if (y > max) window.scrollTo({ top: max, behavior: 'auto' });
+}
+window.addEventListener('resize', clampNow);
+window.addEventListener('load', clampNow);
+
+/* --- 既存の setActive / scrollToSection の直後にも呼ぶとより堅牢 ---
+   例：
+   scrollToSection(i); setActive(i); clampNow();
+*/
+
 </script>
 </body>
 </html>
