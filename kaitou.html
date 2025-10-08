@@ -5,62 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GENESIS 解答ビューア</title>
   <style>
-    :root { --wrap-w: 1100px; --dock-h: 0px; --pad-x: 14px; }
+    :root { --dock-h: 0px; }
 
-    /* ページ全体：横スクロール禁止、1本指は縦スクロール優先 */
+    /* 横スクロール禁止 & 1本指は縦スクロール優先 */
     html, body { overflow-x: hidden; touch-action: pan-y; }
     body { margin: 0; font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif; color:#111; line-height:1.6; }
 
-    .wrap { max-width: var(--wrap-w); margin: 0 auto; padding: 12px var(--pad-x); }
-
-    /* iPad Pro 12.9（1024〜1366幅を想定）では左右余白を半分に */
-    @media (min-width: 820px) and (max-width: 1400px) {
-      :root { --pad-x: 7px; }
-    }
+    /* 余白を“約半分”へ：max-widthを90vwに（上限1200px） */
+    .wrap { max-width: clamp(320px, 90vw, 1200px); margin: 0 auto; padding: 10px 8px; }
 
     main { padding-top: calc(var(--dock-h) + 8px); padding-bottom: 60px; }
+    section { padding: 22px 0; border-bottom: 1px solid #f0f0f0; scroll-margin-top: calc(var(--dock-h) + 8px); }
 
-    /* 見出しはカルーセル下端で止まる */
-    section { padding: 22px 0; border-bottom: 1px solid #f5f5f5; scroll-margin-top: calc(var(--dock-h) + 8px); }
-    section h2 { font-size:.95rem; margin:0 0 8px; color:#333; }
-    figure { margin:0; }
-    .hint { font-size:.85rem; color:#666; margin:6px 0 0; }
-    .tools { display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 0; }
-    .tools a { font-size:.9rem; text-decoration:none; color:#333; padding:6px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; }
+    /* セクション見出し行：左にファイル名、右にツールボタン */
+    .section-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:0 0 10px; }
+    .section-head h2 { font-size:.95rem; margin:0; color:#333; }
+    .tools { display:flex; gap:8px; flex-wrap:wrap; margin:0; }
+    .tools a {
+      font-size:.9rem; text-decoration:none; color:#333;
+      padding:6px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa;
+    }
 
-    /* 画像フレーム：1本指ではページ縦スクロール、ピンチのみ画像操作 */
+    /* 画像フレーム：1本指＝ページ縦スクロール、ピンチ＝画像操作 */
     .frame {
       width:100%; overflow:hidden; border:1px solid #e5e7eb; border-radius:12px; background:#fff;
-      touch-action: pan-y pinch-zoom;
+      touch-action: pan-y; /* 縦スクロールはページへ。ピンチはJSで処理 */
     }
-    .frame img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; transform-origin: 0 0; }
+    .frame img {
+      display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none;
+      transform-origin: 0 0; will-change: transform;
+    }
+    .hint { font-size:.85rem; color:#666; margin:6px 0 0; }
 
-    /* === 固定カルーセル（iPadで消えないように超安定設定） === */
+    /* === 固定カルーセル（消えない・動かない） === */
     .toc-dock{
       position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-      background:#fff; /* iOSの再描画バグ回避のため backdrop-filter を使わない */
-      border-bottom: 1px solid #eee;
-      padding-top: env(safe-area-inset-top);
-      /* iOSでの消失対策：レイヤー安定化 */
-      backface-visibility: hidden;
-      contain: layout paint style; /* 余計な再計算を隔離 */
-      overscroll-behavior: contain; /* ゴムスクロールの影響隔離 */
+      background:#fff; border-bottom:1px solid #eee; padding-top: env(safe-area-inset-top);
+      backface-visibility: hidden; contain: layout paint style; overscroll-behavior: contain;
     }
     .toc-bar { display:flex; align-items:center; gap:10px; }
     .toc-left, .toc-right { display:flex; gap:6px; align-items:center; flex:0 0 auto; }
-
-    /* 固定の器（上下左右に動かない） */
     .toc-container { flex:1 1 auto; overflow: clip; }
-    /* 中身だけ横スクロール可（縦は禁止、縦スワイプはページへ） */
     .toc{
-      overflow-x: auto; overflow-y: hidden;
-      white-space: nowrap; scrollbar-width: none; -webkit-overflow-scrolling: touch;
-      scroll-snap-type: x mandatory;
-      touch-action: pan-x;
-      overscroll-behavior-x: contain;
+      overflow-x:auto; overflow-y:hidden; white-space:nowrap; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+      scroll-snap-type:x mandatory; touch-action: pan-x; overscroll-behavior-x:contain;
     }
     .toc::-webkit-scrollbar{ display:none; }
-
     .toc-list{ display:flex; gap:8px; padding:0; margin:0; list-style:none; }
     .toc-list a{
       display:inline-block; padding:6px 12px; border:1px solid #ddd; border-radius:999px;
@@ -69,12 +59,13 @@
     .toc-list a.active{ background:#e7f1ff; border-color:#cfe3ff; }
     .toc-list a:focus-visible{ outline:3px solid #22c55e; outline-offset:2px; }
 
-    .btn{
-      width:38px; height:34px; border:1px solid #ddd; border-radius:999px;
-      background:#fff; cursor:pointer; line-height:1; font-size:16px; color:#333; user-select:none;
-    }
+    .btn{ width:38px; height:34px; border:1px solid #ddd; border-radius:999px; background:#fff;
+          cursor:pointer; line-height:1; font-size:16px; color:#333; user-select:none; }
     .btn:disabled{ opacity:.35; cursor:default; }
     .btn.wide{ width:44px; } /* ≪/≫ */
+
+    /* ページスクロール固定用（ピンチ中に適用） */
+    body.freeze { position: fixed; width:100%; overflow:hidden; }
   </style>
 </head>
 <body>
@@ -82,18 +73,15 @@
   <div class="toc-dock" id="toc-dock" role="region" aria-label="GENESIS 解答ビューア 目次">
     <div class="wrap">
       <div class="toc-bar">
-        <!-- 左：カルーセル送り（≪/≫） -->
         <div class="toc-left">
           <button class="btn wide" id="car-prev" aria-label="カルーセルを左へ">≪</button>
           <button class="btn wide" id="car-next" aria-label="カルーセルを右へ">≫</button>
         </div>
-        <!-- 中央：固定器／中身だけ横スクロール -->
         <div class="toc-container">
           <nav class="toc" id="toc" aria-label="ページリスト（横スクロール）">
             <ul class="toc-list" id="toc-list"></ul>
           </nav>
         </div>
-        <!-- 右：前後ページ（←/→） -->
         <div class="toc-right">
           <button class="btn" id="pg-prev" aria-label="1つ前のページへ">←</button>
           <button class="btn" id="pg-next" aria-label="1つ次のページへ">→</button>
@@ -114,8 +102,6 @@
       { prefix: "2-", start: 1, end: 12 },
       { prefix: "3-", start: 1, end: 11 },
     ];
-
-    // ===== 生成 =====
     const pad3 = n => String(n).padStart(3, "0");
     const files = groups.flatMap(g => Array.from({length: g.end - g.start + 1}, (_,i)=>`${g.prefix}${pad3(g.start+i)}.jpeg`));
 
@@ -123,37 +109,33 @@
     const tocList = document.getElementById("toc-list");
     const content = document.getElementById("content");
 
+    // ===== セクション生成（ツールを見出しの右に） =====
     files.forEach((name, idx) => {
       const id = `p-${name.replace(/\.[^.]+$/, "")}`;
-
-      // 目次
       const li = document.createElement("li");
       const a = document.createElement("a");
-      a.href = `#${id}`;
-      a.dataset.index = idx;
-      a.textContent = name.replace(".jpeg","");
-      li.appendChild(a);
-      tocList.appendChild(li);
+      a.href = `#${id}`; a.dataset.index = idx; a.textContent = name.replace(".jpeg","");
+      li.appendChild(a); tocList.appendChild(li);
 
-      // 本文
       const sec = document.createElement("section");
-      sec.id = id;
-      sec.dataset.index = idx;
+      sec.id = id; sec.dataset.index = idx;
       sec.innerHTML = `
-        <h2>${idx+1}. ${name}</h2>
+        <div class="section-head">
+          <h2>${idx+1}. ${name}</h2>
+          <div class="tools">
+            <a href="${BASE}${encodeURIComponent(name)}" download>画像をダウンロード</a>
+            <a href="${BASE}${encodeURIComponent(name)}" target="_blank" rel="noopener">原寸で開く</a>
+          </div>
+        </div>
         <figure class="frame" data-zoomable>
           <img src="${BASE}${encodeURIComponent(name)}" alt="${name}">
         </figure>
         <p class="hint">ピンチで拡大／2本指ドラッグで移動／ダブルタップでリセット</p>
-        <div class="tools">
-          <a href="${BASE}${encodeURIComponent(name)}" download>画像をダウンロード</a>
-          <a href="${BASE}${encodeURIComponent(name)}" target="_blank" rel="noopener">原寸で開く</a>
-        </div>
       `;
       content.appendChild(sec);
     });
 
-    // ===== 固定カルーセルの高さをCSS変数に反映（見出し停止位置用） =====
+    // ===== 固定カルーセルの高さをCSS変数に反映 =====
     const dockEl = document.getElementById('toc-dock');
     function applyDockHeightVar() {
       const h = dockEl?.offsetHeight || 0;
@@ -163,7 +145,7 @@
     window.addEventListener('resize', applyDockHeightVar);
     applyDockHeightVar();
 
-    // ===== 現在ページの追跡 =====
+    // ===== 現在ページ追跡 & アクティブ表示 =====
     const sections = Array.from(document.querySelectorAll('main section'));
     const tocLinks = Array.from(document.querySelectorAll('#toc-list a'));
     let currentIndex = 0;
@@ -171,33 +153,27 @@
     function setActive(index){
       currentIndex = Math.max(0, Math.min(files.length-1, index));
       tocLinks.forEach(el => el.classList.toggle('active', Number(el.dataset.index) === currentIndex));
-      // 目次内でアクティブ項目が見えるように
       const active = tocLinks[currentIndex];
       if (active) active.scrollIntoView({ inline:'nearest', block:'nearest' });
       updatePageArrowState();
     }
 
-    // 見出しへスクロール（カルーセル下端に揃える）
     function scrollToSection(index, smooth=true){
-      const target = sections[index];
-      if (!target) return;
+      const target = sections[index]; if (!target) return;
       const h = dockEl?.offsetHeight || 0;
       const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
       window.scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' });
       history.pushState(null, "", `#${target.id}`);
     }
 
-    // 目次クリック
     tocLinks.forEach(a => {
       a.addEventListener('click', e => {
         e.preventDefault();
         const i = Number(a.dataset.index);
-        scrollToSection(i);
-        setActive(i);
+        scrollToSection(i); setActive(i);
       });
     });
 
-    // スクロールに同期して現在ページを更新
     const io = new IntersectionObserver(entries => {
       const h = dockEl?.offsetHeight || 0;
       let best = null;
@@ -283,7 +259,21 @@
       updatePageArrowState();
     });
 
-    // ===== 画像：ピンチズーム（2本指のみ） =====
+    // ======== ピンチ中は「ページ固定」＆画像だけ動く + 滑らか描画 ========
+    let freezeY = 0;
+    function freezeScroll(){
+      if (document.body.classList.contains('freeze')) return;
+      freezeY = window.scrollY || window.pageYOffset;
+      document.body.style.top = `-${freezeY}px`;
+      document.body.classList.add('freeze');
+    }
+    function unfreezeScroll(){
+      if (!document.body.classList.contains('freeze')) return;
+      document.body.classList.remove('freeze');
+      document.body.style.top = '';
+      window.scrollTo(0, freezeY);
+    }
+
     document.querySelectorAll('[data-zoomable]').forEach(initZoomable);
     function initZoomable(frame){
       const img = frame.querySelector('img');
@@ -292,70 +282,97 @@
       let liveScale = 1, liveX = 0, liveY = 0;
       let lastTap = 0, pinchStart = null;
 
-      const setTransform = () => {
+      // rAFでトランスフォームをまとめて適用（滑らか）
+      let raf = null;
+      function applyTransform(){
         const s = baseScale * liveScale;
         const tx = baseX + liveX;
         const ty = baseY + liveY;
-        img.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
-      };
-      const rectPt = (cx,cy)=>{ const r=frame.getBoundingClientRect(); return {x: cx - r.left, y: cy - r.top}; };
+        img.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`;
+        raf = null;
+      }
+      function schedule(){
+        if (raf == null) raf = requestAnimationFrame(applyTransform);
+      }
+      function rectPt(cx,cy){ const r=frame.getBoundingClientRect(); return {x: cx - r.left, y: cy - r.top}; }
       const dist = (a,b)=> Math.hypot(a.x - b.x, a.y - b.y);
       const mid  = (a,b)=> ({ x:(a.x+b.x)/2, y:(a.y+b.y)/2 });
 
       frame.addEventListener('pointerdown', e => {
         frame.setPointerCapture(e.pointerId);
         pointers.set(e.pointerId, rectPt(e.clientX, e.clientY));
+
         const now = performance.now();
         if (now - lastTap < 300 && pointers.size === 1) {
+          // ダブルタップでリセット
           baseScale = 1; baseX = 0; baseY = 0; liveScale = 1; liveX = 0; liveY = 0; pinchStart = null;
           img.style.transformOrigin = "0 0";
-          setTransform(); lastTap = 0; return;
+          schedule(); lastTap = 0; return;
         }
         lastTap = now;
+
+        if (pointers.size === 2) {
+          // ピンチ開始：ページを固定
+          freezeScroll();
+        }
       });
 
       frame.addEventListener('pointermove', e => {
         if (!pointers.has(e.pointerId)) return;
         pointers.set(e.pointerId, rectPt(e.clientX, e.clientY));
+
         if (pointers.size === 2) {
           const [p1, p2] = [...pointers.values()];
           const m = mid(p1,p2);
           const d = dist(p1,p2);
+
           if (!pinchStart) {
             pinchStart = { d, m, bs: baseScale, bx: baseX, by: baseY };
+            // 原点をピンチ中心へ
             const ox = (m.x - baseX) / baseScale;
             const oy = (m.y - baseY) / baseScale;
             img.style.transformOrigin = `${ox}px ${oy}px`;
           } else {
+            // スムーズさ重視で「そのまま比率」で追従（遅延補間なし）
             liveScale = d / pinchStart.d;
             liveX = (m.x - pinchStart.m.x);
             liveY = (m.y - pinchStart.m.y);
           }
-          setTransform();
+          schedule();
         }
+        // 1本指は何もしない（ページの縦スクロールを阻害しない）
       });
 
       function endGesture(id){
         const hadTwo = pointers.size === 2;
         pointers.delete(id);
+
         if (hadTwo || pinchStart) {
+          // ピンチの確定
           baseScale *= liveScale; baseX += liveX; baseY += liveY;
-          liveScale = 1; liveX = 0; liveY = 0; pinchStart = null; setTransform();
+          liveScale = 1; liveX = 0; liveY = 0; pinchStart = null;
+          schedule();
+          // 2本指が離れたらページ固定を解除
+          if (pointers.size < 2) unfreezeScroll();
         }
       }
       frame.addEventListener('pointerup', e => endGesture(e.pointerId));
       frame.addEventListener('pointercancel', e => endGesture(e.pointerId));
 
+      // トラックパッド等のCtrl+ホイール拡大も滑らかに
       frame.addEventListener('wheel', e => {
         if (!e.ctrlKey) return;
         e.preventDefault();
+        freezeScroll(); // ズーム中はページ固定
         const { x, y } = rectPt(e.clientX, e.clientY);
-        const scaleDelta = Math.exp(-e.deltaY * 0.002);
+        const scaleDelta = Math.exp(-e.deltaY * 0.002); // 反応を良くするため少し強め
         const ox = (x - baseX) / baseScale;
         const oy = (y - baseY) / baseScale;
         img.style.transformOrigin = `${ox}px ${oy}px`;
         baseScale *= scaleDelta;
-        setTransform();
+        schedule();
+        clearTimeout(frame._wheelTimer);
+        frame._wheelTimer = setTimeout(unfreezeScroll, 120);
       }, { passive:false });
     }
   </script>
