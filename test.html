@@ -28,7 +28,7 @@
         background: #0f172a;
         border-radius: 12px;
         overflow: hidden;
-        aspect-ratio: 3 / 2; /* ビューア比率はお好みで */
+        aspect-ratio: 3 / 2;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -45,12 +45,12 @@
       .loupe {
         position: absolute;
         inset: auto auto auto auto;
-        display: none; /* トグルで表示 / 非表示（サンプルではボタンで）*/
+        display: none;
         overflow: hidden;
         border-radius: 16px;
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        touch-action: none; /* 1本指ドラッグ可能に */
+        touch-action: none;
         backdrop-filter: saturate(120%);
       }
       .loupe.active {
@@ -92,7 +92,6 @@
       .list {
         display: flex;
         gap: var(--gap);
-        /* snap は任意 */
       }
       .thumb {
         flex: 0 0 auto;
@@ -121,7 +120,6 @@
         padding: 0.15rem 0.35rem;
         border-radius: 6px;
       }
-      /* 現在地リング */
       .thumb.current::after {
         content: "";
         position: absolute;
@@ -131,7 +129,6 @@
         box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25) inset;
       }
 
-      /* ボタン */
       .btn {
         appearance: none;
         border: none;
@@ -195,7 +192,7 @@
         src: `https://picsum.photos/seed/${i + 1}/600/400`,
       }));
 
-      /************** カルーセル：現在地常時可視（←/→） **************/
+      /************** カルーセル：現在地“端固定” **************/
       const bar = document.getElementById("bar");
       const list = document.getElementById("list");
       const btnPrev = document.getElementById("btnPrev");
@@ -224,10 +221,7 @@
         return list.querySelector(`.thumb[data-idx="${idx}"]`);
       }
 
-      function setCurrent(
-        idx,
-        { ensureVisible = false, placeAtEdge = false, scroll = false } = {}
-      ) {
+      function setCurrent(idx, { ensureVisible = false } = {}) {
         idx = Math.max(0, Math.min(PAGES.length - 1, idx));
         current = idx;
         list
@@ -235,97 +229,104 @@
           .forEach((t) =>
             t.classList.toggle("current", Number(t.dataset.idx) === current)
           );
-        if (ensureVisible) {
-          keepCurrentVisible(placeAtEdge);
-        } else if (scroll) {
-          // << / >> ではスクロールしない（＝非表示を許容） → 要望どおり
+        if (ensureVisible) keepCurrentFullyVisible();
+      }
+
+      // 端にピタッと合わせるためのユーティリティ
+      function pinCurrentToEdge(side /* 'left' | 'right' */) {
+        const t = getThumb(current);
+        if (!t) return;
+        const padL = parseFloat(getComputedStyle(bar).paddingLeft) || 0;
+        const padR = parseFloat(getComputedStyle(bar).paddingRight) || 0;
+
+        if (side === "left") {
+          // 現在地サムネの左端をバー内側左端に一致
+          bar.scrollLeft = t.offsetLeft - padL;
+        } else {
+          // 現在地サムネの右端をバー内側右端に一致
+          const rightInner = bar.clientWidth - padR;
+          bar.scrollLeft = t.offsetLeft - (rightInner - t.clientWidth - padL);
         }
       }
 
-      // 現在地を常時表示：必要時にスクロール
-      function keepCurrentVisible(placeAtEdge = false) {
+      // 端固定ではなく、単に完全可視化だけ（クリック時などに使用）
+      function keepCurrentFullyVisible() {
         const t = getThumb(current);
         if (!t) return;
         const tRect = t.getBoundingClientRect();
         const bRect = bar.getBoundingClientRect();
-        const overLeft = tRect.left < bRect.left;
-        const overRight = tRect.right > bRect.right;
-        if (overLeft || overRight) {
-          if (placeAtEdge) {
-            // 現在地を端に“とどめたまま”バーだけ送る感覚に近づける
-            const delta = overLeft
-              ? tRect.left - bRect.left // 負
-              : tRect.right - bRect.right; // 正
-            bar.scrollLeft += delta; // 端で固定される感覚
-          } else {
-            // 単純に fully visible までスクロール
-            t.scrollIntoView({
-              block: "nearest",
-              inline: overLeft ? "start" : "end",
-              behavior: "smooth",
-            });
-          }
+        if (tRect.left < bRect.left) {
+          pinCurrentToEdge("left");
+        } else if (tRect.right > bRect.right) {
+          pinCurrentToEdge("right");
         }
       }
 
-      // ←/→：現在地は常に見えるように（端に来たら端で留めつつバーを送る）
+      // ←/→：現在地が常に見える＆端に“居続ける”
       btnPrev.addEventListener("click", () => {
-        const before = current;
-        setCurrent(current - 1, { ensureVisible: true, placeAtEdge: true });
-        if (before === current) {
-          keepCurrentVisible(true);
-        } // 0から左に打った場合の保険
-      });
-      btnNext.addEventListener("click", () => {
-        const before = current;
-        setCurrent(current + 1, { ensureVisible: true, placeAtEdge: true });
-        if (before === current) {
-          keepCurrentVisible(true);
-        } // 末尾から右に打った場合の保険
+        const next = Math.max(0, current - 1);
+        if (next === current) {
+          // 先頭からさらに←：端固定を明示的に保つ
+          pinCurrentToEdge("left");
+          return;
+        }
+        setCurrent(next);
+        pinCurrentToEdge("left");
       });
 
-      // « »：非表示も許容（＝スクロールしない）
+      btnNext.addEventListener("click", () => {
+        const next = Math.min(PAGES.length - 1, current + 1);
+        if (next === current) {
+          // 末尾からさらに→：端固定を明示的に保つ
+          pinCurrentToEdge("right");
+          return;
+        }
+        setCurrent(next);
+        pinCurrentToEdge("right");
+      });
+
+      // « / »：非表示を許容（スクロールしない）
       btnFastPrev.addEventListener("click", () => {
-        setCurrent(Math.max(0, current - 5), { scroll: false });
+        setCurrent(Math.max(0, current - 5), { ensureVisible: false });
+        // スクロールなし＝一時的に非表示でもOK
       });
       btnFastNext.addEventListener("click", () => {
-        setCurrent(Math.min(PAGES.length - 1, current + 5), { scroll: false });
+        setCurrent(Math.min(PAGES.length - 1, current + 5), {
+          ensureVisible: false,
+        });
+        // スクロールなし＝一時的に非表示でもOK
       });
 
       // 初期描画
       renderList();
-      // 最初は中央付近が見えるよう軽くスクロール
+      // 初期は完全可視化のみ（端固定はしない）
       setTimeout(() => {
-        keepCurrentVisible();
+        keepCurrentFullyVisible();
       }, 0);
 
-      /************** 虫眼鏡：4分割 & 4隅スナップ **************/
+      /************** 虫眼鏡：4分割 & 4隅スナップ（2/3サイズ） **************/
       const viewer = document.getElementById("viewer");
       const pageImg = document.getElementById("pageImage");
       const loupe = document.getElementById("loupe");
       const loupeImg = document.getElementById("loupeImg");
       const toggle = document.getElementById("toggleLoupe");
 
-      // 画面の2/3サイズに調整（常に viewer の 2/3）
+      // 画面の2/3サイズ
       function sizeLoupe() {
         const r = viewer.getBoundingClientRect();
-        const w = Math.round((r.width * 2) / 3);
-        const h = Math.round((r.height * 2) / 3);
-        loupe.style.width = w + "px";
-        loupe.style.height = h + "px";
+        loupe.style.width = Math.round((r.width * 2) / 3) + "px";
+        loupe.style.height = Math.round((r.height * 2) / 3) + "px";
       }
 
-      // 現在の隅（'tl'|'tr'|'bl'|'br'）と、ドラッグ中は位置から動的判定
       function quadrantFromCenter(cx, cy) {
         const r = viewer.getBoundingClientRect();
         const midX = r.left + r.width / 2;
         const midY = r.top + r.height / 2;
         const horiz = cx < midX ? "l" : "r";
         const vert = cy < midY ? "t" : "b";
-        return vert + horiz; // 'tl' など
+        return vert + horiz; // 'tl' 'tr' 'bl' 'br'
       }
 
-      // 指を離したら最寄りの隅へスナップ
       function snapToNearestCorner() {
         const vr = viewer.getBoundingClientRect();
         const lr = loupe.getBoundingClientRect();
@@ -353,35 +354,29 @@
         updateLoupeContent(best.q);
       }
 
-      // 4分の1領域を虫眼鏡サイズに拡大表示
+      // 四分の一領域を虫眼鏡サイズにフィット
       function updateLoupeContent(q) {
-        // 表示中画像の実表示サイズを取得
         const ir = pageImg.getBoundingClientRect();
         const vr = viewer.getBoundingClientRect();
         const lW = loupe.clientWidth,
           lH = loupe.clientHeight;
 
-        // 画像が viewer の中でオフセットされている分も考慮
         const imgW = ir.width,
           imgH = ir.height;
-        // 四分の一矩形の左上座標（画像表示領域内）
         const srcX = q.endsWith("l") ? 0 : imgW / 2;
         const srcY = q.startsWith("t") ? 0 : imgH / 2;
         const srcW = imgW / 2,
           srcH = imgH / 2;
 
-        // その四分の一を虫眼鏡の枠いっぱいに埋めるスケール
         const sx = lW / srcW;
         const sy = lH / srcH;
 
-        // loupe 内に同じ画像を配置し、拡大＋オフセット
         loupeImg.src = pageImg.src;
         loupeImg.style.width = Math.round(imgW * sx) + "px";
         loupeImg.style.height = Math.round(imgH * sy) + "px";
 
-        // viewer 内での画像の左上を基準に、四分の一の開始点をズラす
-        const offsetX = ir.left - vr.left; // viewer基準の画像原点X
-        const offsetY = ir.top - vr.top; // viewer基準の画像原点Y
+        const offsetX = ir.left - vr.left;
+        const offsetY = ir.top - vr.top;
 
         const left = Math.round(-srcX * sx + -offsetX * sx);
         const top = Math.round(-srcY * sy + -offsetY * sy);
@@ -389,17 +384,15 @@
         loupeImg.style.transform = `translate(${left}px, ${top}px)`;
       }
 
-      // 位置更新（ドラッグ中はどこでも存在OK）
+      // ドラッグで一時的に任意位置 → 指を離すと四隅へ吸着
       let dragging = false,
         grabDX = 0,
         grabDY = 0;
       function startDrag(clientX, clientY) {
         dragging = true;
-        const vr = viewer.getBoundingClientRect();
         const lr = loupe.getBoundingClientRect();
         grabDX = clientX - lr.left;
         grabDY = clientY - lr.top;
-        // ドラッグ開始時、現在の象限プレビュー
         const q = quadrantFromCenter(
           lr.left + lr.width / 2,
           lr.top + lr.height / 2
@@ -411,12 +404,10 @@
         const vr = viewer.getBoundingClientRect();
         let x = clientX - grabDX - vr.left;
         let y = clientY - grabDY - vr.top;
-        // viewer 内だけ動けるようクランプ
         x = Math.max(0, Math.min(x, vr.width - loupe.clientWidth));
         y = Math.max(0, Math.min(y, vr.height - loupe.clientHeight));
         loupe.style.left = Math.round(x) + "px";
         loupe.style.top = Math.round(y) + "px";
-        // 現在中心の位置から象限を判定して内容更新
         const lr = loupe.getBoundingClientRect();
         const q = quadrantFromCenter(
           lr.left + lr.width / 2,
@@ -430,7 +421,6 @@
         snapToNearestCorner();
       }
 
-      // 4隅に初期配置
       function placeLoupeAt(q = "tr") {
         sizeLoupe();
         const vr = viewer.getBoundingClientRect();
@@ -445,15 +435,13 @@
         updateLoupeContent(q);
       }
 
-      // ON/OFF
-      toggle.addEventListener("click", () => {
+      document.getElementById("toggleLoupe").addEventListener("click", () => {
         loupe.classList.toggle("active");
         if (loupe.classList.contains("active")) {
-          placeLoupeAt("tr"); // 右上に出す
+          placeLoupeAt("tr");
         }
       });
 
-      // ポインタイベント（マウス・タッチ共通）
       loupe.addEventListener("pointerdown", (e) => {
         loupe.setPointerCapture(e.pointerId);
         startDrag(e.clientX, e.clientY);
@@ -467,7 +455,6 @@
       });
       loupe.addEventListener("pointercancel", () => endDrag());
 
-      // リサイズ時にサイズ再計算＆スナップ維持
       const ro = new ResizeObserver(() => {
         if (!loupe.classList.contains("active")) return;
         const lr = loupe.getBoundingClientRect();
