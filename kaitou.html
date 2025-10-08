@@ -70,26 +70,21 @@
   /* ===== 虫眼鏡（背景オフセット＋エッジ・グラデーション） ===== */
   .magnifier{
     position:absolute; display:none; pointer-events:none;
-    width:20vw; height:20vh;           /* 画面の1/5 */
+    width:33.333vw; height:33.333vh;           /* 画面の1/3 */
     border:2px solid #22c55e; border-radius:8px; overflow:hidden;
     box-shadow:0 2px 6px rgba(0,0,0,.25);
     background-repeat:no-repeat;
     /* background-image / size / position はJSで設定 */
   }
-  /* 常時わずかな内側フェザー（視認性UP） */
+  /* グラデーションはJSから強さを可変で渡す（--gL/R/T/B） */
   .magnifier::after{
     content:""; position:absolute; inset:0; pointer-events:none;
+    /* それぞれ 32px のフェザー幅。強さは --g* (0〜.5 くらい) で制御 */
     background:
-      linear-gradient(to right, rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%),
-      linear-gradient(to left,  rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%),
-      linear-gradient(to bottom,rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%),
-      linear-gradient(to top,   rgba(255,255,255,.20), rgba(255,255,255,0) 16px 100%);
-    mix-blend-mode: multiply;
-  }
-  /* 左端に寄ったときは左側だけ強めのフェザーで端の文字を見やすく */
-  .magnifier.edge-left::before{
-    content:""; position:absolute; inset:0; pointer-events:none;
-    background: linear-gradient(to right, rgba(255,255,255,.35), rgba(255,255,255,0) 24px);
+      linear-gradient(to right, rgba(255,255,255,var(--gL,0)), rgba(255,255,255,0) 32px),
+      linear-gradient(to left,  rgba(255,255,255,var(--gR,0)), rgba(255,255,255,0) 32px),
+      linear-gradient(to bottom,rgba(255,255,255,var(--gT,0)), rgba(255,255,255,0) 32px),
+      linear-gradient(to top,   rgba(255,255,255,var(--gB,0)), rgba(255,255,255,0) 32px);
     mix-blend-mode: multiply;
   }
 </style>
@@ -213,7 +208,7 @@ tocEl.addEventListener('scroll', ()=>{
   else if (tocEl.scrollLeft > max) tocEl.scrollLeft=max;
 }, {passive:true});
 
-/* ========= 排反制御のユーティリティ ========= */
+/* ======== 排反制御・ユーティリティ ======== */
 let zoomedFrame=null;
 let magActive=false, magFrame=null;
 function disablePageScroll(){ document.documentElement.style.overflowY='hidden'; document.body.style.overflowY='hidden'; }
@@ -221,8 +216,8 @@ function enablePageScroll(){ document.documentElement.style.overflowY='auto';   
 
 /* ========= 2倍拡大（トグル、虫眼鏡と排反） ========= */
 function enterZoom(frame){
-  // 先に虫眼鏡をオフ（排反）
-  if (magActive) exitMagnifier(magFrame);
+  // 排反：虫眼鏡が動作中ならOFF
+  if (magActive && magFrame) exitMagnifier(magFrame);
 
   const img=frame.querySelector('img');
   img.style.transform=`translate(0px,0px) scale(2)`;
@@ -267,6 +262,16 @@ btnZoom.addEventListener('click', ()=>{
 });
 
 /* ========= 虫眼鏡（2倍、排反・スクロール停止・端まで正しく映す） ========= */
+/* 強さを0〜1で受け取り、CSS変数に反映（最大不透明度は0.45程度に内部でスケール） */
+function setMagGradient(mag, gL, gR, gT, gB){
+  const scale=0.45;
+  mag.style.setProperty('--gL', (gL*scale).toFixed(3));
+  mag.style.setProperty('--gR', (gR*scale).toFixed(3));
+  mag.style.setProperty('--gT', (gT*scale).toFixed(3));
+  mag.style.setProperty('--gB', (gB*scale).toFixed(3));
+}
+
+/* レンズ配置＆背景オフセット（常に2倍）＋グラデーション強度更新 */
 function positionMagnifier(frame, mag, left, top){
   const fr=frame.getBoundingClientRect();
   const w=mag.offsetWidth, h=mag.offsetHeight;
@@ -279,31 +284,42 @@ function positionMagnifier(frame, mag, left, top){
   mag.style.left=`${left}px`;
   mag.style.top =`${top}px`;
 
-  // 背景の2倍拡大（frame全体を2倍にして、そのleft/topに対応させる）
+  // 背景の2倍拡大：frameサイズ×2
   const zoom=2;
   mag.style.backgroundPosition = `${-(left*zoom)}px ${-(top*zoom)}px`;
 
-  // 端寄りのグラデーション（左端近いときに強化）
-  if (left <= 2) mag.classList.add('edge-left'); else mag.classList.remove('edge-left');
+  // グラデーション強度（中央0、端で最大）
+  const th = 96; // しきい距離(px)。この距離以内でじわっと濃く
+  const distL = left;
+  const distR = fr.width  - (left + w);
+  const distT = top;
+  const distB = fr.height - (top  + h);
+  const gL = Math.max(0, Math.min(1, 1 - distL/th));
+  const gR = Math.max(0, Math.min(1, 1 - distR/th));
+  const gT = Math.max(0, Math.min(1, 1 - distT/th));
+  const gB = Math.max(0, Math.min(1, 1 - distB/th));
+  setMagGradient(mag, gL, gR, gT, gB);
 }
 
 function enterMagnifier(frame){
-  // 先に2倍をオフ（排反）
+  // 排反：2倍が動作中ならOFF
   if (zoomedFrame) exitZoom(zoomedFrame);
 
   const mag=frame.querySelector('.magnifier');
   const img=frame.querySelector('img');
 
-  // レンズサイズ（20vw/20vh）と背景（frameの2倍サイズ）
-  mag.style.width='20vw'; mag.style.height='20vh';
+  // 背景はフレームの2倍
   mag.style.backgroundImage=`url("${img.currentSrc||img.src}")`;
   mag.style.backgroundSize = `${frame.clientWidth*2}px ${frame.clientHeight*2}px`;
   mag.style.display='block';
 
-  // 初期位置＝中央
-  positionMagnifier(frame, mag, (frame.clientWidth - mag.offsetWidth)/2, (frame.clientHeight - mag.offsetHeight)/2);
+  // 初期位置＝中央（中央はグラデーション0）
+  positionMagnifier(frame, mag,
+    (frame.clientWidth - mag.offsetWidth)/2,
+    (frame.clientHeight - mag.offsetHeight)/2
+  );
 
-  // スクロール停止、ジェスチャ切替
+  // スクロール停止、ジェスチャ切替（1本指ドラッグでレンズ移動）
   disablePageScroll();
   frame.style.touchAction='none';
 
@@ -329,10 +345,11 @@ function enterMagnifier(frame){
 
   magFrame=frame; magActive=true; btnMag.textContent='オフ';
 }
+
 function exitMagnifier(frame){
   const mag=frame.querySelector('.magnifier');
   mag.style.display='none';
-  mag.classList.remove('edge-left');
+  setMagGradient(mag,0,0,0,0);
 
   enablePageScroll();
   frame.style.touchAction='pan-y';
@@ -356,7 +373,7 @@ btnMag.addEventListener('click', ()=>{
   }
 });
 
-/* ========= ダブルタップ拡大の無効化（iOS対策） ========= */
+/* ========= iOSのダブルタップズーム無効 ========= */
 let lastTouchEnd=0;
 document.addEventListener('touchend',(e)=>{
   const now=Date.now();
