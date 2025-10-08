@@ -11,13 +11,13 @@
     html, body { overflow-x: hidden; touch-action: pan-y; }
     body { margin: 0; font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif; color:#111; line-height:1.6; }
 
-    /* 余白を“約半分”へ：max-widthを90vwに（上限1200px） */
-    .wrap { max-width: clamp(320px, 90vw, 1200px); margin: 0 auto; padding: 10px 8px; }
+    /* 余白を約1/2へ（幅を広げる） */
+    .wrap { max-width: clamp(320px, 94vw, 1200px); margin: 0 auto; padding: 10px 8px; }
 
     main { padding-top: calc(var(--dock-h) + 8px); padding-bottom: 60px; }
     section { padding: 22px 0; border-bottom: 1px solid #f0f0f0; scroll-margin-top: calc(var(--dock-h) + 8px); }
 
-    /* セクション見出し行：左にファイル名、右にツールボタン */
+    /* 見出し：左にファイル名、右にツールボタン（画像の上側） */
     .section-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:0 0 10px; }
     .section-head h2 { font-size:.95rem; margin:0; color:#333; }
     .tools { display:flex; gap:8px; flex-wrap:wrap; margin:0; }
@@ -27,17 +27,10 @@
     }
 
     /* 画像フレーム：1本指＝ページ縦スクロール、ピンチ＝画像操作 */
-    .frame {
-      width:100%; overflow:hidden; border:1px solid #e5e7eb; border-radius:12px; background:#fff;
-      touch-action: pan-y; /* 縦スクロールはページへ。ピンチはJSで処理 */
-    }
-    .frame img {
-      display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none;
-      transform-origin: 0 0; will-change: transform;
-    }
-    .hint { font-size:.85rem; color:#666; margin:6px 0 0; }
+    .frame { width:100%; overflow:hidden; border:1px solid #e5e7eb; border-radius:12px; background:#fff; touch-action: pan-y; }
+    .frame img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; transform-origin: 0 0; will-change: transform; }
 
-    /* === 固定カルーセル（消えない・動かない） === */
+    /* === 固定カルーセル === */
     .toc-dock{
       position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
       background:#fff; border-bottom:1px solid #eee; padding-top: env(safe-area-inset-top);
@@ -45,12 +38,18 @@
     }
     .toc-bar { display:flex; align-items:center; gap:10px; }
     .toc-left, .toc-right { display:flex; gap:6px; align-items:center; flex:0 0 auto; }
+
+    /* 固定の器（上下左右に動かない） */
     .toc-container { flex:1 1 auto; overflow: clip; }
+
+    /* 中身だけ横スクロール可。縦はページへ。 */
     .toc{
       overflow-x:auto; overflow-y:hidden; white-space:nowrap; scrollbar-width:none; -webkit-overflow-scrolling:touch;
       scroll-snap-type:x mandatory; touch-action: pan-x; overscroll-behavior-x:contain;
     }
+    .toc.no-snap{ scroll-snap-type: none; } /* 一時的にスナップ無効化用 */
     .toc::-webkit-scrollbar{ display:none; }
+
     .toc-list{ display:flex; gap:8px; padding:0; margin:0; list-style:none; }
     .toc-list a{
       display:inline-block; padding:6px 12px; border:1px solid #ddd; border-radius:999px;
@@ -59,12 +58,11 @@
     .toc-list a.active{ background:#e7f1ff; border-color:#cfe3ff; }
     .toc-list a:focus-visible{ outline:3px solid #22c55e; outline-offset:2px; }
 
-    .btn{ width:38px; height:34px; border:1px solid #ddd; border-radius:999px; background:#fff;
-          cursor:pointer; line-height:1; font-size:16px; color:#333; user-select:none; }
+    .btn{ width:38px; height:34px; border:1px solid #ddd; border-radius:999px; background:#fff; cursor:pointer; line-height:1; font-size:16px; color:#333; user-select:none; }
     .btn:disabled{ opacity:.35; cursor:default; }
     .btn.wide{ width:44px; } /* ≪/≫ */
 
-    /* ページスクロール固定用（ピンチ中に適用） */
+    /* ピンチ中はページ固定 */
     body.freeze { position: fixed; width:100%; overflow:hidden; }
   </style>
 </head>
@@ -96,7 +94,7 @@
 
   <script>
     // ===== 設定 =====
-    const BASE = "docs/"; // 画像フォルダ
+    const BASE = "docs/";
     const groups = [
       { prefix: "1-", start: 1, end: 15 },
       { prefix: "2-", start: 1, end: 12 },
@@ -105,18 +103,21 @@
     const pad3 = n => String(n).padStart(3, "0");
     const files = groups.flatMap(g => Array.from({length: g.end - g.start + 1}, (_,i)=>`${g.prefix}${pad3(g.start+i)}.jpeg`));
 
-    const tocEl = document.getElementById('toc');
-    const tocList = document.getElementById("toc-list");
-    const content = document.getElementById("content");
+    const tocEl   = document.getElementById('toc');
+    const tocList = document.getElementById('toc-list');
+    const content = document.getElementById('content');
 
-    // ===== セクション生成（ツールを見出しの右に） =====
+    // ===== セクション生成（ツールは見出し右） =====
     files.forEach((name, idx) => {
       const id = `p-${name.replace(/\.[^.]+$/, "")}`;
+
+      // TOC
       const li = document.createElement("li");
-      const a = document.createElement("a");
+      const a  = document.createElement("a");
       a.href = `#${id}`; a.dataset.index = idx; a.textContent = name.replace(".jpeg","");
       li.appendChild(a); tocList.appendChild(li);
 
+      // 本文
       const sec = document.createElement("section");
       sec.id = id; sec.dataset.index = idx;
       sec.innerHTML = `
@@ -135,12 +136,9 @@
       content.appendChild(sec);
     });
 
-    // ===== 固定カルーセルの高さをCSS変数に反映 =====
+    // ===== 固定カルーセルの高さをCSS変数へ =====
     const dockEl = document.getElementById('toc-dock');
-    function applyDockHeightVar() {
-      const h = dockEl?.offsetHeight || 0;
-      document.documentElement.style.setProperty('--dock-h', h + 'px');
-    }
+    function applyDockHeightVar(){ document.documentElement.style.setProperty('--dock-h', (dockEl?.offsetHeight || 0) + 'px'); }
     new ResizeObserver(applyDockHeightVar).observe(dockEl);
     window.addEventListener('resize', applyDockHeightVar);
     applyDockHeightVar();
@@ -150,12 +148,43 @@
     const tocLinks = Array.from(document.querySelectorAll('#toc-list a'));
     let currentIndex = 0;
 
-    function setActive(index){
+    // クリック直後の“ズレ防止”フラグ
+    let suppressTocScrollUntil = 0;
+
+    // 要素がコンテナ内に完全に見えているか
+    function fullyVisible(el, container){
+      const cr = container.getBoundingClientRect();
+      const er = el.getBoundingClientRect();
+      return er.left >= cr.left && er.right <= cr.right;
+    }
+    // スナップ無効化の一時ラッパー
+    function withNoSnap(fn, timeout=160){
+      tocEl.classList.add('no-snap');
+      try { fn(); } finally {
+        setTimeout(()=>tocEl.classList.remove('no-snap'), timeout);
+      }
+    }
+
+    function setActive(index, cause="auto"){
       currentIndex = Math.max(0, Math.min(files.length-1, index));
       tocLinks.forEach(el => el.classList.toggle('active', Number(el.dataset.index) === currentIndex));
+
       const active = tocLinks[currentIndex];
-      if (active) active.scrollIntoView({ inline:'nearest', block:'nearest' });
-      updatePageArrowState();
+      // クリック直後は絶対に動かさない
+      if (Date.now() < suppressTocScrollUntil) return;
+
+      // クリック以外（スクロール/矢印）でも、完全に見えていれば動かさない
+      if (!active || fullyVisible(active, tocEl)) return;
+
+      // どうしても見切れている場合のみ、最小量だけスクロール（スナップ無効でズレ防止）
+      withNoSnap(() => {
+        const cr = tocEl.getBoundingClientRect();
+        const er = active.getBoundingClientRect();
+        let dx = 0;
+        if (er.left < cr.left) dx = er.left - cr.left - 8;
+        else if (er.right > cr.right) dx = er.right - cr.right + 8;
+        if (dx !== 0) tocEl.scrollBy({ left: dx, behavior: 'auto' });
+      });
     }
 
     function scrollToSection(index, smooth=true){
@@ -166,14 +195,19 @@
       history.pushState(null, "", `#${target.id}`);
     }
 
+    // TOCクリック：ズレ防止のため一時的にスナップ無効＋可視域でもスクロールしない
     tocLinks.forEach(a => {
       a.addEventListener('click', e => {
         e.preventDefault();
-        const i = Number(a.dataset.index);
-        scrollToSection(i); setActive(i);
+        suppressTocScrollUntil = Date.now() + 600; // 0.6秒はTOCを動かさない
+        withNoSnap(() => {
+          const i = Number(a.dataset.index);
+          scrollToSection(i); setActive(i, "click");
+        });
       });
     });
 
+    // スクロールに同期して現在ページを更新（TOCは必要な時だけ最小移動）
     const io = new IntersectionObserver(entries => {
       const h = dockEl?.offsetHeight || 0;
       let best = null;
@@ -182,7 +216,7 @@
         const dist = Math.abs(e.target.getBoundingClientRect().top - h - 8);
         if (!best || dist < best.dist) best = { idx: Number(e.target.dataset.index), dist };
       }
-      if (best) setActive(best.idx);
+      if (best) setActive(best.idx, "scroll");
     }, { threshold: [0, .25, .5, .75, 1], rootMargin: `-${8}px 0px 0px 0px` });
     sections.forEach(s => io.observe(s));
 
@@ -196,16 +230,17 @@
       carPrev.disabled = tocEl.scrollLeft <= 0;
       carNext.disabled = tocEl.scrollLeft >= max;
     }
-    carPrev.addEventListener('click', () => { tocEl.scrollBy({left: -pageSize(), behavior:'smooth'}); });
-    carNext.addEventListener('click', () => { tocEl.scrollBy({left:  pageSize(), behavior:'smooth'}); });
+    carPrev.addEventListener('click', () => { withNoSnap(()=>tocEl.scrollBy({left: -pageSize(), behavior:'smooth'})); });
+    carNext.addEventListener('click', () => { withNoSnap(()=>tocEl.scrollBy({left:  pageSize(), behavior:'smooth'})); });
     tocEl.addEventListener('scroll', updateCarouselButtons);
     window.addEventListener('resize', updateCarouselButtons);
     updateCarouselButtons();
 
-    // ドラッグ/フリック（カルーセル中身のみ横スクロール）
+    // ドラッグ/フリック（リンクを掴んだときはドラッグしない＝誤差スクロール防止）
     (() => {
       let isDown=false, startX=0, startLeft=0;
       tocEl.addEventListener('pointerdown', e => {
+        if (e.target.closest('a')) return; // リンクタップはドラッグ開始しない
         isDown = true; startX = e.clientX; startLeft = tocEl.scrollLeft;
         tocEl.setPointerCapture(e.pointerId);
       });
@@ -242,11 +277,15 @@
     }
     pgPrev.addEventListener('click', () => {
       const idx = getCurrentIndexByScroll();
-      if (idx > 0) { scrollToSection(idx - 1); setActive(idx - 1); }
+      withNoSnap(() => {
+        if (idx > 0) { scrollToSection(idx - 1); setActive(idx - 1, "arrow"); }
+      });
     });
     pgNext.addEventListener('click', () => {
       const idx = getCurrentIndexByScroll();
-      if (idx < files.length - 1) { scrollToSection(idx + 1); setActive(idx + 1); }
+      withNoSnap(() => {
+        if (idx < files.length - 1) { scrollToSection(idx + 1); setActive(idx + 1, "arrow"); }
+      });
     });
     window.addEventListener('scroll', () => { updatePageArrowState(); }, { passive:true });
 
@@ -254,12 +293,12 @@
     window.addEventListener('load', () => {
       const hash = location.hash.slice(1);
       const idx = sections.findIndex(s => s.id === hash);
-      if (idx >= 0) { setTimeout(() => scrollToSection(idx, false), 0); setActive(idx); }
-      else { setActive(0); }
+      if (idx >= 0) { setTimeout(() => scrollToSection(idx, false), 0); setActive(idx, "load"); }
+      else { setActive(0, "load"); }
       updatePageArrowState();
     });
 
-    // ======== ピンチ中は「ページ固定」＆画像だけ動く + 滑らか描画 ========
+    // ===== ピンチ中はページ固定 & 画像だけ動く（滑らか） =====
     let freezeY = 0;
     function freezeScroll(){
       if (document.body.classList.contains('freeze')) return;
@@ -282,18 +321,16 @@
       let liveScale = 1, liveX = 0, liveY = 0;
       let lastTap = 0, pinchStart = null;
 
-      // rAFでトランスフォームをまとめて適用（滑らか）
+      // rAFでまとめ適用（滑らか）
       let raf = null;
       function applyTransform(){
-        const s = baseScale * liveScale;
+        const s  = baseScale * liveScale;
         const tx = baseX + liveX;
         const ty = baseY + liveY;
         img.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`;
         raf = null;
       }
-      function schedule(){
-        if (raf == null) raf = requestAnimationFrame(applyTransform);
-      }
+      function schedule(){ if (raf == null) raf = requestAnimationFrame(applyTransform); }
       function rectPt(cx,cy){ const r=frame.getBoundingClientRect(); return {x: cx - r.left, y: cy - r.top}; }
       const dist = (a,b)=> Math.hypot(a.x - b.x, a.y - b.y);
       const mid  = (a,b)=> ({ x:(a.x+b.x)/2, y:(a.y+b.y)/2 });
@@ -304,17 +341,13 @@
 
         const now = performance.now();
         if (now - lastTap < 300 && pointers.size === 1) {
-          // ダブルタップでリセット
           baseScale = 1; baseX = 0; baseY = 0; liveScale = 1; liveX = 0; liveY = 0; pinchStart = null;
           img.style.transformOrigin = "0 0";
           schedule(); lastTap = 0; return;
         }
         lastTap = now;
 
-        if (pointers.size === 2) {
-          // ピンチ開始：ページを固定
-          freezeScroll();
-        }
+        if (pointers.size === 2) freezeScroll(); // ピンチ開始でページ固定
       });
 
       frame.addEventListener('pointermove', e => {
@@ -328,44 +361,39 @@
 
           if (!pinchStart) {
             pinchStart = { d, m, bs: baseScale, bx: baseX, by: baseY };
-            // 原点をピンチ中心へ
             const ox = (m.x - baseX) / baseScale;
             const oy = (m.y - baseY) / baseScale;
             img.style.transformOrigin = `${ox}px ${oy}px`;
           } else {
-            // スムーズさ重視で「そのまま比率」で追従（遅延補間なし）
             liveScale = d / pinchStart.d;
             liveX = (m.x - pinchStart.m.x);
             liveY = (m.y - pinchStart.m.y);
           }
           schedule();
         }
-        // 1本指は何もしない（ページの縦スクロールを阻害しない）
+        // 1本指はページ縦スクロールに委ねる
       });
 
       function endGesture(id){
         const hadTwo = pointers.size === 2;
         pointers.delete(id);
-
         if (hadTwo || pinchStart) {
-          // ピンチの確定
           baseScale *= liveScale; baseX += liveX; baseY += liveY;
           liveScale = 1; liveX = 0; liveY = 0; pinchStart = null;
           schedule();
-          // 2本指が離れたらページ固定を解除
-          if (pointers.size < 2) unfreezeScroll();
+          if (pointers.size < 2) unfreezeScroll(); // ピンチ終了で解除
         }
       }
       frame.addEventListener('pointerup', e => endGesture(e.pointerId));
       frame.addEventListener('pointercancel', e => endGesture(e.pointerId));
 
-      // トラックパッド等のCtrl+ホイール拡大も滑らかに
+      // Ctrl+ホイール拡大もページ固定＆滑らか
       frame.addEventListener('wheel', e => {
         if (!e.ctrlKey) return;
         e.preventDefault();
-        freezeScroll(); // ズーム中はページ固定
+        freezeScroll();
         const { x, y } = rectPt(e.clientX, e.clientY);
-        const scaleDelta = Math.exp(-e.deltaY * 0.002); // 反応を良くするため少し強め
+        const scaleDelta = Math.exp(-e.deltaY * 0.002);
         const ox = (x - baseX) / baseScale;
         const oy = (y - baseY) / baseScale;
         img.style.transformOrigin = `${ox}px ${oy}px`;
