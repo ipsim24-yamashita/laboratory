@@ -170,7 +170,7 @@
         position: absolute;
         inset: 0;
         pointer-events: none;
-        /* それぞれ 32px のフェザー幅。強さは --g* (0〜.5 くらい) で制御 */
+        /* それぞれ 32px のフェザー幅。強さは --g* (0〜.5 くらい)  で制御 */
         background: linear-gradient(
             to right,
             rgba(255, 255, 255, var(--gL, 0)),
@@ -292,13 +292,9 @@
       const sections = Array.from(document.querySelectorAll("main section"));
       const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
       let currentIndex = 0;
+      let lastIndex = 0; // 移動方向の判定用
 
-      /* ========= 70%しきい＋カルーセル下線（dock bottom）基準の現在地判定 =========
-   ルール：
-   - 画面の「カルーセル下端線」(dock bottom) を Yb とする。
-   - 各ページ i について、threshold_i = top_i + 0.7 * height_i
-   - Yb が threshold_i を超えた回数だけ「次のページへ進む」。
-   - 例：Yb が p1 の 70% を越えたら現在地は p2。 */
+      /* ========= 70%しきい＋カルーセル下線（dock bottom）基準の現在地判定 ========= */
       function detectCurrentByBaseline() {
         const baseline = dockEl.getBoundingClientRect().bottom; // カルーセル下端の線
         let idx = 0;
@@ -312,33 +308,85 @@
         if (idx !== currentIndex) setActive(idx);
       }
 
+      /* ========= TOC 可視化制御：常に表示域内、進む→右端／戻る→左端に寄せる ========= */
+      function ensureTocVisibility(targetIndex, prevIndex) {
+        const link = tocLinks[targetIndex];
+        if (!link) return;
+        const cr = tocEl.getBoundingClientRect();
+        const lr = link.getBoundingClientRect();
+
+        const goingForward = targetIndex > prevIndex;
+        const goingBackward = targetIndex < prevIndex;
+
+        // すでに全体が見えていれば何もしない
+        if (lr.left >= cr.left && lr.right <= cr.right) return;
+
+        // 右へ進むときは右端に合わせる
+        if (goingForward && lr.right > cr.right) {
+          const delta = lr.right - cr.right;
+          tocEl.scrollLeft += Math.ceil(delta);
+          return;
+        }
+
+        // 左へ戻るときは左端に合わせる
+        if (goingBackward && lr.left < cr.left) {
+          const delta = lr.left - cr.left;
+          tocEl.scrollLeft += Math.floor(delta);
+          return;
+        }
+
+        // 方向不明（初期判定やジャンプ時）は近い方の端に寄せる
+        const overLeft = Math.max(0, cr.left - lr.left);
+        const overRight = Math.max(0, lr.right - cr.right);
+        if (overRight > overLeft) tocEl.scrollLeft += overRight;
+        else tocEl.scrollLeft -= overLeft;
+      }
+
       function setActive(i) {
+        lastIndex = currentIndex;
         currentIndex = i;
-        // TOCの見た目更新（LINEグリーンに）
+
+        // TOC見た目更新（LINEグリーン）
         tocLinks.forEach((el, idx) => el.classList.toggle("active", idx === i));
+
         // 原寸リンク更新
         const img = sections[i]?.querySelector("img");
         if (img) btnOpen.href = img.currentSrc || img.src;
+
         // 前後ボタン活性/非活性
         pgPrev.disabled = i <= 0;
         pgNext.disabled = i >= sections.length - 1;
+
+        // 現在チップを可視域へ（端寄せルール適用）
+        ensureTocVisibility(i, lastIndex);
       }
 
       /* スクロール・リサイズ・起動時に判定 */
       window.addEventListener("scroll", detectCurrentByBaseline, {
         passive: true,
       });
-      window.addEventListener("resize", detectCurrentByBaseline);
-      window.addEventListener("load", detectCurrentByBaseline);
+      window.addEventListener("resize", () => {
+        detectCurrentByBaseline();
+        // リサイズでも現在チップが見えるよう再調整
+        requestAnimationFrame(() =>
+          ensureTocVisibility(currentIndex, lastIndex)
+        );
+      });
+      window.addEventListener("load", () => {
+        detectCurrentByBaseline();
+        ensureTocVisibility(currentIndex, lastIndex);
+      });
 
       /* ========= ページ移動（瞬時） ========= */
       function scrollToSection(i) {
         const s = sections[i];
         if (!s) return;
-        // 瞬時スクロール
         window.scrollTo({ top: s.offsetTop, behavior: "auto" });
-        // スクロール直後に現在地再判定（慣性の影響を受けないよう requestAnimationFrame）
-        requestAnimationFrame(detectCurrentByBaseline);
+        // スクロール直後：現在地再判定→TOCスクロール
+        requestAnimationFrame(() => {
+          detectCurrentByBaseline();
+          ensureTocVisibility(currentIndex, lastIndex);
+        });
       }
       tocLinks.forEach((a) =>
         a.addEventListener("click", (e) => {
@@ -358,12 +406,19 @@
       function pageSize() {
         return Math.max(200, tocEl.clientWidth * 0.8);
       }
-      carPrev.addEventListener("click", () =>
-        tocEl.scrollBy({ left: -pageSize(), behavior: "auto" })
-      );
-      carNext.addEventListener("click", () =>
-        tocEl.scrollBy({ left: pageSize(), behavior: "auto" })
-      );
+      document.getElementById("car-prev").addEventListener("click", () => {
+        tocEl.scrollBy({ left: -pageSize(), behavior: "auto" });
+        // ボタン操作後も現在チップが端に来るよう微調整
+        requestAnimationFrame(() =>
+          ensureTocVisibility(currentIndex, lastIndex)
+        );
+      });
+      document.getElementById("car-next").addEventListener("click", () => {
+        tocEl.scrollBy({ left: pageSize(), behavior: "auto" });
+        requestAnimationFrame(() =>
+          ensureTocVisibility(currentIndex, lastIndex)
+        );
+      });
       tocEl.addEventListener(
         "scroll",
         () => {
@@ -648,7 +703,7 @@
         // 初回の現在地判定
         detectCurrentByBaseline();
 
-        // リサイズ時：ズーム/虫眼鏡中の制約計算を更新 & 現在地再判定
+        // リサイズ時：ズーム/虫眼鏡中の制約計算を更新 & 現在地/TOC再調整
         window.addEventListener("resize", () => {
           if (zoomedFrame && zoomedFrame._zoomHandlers) {
             const frame = zoomedFrame;
@@ -662,7 +717,6 @@
           if (magActive && magFrame) {
             const frame = magFrame;
             const mag = frame.querySelector(".magnifier");
-            // 中心に寄せ直し（必要に応じて位置維持に変更可）
             positionMagnifier(
               frame,
               mag,
@@ -674,6 +728,9 @@
             }px`;
           }
           detectCurrentByBaseline();
+          requestAnimationFrame(() =>
+            ensureTocVisibility(currentIndex, lastIndex)
+          );
         });
       })();
     </script>
