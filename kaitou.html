@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GENESIS 解答ビューア</title>
   <style>
-    :root { --wrap-w: 1100px; --gap: 16px; --dock-h: 0px; }
+    :root { --wrap-w: 1100px; --dock-h: 0px; }
 
-    /* ページ全体：横スクロールを完全に禁止（iPad Pro 対策） */
-    html, body { overflow-x: hidden; touch-action: pan-y; }
+    /* ページ全体の横スクロールを完全禁止（iPad対策） */
+    html, body { overflow-x: hidden; }
+    /* 1本指は縦スクロール優先 */
+    html, body { touch-action: pan-y; }
+
     body { margin: 0; font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif; color:#111; line-height:1.6; }
+    .wrap { max-width: var(--wrap-w); margin: 0 auto; padding: 12px 14px; }
 
-    .wrap { max-width: var(--wrap-w); margin: 0 auto; padding: 14px; }
-    main { padding-bottom: 60px; /* 下余白 */ 
-           /* 固定カルーセルの下に内容を配置するための上パディング */
-           padding-top: calc(var(--dock-h) + 8px);
-    }
+    /* コンテンツは固定カルーセルの下から開始 */
+    main { padding-top: calc(var(--dock-h) + 8px); padding-bottom: 60px; }
 
-    /* セクション先頭がカルーセル下端に揃うよう補正 */
+    /* 見出しがカルーセル下端にピタッと止まる */
     section { padding: 22px 0; border-bottom: 1px solid #f5f5f5; scroll-margin-top: calc(var(--dock-h) + 8px); }
     section h2 { font-size:.95rem; margin:0 0 8px; color:#333; }
     figure { margin:0; }
@@ -25,37 +26,37 @@
     .tools { display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 0; }
     .tools a { font-size:.9rem; text-decoration:none; color:#333; padding:6px 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; }
 
-    /* 画像フレーム（ピンチズーム対応） */
-    .frame { width:100%; overflow:hidden; border:1px solid #e5e7eb; border-radius:12px; background:#fff; touch-action: none; }
-    .frame img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; touch-action: none; transform-origin: 0 0; }
+    /* 画像フレーム：1本指はページ縦スクロールに委ねる。ピンチのみ画像操作 */
+    .frame { width:100%; overflow:hidden; border:1px solid #e5e7eb; border-radius:12px; background:#fff;
+             /* 1本指の縦パンは許可、横パンはページには流さない（実害なし）、ピンチは許可 */
+             touch-action: pan-y pinch-zoom; }
+    .frame img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; transform-origin: 0 0; }
 
-    /* === 固定カルーセル（位置は完全固定・上下左右に動かない） === */
-    .toc-dock {
-      position: fixed; inset: 0 0 auto 0; /* top:0; left:0; right:0; */
-      z-index: 50;
-      background: rgba(255,255,255,.96);
-      backdrop-filter: blur(8px);
+    /* === 固定カルーセル（絶対に動かない） === */
+    .toc-dock{
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: rgba(255,255,255,.97);
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
       border-bottom: 1px solid #eee;
       padding-top: env(safe-area-inset-top);
+      transform: translateZ(0); /* iPad Safariの描画抜け対策 */
+      will-change: transform;
+      overscroll-behavior: contain; /* 上下の弾性スクロールで位置が動かないように */
     }
     .toc-bar { display:flex; align-items:center; gap:10px; }
+    .toc-left, .toc-right { display:flex; gap:6px; align-items:center; flex:0 0 auto; }
 
-    /* 左右のボタンブロック */
-    .toc-left, .toc-right { display:flex; gap:6px; align-items:center; flex: 0 0 auto; }
-
-    /* 中央：ページリスト。コンテナは固定で一切スクロールしない */
-    .toc-container { flex:1 1 auto; overflow: clip; } /* 横・縦ともスクロール不可＆はみ出しは隠す */
-    .toc {
-      /* 中身のリストだけ横スクロール可。縦は不可、かつ縦スワイプはページスクロール可能 */
+    /* 中央の器は固定、スクロールしない。中身のリストだけ横スクロールOK */
+    .toc-container { flex:1 1 auto; overflow: clip; }
+    .toc{
       overflow-x: auto; overflow-y: hidden;
-      white-space: nowrap;
+      white-space: nowrap; scrollbar-width: none; -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
-      scrollbar-width: none; -webkit-overflow-scrolling: touch;
-      touch-action: pan-x pan-y; /* 縦スワイプはページへ、横はこの中でスクロール */
-      overscroll-behavior-x: contain; /* 横方向のスクロール連鎖防止 */
+      /* 横だけこの中でスクロール。縦はページに委ねる */
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
     }
     .toc::-webkit-scrollbar{ display:none; }
-
     .toc-list{ display:flex; gap:8px; padding:0; margin:0; list-style:none; }
     .toc-list a{
       display:inline-block; padding:6px 12px; border:1px solid #ddd; border-radius:999px;
@@ -64,35 +65,31 @@
     .toc-list a.active{ background:#e7f1ff; border-color:#cfe3ff; }
     .toc-list a:focus-visible{ outline:3px solid #22c55e; outline-offset:2px; }
 
-    .btn {
+    .btn{
       width:38px; height:34px; border:1px solid #ddd; border-radius:999px;
       background:#fff; cursor:pointer; line-height:1; font-size:16px; color:#333; user-select:none;
     }
     .btn:disabled{ opacity:.35; cursor:default; }
-    .btn.wide{ width:44px; } /* ≪ ≫ 用 */
-
-    @media (max-width: 640px) { .wrap{ padding:12px; } }
+    .btn.wide{ width:44px; } /* ≪/≫ */
   </style>
 </head>
 <body>
-  <!-- カルーセルのみ固定表示（タイトル見出しは省略） -->
+  <!-- カルーセルのみ固定（タイトル見出しは無し） -->
   <div class="toc-dock" id="toc-dock" role="region" aria-label="GENESIS 解答ビューア 目次">
     <div class="wrap">
       <div class="toc-bar">
-        <!-- 左：カルーセル送り（≪ ≫） -->
+        <!-- 左：カルーセル送り（≪/≫） -->
         <div class="toc-left">
           <button class="btn wide" id="car-prev" aria-label="カルーセルを左へ">≪</button>
           <button class="btn wide" id="car-next" aria-label="カルーセルを右へ">≫</button>
         </div>
-
-        <!-- 中央：固定位置のコンテナ内で、ページリストだけ横スクロールOK -->
+        <!-- 中央：固定器／中身だけ横スクロール -->
         <div class="toc-container">
           <nav class="toc" id="toc" aria-label="ページリスト（横スクロール）">
             <ul class="toc-list" id="toc-list"></ul>
           </nav>
         </div>
-
-        <!-- 右：前後ページへ移動（← →） -->
+        <!-- 右：前後ページ（←/→） -->
         <div class="toc-right">
           <button class="btn" id="pg-prev" aria-label="1つ前のページへ">←</button>
           <button class="btn" id="pg-next" aria-label="1つ次のページへ">→</button>
@@ -108,7 +105,6 @@
   <script>
     // ===== 設定 =====
     const BASE = "docs/"; // 画像フォルダ
-    // 例：1-001..1-015, 2-001..2-012, 3-001..3-011
     const groups = [
       { prefix: "1-", start: 1, end: 15 },
       { prefix: "2-", start: 1, end: 12 },
@@ -119,12 +115,14 @@
     const pad3 = n => String(n).padStart(3, "0");
     const files = groups.flatMap(g => Array.from({length: g.end - g.start + 1}, (_,i)=>`${g.prefix}${pad3(g.start+i)}.jpeg`));
 
+    const tocEl = document.getElementById('toc');
     const tocList = document.getElementById("toc-list");
     const content = document.getElementById("content");
 
     files.forEach((name, idx) => {
       const id = `p-${name.replace(/\.[^.]+$/, "")}`;
-      // TOC
+
+      // 目次
       const li = document.createElement("li");
       const a = document.createElement("a");
       a.href = `#${id}`;
@@ -133,7 +131,7 @@
       li.appendChild(a);
       tocList.appendChild(li);
 
-      // Section
+      // 本文
       const sec = document.createElement("section");
       sec.id = id;
       sec.dataset.index = idx;
@@ -151,46 +149,55 @@
       content.appendChild(sec);
     });
 
-    // ===== 固定カルーセルの高さを CSS 変数へ反映（内容揃え用） =====
+    // ===== 固定カルーセルの高さをCSS変数へ反映 =====
     const dockEl = document.getElementById('toc-dock');
     function applyDockHeightVar() {
       const h = dockEl?.offsetHeight || 0;
       document.documentElement.style.setProperty('--dock-h', h + 'px');
-      rebuildObserver(); // 高さが変わったらIOを作り直す
     }
     new ResizeObserver(applyDockHeightVar).observe(dockEl);
     window.addEventListener('resize', applyDockHeightVar);
     applyDockHeightVar();
 
-    // ===== 現在ページの追跡 =====
+    // ===== 現在ページの追跡（より堅牢に） =====
     const sections = Array.from(document.querySelectorAll('main section'));
     const tocLinks = Array.from(document.querySelectorAll('#toc-list a'));
     let currentIndex = 0;
-    let io = null;
 
     function setActive(index){
       currentIndex = Math.max(0, Math.min(files.length-1, index));
       tocLinks.forEach(el => el.classList.toggle('active', Number(el.dataset.index) === currentIndex));
-      // TOC内で見える位置へ
+      // 目次内でアクティブ項目が見えるように
       const active = tocLinks[currentIndex];
       if (active) active.scrollIntoView({ inline:'nearest', block:'nearest' });
       updatePageArrowState();
     }
 
-    function rebuildObserver(){
-      if (io) io.disconnect();
+    function getCurrentIndexByScroll(){
       const h = dockEl?.offsetHeight || 0;
-      io = new IntersectionObserver(entries => {
-        let best = null;
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          const distance = Math.abs(e.target.getBoundingClientRect().top - h - 8);
-          if (!best || distance < best.dist) best = { idx: Number(e.target.dataset.index), dist: distance };
-        }
-        if (best) setActive(best.idx);
-      }, { threshold: [0, 0.25, 0.5, 0.75, 1], rootMargin: `-${(h+8)}px 0px 0px 0px` });
-      sections.forEach(s => io.observe(s));
+      const y = window.scrollY + h + 8;
+      // 最も近いセクションのインデックス
+      let bestIdx = 0, bestDist = Infinity;
+      for (let i=0;i<sections.length;i++){
+        const top = sections[i].offsetTop;
+        const d = Math.abs(top - y);
+        if (d < bestDist){ bestDist = d; bestIdx = i; }
+      }
+      return bestIdx;
     }
+
+    // IntersectionObserver で追従（iOSのUI表示/非表示でもズレに強いよう rootMarginは動的にしない）
+    const io = new IntersectionObserver(entries => {
+      let best = null;
+      const h = dockEl?.offsetHeight || 0;
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        const dist = Math.abs(e.target.getBoundingClientRect().top - h - 8);
+        if (!best || dist < best.dist) best = { idx: Number(e.target.dataset.index), dist };
+      }
+      if (best) setActive(best.idx);
+    }, { threshold: [0, 0.25, 0.5, 0.75, 1], rootMargin: `-${8}px 0px 0px 0px` });
+    sections.forEach(s => io.observe(s));
 
     // ===== 見出しへスクロール（カルーセル下端にピタッと） =====
     function scrollToSection(index, smooth=true){
@@ -212,8 +219,7 @@
       });
     });
 
-    // ===== カルーセル左右（≪ ≫） =====
-    const tocEl = document.getElementById('toc');
+    // ===== カルーセル左右（≪/≫） =====
     const carPrev = document.getElementById('car-prev');
     const carNext = document.getElementById('car-next');
 
@@ -247,22 +253,28 @@
       tocEl.addEventListener('pointerleave', end);
     })();
 
-    // ===== 右側：前後ページ（← →） =====
+    // ===== 右側：前後ページ（←/→） =====
     const pgPrev = document.getElementById('pg-prev');
     const pgNext = document.getElementById('pg-next');
 
     function updatePageArrowState(){
-      pgPrev.disabled = currentIndex <= 0;
-      pgNext.disabled = currentIndex >= files.length - 1;
+      const idx = getCurrentIndexByScroll(); // 実際の位置から算出（信頼性UP）
+      currentIndex = idx;
+      pgPrev.disabled = idx <= 0;
+      pgNext.disabled = idx >= files.length - 1;
     }
     pgPrev.addEventListener('click', () => {
-      if (currentIndex > 0) { scrollToSection(currentIndex - 1); setActive(currentIndex - 1); }
+      const idx = getCurrentIndexByScroll();
+      if (idx > 0) { scrollToSection(idx - 1); setActive(idx - 1); }
     });
     pgNext.addEventListener('click', () => {
-      if (currentIndex < files.length - 1) { scrollToSection(currentIndex + 1); setActive(currentIndex + 1); }
+      const idx = getCurrentIndexByScroll();
+      if (idx < files.length - 1) { scrollToSection(idx + 1); setActive(idx + 1); }
     });
+    // スクロール中もボタン活性/非活性を更新
+    window.addEventListener('scroll', () => { updatePageArrowState(); }, { passive:true });
 
-    // ===== ハッシュでの直接アクセス補正 =====
+    // ===== 初期化（ハッシュ補正＆状態反映） =====
     window.addEventListener('load', () => {
       const hash = location.hash.slice(1);
       const idx = sections.findIndex(s => s.id === hash);
@@ -272,9 +284,10 @@
       } else {
         setActive(0);
       }
+      updatePageArrowState();
     });
 
-    // ===== 画像ピンチズーム（Pointer Events） =====
+    // ===== 画像：ピンチズーム（2本指のみ） =====
     document.querySelectorAll('[data-zoomable]').forEach(initZoomable);
 
     function initZoomable(frame){
@@ -291,13 +304,14 @@
         img.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
       };
       const rectPt = (cx,cy)=>{ const r=frame.getBoundingClientRect(); return {x: cx - r.left, y: cy - r.top}; };
-      const dist = (a,b)=> Math.hypot(a.x-b.x, a.y-b-y);
+      const dist = (a,b)=> Math.hypot(a.x - b.x, a.y - b.y);
       const mid  = (a,b)=> ({ x:(a.x+b.x)/2, y:(a.y+b.y)/2 });
 
       frame.addEventListener('pointerdown', e => {
         frame.setPointerCapture(e.pointerId);
         pointers.set(e.pointerId, rectPt(e.clientX, e.clientY));
 
+        // ダブルタップでリセット（1本指のみ判定・ページ縦スクロールは阻害しない）
         const now = performance.now();
         if (now - lastTap < 300 && pointers.size === 1) {
           baseScale = 1; baseX = 0; baseY = 0; liveScale = 1; liveX = 0; liveY = 0; pinchStart = null;
@@ -322,17 +336,13 @@
             img.style.transformOrigin = `${ox}px ${oy}px`;
           } else {
             liveScale = d / pinchStart.d;
+            // 2本指の移動で画像も追従（1本指では何もしない＝ページ縦スクロール優先）
             liveX = (m.x - pinchStart.m.x);
             liveY = (m.y - pinchStart.m.y);
           }
           setTransform();
-        } else if (pointers.size === 1 && !pinchStart) {
-          const p = [...pointers.values()][0];
-          liveX = p._lx !== undefined ? (p.x - p._lx) : 0;
-          liveY = p._ly !== undefined ? (p.y - p._ly) : 0;
-          p._lx = p.x; p._ly = p.y;
-          setTransform();
         }
+        // 1本指のときは何もしない（ページ縦スクロールを阻害しない）
       });
 
       function endGesture(id){
@@ -341,13 +351,12 @@
         if (hadTwo || pinchStart) {
           baseScale *= liveScale; baseX += liveX; baseY += liveY;
           liveScale = 1; liveX = 0; liveY = 0; pinchStart = null; setTransform();
-        } else if (liveX || liveY) {
-          baseX += liveX; baseY += liveY; liveX = 0; liveY = 0; setTransform();
         }
       }
       frame.addEventListener('pointerup', e => endGesture(e.pointerId));
       frame.addEventListener('pointercancel', e => endGesture(e.pointerId));
 
+      // トラックパッド等のピンチズーム（Ctrl+wheel）は維持
       frame.addEventListener('wheel', e => {
         if (!e.ctrlKey) return;
         e.preventDefault();
