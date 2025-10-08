@@ -2,89 +2,92 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8" />
-<!-- ピンチ拡大を無効化（ページズーム禁止） -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <title>GENESIS 解答ビューア</title>
 <style>
-  :root { --dock-h: 0px; --gap: 10px; }
+  :root { --dock-h: 0px; }
 
-  html, body { margin:0; background:#ffffff; color:#111; font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif; }
+  html, body {
+    margin: 0;
+    background: #fff;
+    color: #111;
+    font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
+    overscroll-behavior: none;
+  }
   .wrap { max-width: 1200px; margin: 0 auto; padding: 0 12px; }
 
-  /* ===== カルーセル（テキストのページチップ） ===== */
-  .toc-dock{
-    position:fixed; top:0; left:0; right:0; z-index:1000;
-    background:#fff; border-bottom:1px solid #eee;
-    padding:8px 0 env(safe-area-inset-top) 0;
+  /* ===== カルーセル ===== */
+  .toc-dock {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: #fff; border-bottom: 1px solid #eee;
+    padding: 8px 0 env(safe-area-inset-top) 0;
   }
-  .toc-bar{ display:flex; align-items:center; gap:10px; }
-
-  .btn{ height:34px; padding:0 10px; border:1px solid #ddd; background:#f9fafb; color:#111; border-radius:999px; cursor:pointer; }
-  .btn.wide{ padding:0 12px; }
-  .btn:disabled{ opacity:.4; cursor:default; }
-
-  .toc-container{ flex:1; overflow:hidden; }
-  .toc{ overflow-x:auto; overflow-y:hidden; white-space:nowrap; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-  .toc::-webkit-scrollbar{ display:none; }
-  .toc-list{ display:flex; gap:8px; padding:0; margin:0; list-style:none; }
-  .toc-list a{
-    display:inline-block; padding:6px 12px; border:1px solid #ddd; border-radius:999px;
-    background:#f0f6ff; color:#0366d6; text-decoration:none; user-select:none;
+  .toc-bar { display: flex; align-items: center; gap: 10px; }
+  .btn {
+    height: 34px; padding: 0 12px;
+    border: 1px solid #ddd; border-radius: 999px;
+    background: #f9fafb; color: #111; cursor: pointer;
   }
-  .toc-list a.active{ background:#e7f1ff; border-color:#cfe3ff; }
-
-  /* 右端の操作群（ページ送り・2倍・原寸） */
-  .toolbar-right{ display:flex; gap:8px; align-items:center; }
-
-  /* ===== 本文（縦セクション） ===== */
-  main{ padding-top: calc(var(--dock-h) + 12px); padding-bottom: 48px; }
-  section{ padding: 18px 0; border-bottom: 1px solid #f0f0f0; scroll-margin-top: calc(var(--dock-h) + 8px); }
-
-  /* 画像部分（左右余白をviewer-innerで揃える） */
-  .viewer-inner{ padding: 0 12px 12px 12px; box-sizing: border-box; }
-  .frame{
-    position:relative; overflow:hidden;
-    border:1px solid #e5e7eb; border-radius:12px; background:#fff;
-    touch-action: pan-y; /* 1本指は縦スクロール優先。2本指はJSでpanに切替 */
+  .btn:disabled { opacity: .4; cursor: default; }
+  .toc-container { flex: 1; overflow: hidden; }
+  .toc { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .toc::-webkit-scrollbar { display: none; }
+  .toc-list { display: flex; gap: 8px; padding: 0; margin: 0; list-style: none; }
+  .toc-list a {
+    display: inline-block; padding: 6px 12px;
+    border: 1px solid #ddd; border-radius: 999px;
+    background: #f0f6ff; color: #0366d6; text-decoration: none; user-select: none;
   }
-  .frame img{
-    display:block; width:100%; height:auto;
-    user-select:none; -webkit-user-drag:none; pointer-events:none; /* 画像タップ無効 */
-    transform-origin:0 0; will-change:transform;
-  }
-  .hint{ font-size:.85rem; color:#666; margin:6px 0 0; text-align:left; }
+  .toc-list a.active { background: #e7f1ff; border-color: #cfe3ff; }
 
-  .badge{
-    position:absolute; right:10px; bottom:10px;
-    background:rgba(0,0,0,.55); color:#fff; border:1px solid rgba(255,255,255,.12);
-    padding:4px 8px; border-radius:8px; font-size:12px;
-  }
+  .toolbar-right { display: flex; gap: 8px; align-items: center; }
 
-  a.tool-link{ display:inline-block; padding:6px 10px; border:1px solid #ddd; border-radius:8px; background:#fafafa; color:#111; text-decoration:none; }
+  /* ===== 本文 ===== */
+  main { padding-top: calc(var(--dock-h) + 12px); padding-bottom: 48px; }
+  section { padding: 18px 0; border-bottom: 1px solid #f0f0f0; }
+
+  .viewer-inner { padding: 0 12px 12px 12px; box-sizing: border-box; }
+  .frame {
+    position: relative; overflow: hidden;
+    border: 1px solid #e5e7eb; border-radius: 12px;
+    background: #fff;
+    touch-action: none; /* ← 全ての標準ジェスチャを無効化 */
+  }
+  .frame img {
+    display: block; width: 100%; height: auto;
+    user-select: none; -webkit-user-drag: none; pointer-events: none;
+    transform-origin: 0 0; will-change: transform;
+  }
+  .badge {
+    position: absolute; right: 10px; bottom: 10px;
+    background: rgba(0,0,0,.55); color: #fff;
+    border: 1px solid rgba(255,255,255,.12);
+    padding: 4px 8px; border-radius: 8px; font-size: 12px;
+  }
 </style>
 </head>
 <body>
-  <!-- ===== カルーセル（4ボタン＋テキストチップ＋右端ツール） ===== -->
-  <div class="toc-dock" id="toc-dock" role="region" aria-label="目次">
+  <!-- ===== カルーセル：4ボタン＋右端ツール ===== -->
+  <div class="toc-dock" id="toc-dock">
     <div class="wrap">
       <div class="toc-bar">
-        <!-- カルーセル左右 -->
-        <button class="btn wide" id="car-prev" aria-label="カルーセルを左へ">≪</button>
-        <button class="btn wide" id="car-next" aria-label="カルーセルを右へ">≫</button>
+        <!-- 左：カルーセル操作 -->
+        <button class="btn" id="car-prev">≪</button>
+        <button class="btn" id="car-next">≫</button>
 
-        <!-- ページチップ -->
+        <!-- 中央：ページチップ -->
         <div class="toc-container">
-          <nav class="toc" id="toc" aria-label="ページリスト（横スクロール）">
+          <nav class="toc" id="toc">
             <ul class="toc-list" id="toc-list"></ul>
           </nav>
         </div>
 
-        <!-- 右端：ページ送り ← → ／ 2倍 ／ 原寸で開く -->
+        <!-- 右端：ページ送り＋ズーム操作 -->
         <div class="toolbar-right">
-          <button class="btn" id="pg-prev" aria-label="1つ前のページへ">←</button>
-          <button class="btn" id="pg-next" aria-label="1つ次のページへ">→</button>
-          <button class="btn" id="btn-zoom2" aria-label="画像を2倍表示">2倍</button>
-          <a class="tool-link" id="btn-open" href="#" target="_blank" rel="noopener">原寸で開く</a>
+          <button class="btn" id="pg-prev">←</button>
+          <button class="btn" id="pg-next">→</button>
+          <button class="btn" id="btn-zoom">2倍</button>
+          <a class="btn" id="btn-open" href="#" target="_blank" rel="noopener">原寸</a>
         </div>
       </div>
     </div>
@@ -101,225 +104,145 @@ const groups = [
   { prefix: "3-", start: 1, end: 11 },
 ];
 const pad3 = n => String(n).padStart(3, "0");
-const files = groups.flatMap(g => Array.from({length: g.end - g.start + 1}, (_,i)=>`${g.prefix}${pad3(g.start+i)}.jpeg`));
+const files = groups.flatMap(g =>
+  Array.from({ length: g.end - g.start + 1 }, (_, i) => `${g.prefix}${pad3(g.start + i)}.jpeg`)
+);
 
 /* ========= 要素 ========= */
-const dockEl  = document.getElementById('toc-dock');
-const tocEl   = document.getElementById('toc');
-const tocList = document.getElementById('toc-list');
-const content = document.getElementById('content');
-const btnOpen = document.getElementById('btn-open');
-const btnZoom2= document.getElementById('btn-zoom2');
-const pgPrev  = document.getElementById('pg-prev');
-const pgNext  = document.getElementById('pg-next');
-const carPrev = document.getElementById('car-prev');
-const carNext = document.getElementById('car-next');
+const tocEl = document.getElementById("toc");
+const tocList = document.getElementById("toc-list");
+const content = document.getElementById("content");
+const btnZoom = document.getElementById("btn-zoom");
+const btnOpen = document.getElementById("btn-open");
+const pgPrev = document.getElementById("pg-prev");
+const pgNext = document.getElementById("pg-next");
+const carPrev = document.getElementById("car-prev");
+const carNext = document.getElementById("car-next");
 
-/* ========= DOM生成（セクションとテキストチップ） ========= */
+/* ========= セクション生成 ========= */
 files.forEach((name, idx) => {
-  // TOC チップ
-  const li = document.createElement('li');
-  const a  = document.createElement('a');
+  const li = document.createElement("li");
+  const a = document.createElement("a");
   a.href = `#p-${name.replace(/\.[^.]+$/, "")}`;
+  a.textContent = name.replace(".jpeg", "");
   a.dataset.index = idx;
-  a.textContent = name.replace('.jpeg','');
-  if (idx === 0) a.classList.add('active');
-  li.appendChild(a); tocList.appendChild(li);
+  if (idx === 0) a.classList.add("active");
+  li.appendChild(a);
+  tocList.appendChild(li);
 
-  // セクション（画像名やダウンロードは不要なので出さない）
-  const sec = document.createElement('section');
-  sec.dataset.index = idx; sec.id = `p-${name.replace(/\.[^.]+$/, "")}`;
+  const sec = document.createElement("section");
+  sec.dataset.index = idx;
+  sec.id = `p-${name.replace(/\.[^.]+$/, "")}`;
   sec.innerHTML = `
     <div class="viewer-inner">
       <figure class="frame" data-zoomable>
         <img src="${BASE}${encodeURIComponent(name)}" alt="">
         <div class="badge">1.00×</div>
       </figure>
-      <p class="hint">操作：1本指ドラッグ＝ページ縦スクロール／2本指ドラッグ＝画像パン／「2倍」ボタン＝中央付近を2倍／ピンチ不可・画像タップ無効</p>
     </div>
   `;
   content.appendChild(sec);
 });
 
-/* ========= カルーセル高さを CSS 変数へ ========= */
-function applyDockH(){ document.documentElement.style.setProperty('--dock-h', (dockEl?.offsetHeight||0) + 'px'); }
-new ResizeObserver(applyDockH).observe(dockEl);
-window.addEventListener('resize', applyDockH);
-applyDockH();
+/* ========= カルーセル操作 ========= */
+function pageSize() { return Math.max(200, tocEl.clientWidth * 0.8); }
+carPrev.addEventListener("click", () => tocEl.scrollBy({ left: -pageSize(), behavior: "smooth" }));
+carNext.addEventListener("click", () => tocEl.scrollBy({ left: pageSize(), behavior: "smooth" }));
 
-/* ========= 現在ページ同期（スクロールでアクティブ更新 & 原寸リンク更新） ========= */
-const sections = Array.from(document.querySelectorAll('main section'));
-const tocLinks = Array.from(document.querySelectorAll('#toc-list a'));
-
-function indexByScroll(){
-  const h = dockEl?.offsetHeight || 0;
-  const y = window.scrollY + h + 8;
+/* ========= ページ移動 ========= */
+const sections = Array.from(document.querySelectorAll("main section"));
+const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
+function indexByScroll() {
+  const y = window.scrollY;
   let best = 0, dist = Infinity;
-  for (let i=0;i<sections.length;i++){
-    const d = Math.abs(sections[i].offsetTop - y);
-    if (d < dist){ dist = d; best = i; }
-  }
+  sections.forEach((s, i) => {
+    const d = Math.abs(s.offsetTop - y);
+    if (d < dist) { dist = d; best = i; }
+  });
   return best;
 }
-function markActive(i){
-  tocLinks.forEach((el,idx)=>el.classList.toggle('active', idx===i));
-  // 右端「原寸で開く」を現在ページの画像へ
-  const img = sections[i]?.querySelector('img');
+function markActive(i) {
+  tocLinks.forEach((el, idx) => el.classList.toggle("active", idx === i));
+  const img = sections[i]?.querySelector("img");
   if (img) btnOpen.href = img.currentSrc || img.src;
 }
-function scrollToSection(index, smooth=true){
-  const target = sections[index]; if (!target) return;
-  const h = dockEl?.offsetHeight || 0;
-  const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
-  window.scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' });
-  markActive(index);
+function scrollToSection(i, smooth = true) {
+  const s = sections[i]; if (!s) return;
+  const y = s.offsetTop;
+  window.scrollTo({ top: y, behavior: smooth ? "smooth" : "auto" });
+  markActive(i);
 }
+tocLinks.forEach(a => a.addEventListener("click", e => {
+  e.preventDefault();
+  scrollToSection(Number(a.dataset.index));
+}));
+pgPrev.addEventListener("click", () => { const i = indexByScroll(); if (i > 0) scrollToSection(i - 1); });
+pgNext.addEventListener("click", () => { const i = indexByScroll(); if (i < sections.length - 1) scrollToSection(i + 1); });
+window.addEventListener("scroll", () => markActive(indexByScroll()), { passive: true });
 
-tocLinks.forEach(a=>{
-  a.addEventListener('click', e=>{
-    e.preventDefault();
-    scrollToSection(Number(a.dataset.index));
-  });
-});
+/* ========= 画像ズーム処理（タップ・ピンチ禁止） ========= */
+let zoomed = false;        // 2倍状態かどうか
+let activeFrame = null;    // 現在ズーム中のframe
+btnZoom.addEventListener("click", () => {
+  const i = indexByScroll();
+  const frame = sections[i].querySelector(".frame");
+  const img = frame.querySelector("img");
+  const badge = frame.querySelector(".badge");
 
-window.addEventListener('scroll', () => {
-  const idx = indexByScroll();
-  markActive(idx);
-}, { passive:true });
+  if (!zoomed) {
+    // ---- 2倍化 ----
+    zoomed = true;
+    activeFrame = frame;
+    btnZoom.textContent = "1倍";
+    document.body.style.overflow = "hidden"; // ページ固定
+    img.style.transform = "scale(2)";
+    badge.textContent = "2.00×";
 
-/* ========= カルーセル左右（≪ ≫） ========= */
-function pageSize(){ return Math.max(200, tocEl.clientWidth * 0.8); }
-carPrev.addEventListener('click', ()=> tocEl.scrollBy({left:-pageSize(), behavior:'smooth'}));
-carNext.addEventListener('click', ()=> tocEl.scrollBy({left: pageSize(), behavior:'smooth'}));
+    // 1本指パン許可
+    let startX = 0, startY = 0;
+    let moveX = 0, moveY = 0;
+    frame.addEventListener("pointerdown", onDown);
+    frame.addEventListener("pointermove", onMove);
+    frame.addEventListener("pointerup", onUp);
+    frame.addEventListener("pointercancel", onUp);
 
-/* ========= ページ送り（← →） ========= */
-function updatePageButtons(){
-  const idx = indexByScroll();
-  pgPrev.disabled = (idx <= 0);
-  pgNext.disabled = (idx >= sections.length - 1);
-}
-pgPrev.addEventListener('click', ()=>{
-  const idx = indexByScroll();
-  if (idx > 0) scrollToSection(idx - 1);
-});
-pgNext.addEventListener('click', ()=>{
-  const idx = indexByScroll();
-  if (idx < sections.length - 1) scrollToSection(idx + 1);
-});
-window.addEventListener('scroll', updatePageButtons, { passive:true });
-window.addEventListener('load', updatePageButtons);
-
-/* ========= 画像操作（ピンチ禁止／画像タップ無効／2本指ドラッグ＝パン／2倍ボタン） ========= */
-document.querySelectorAll('[data-zoomable]').forEach(initZoomable);
-
-// 各ページごとにズーム状態を持つ
-function initZoomable(frame){
-  const img   = frame.querySelector('img');
-  const badge = frame.querySelector('.badge');
-
-  let pointers = new Map();     // pointerId -> {x,y}
-  let baseScale = 1;            // 1 or 2（「2倍」ボタンで2にセット）
-  let baseX = 0, baseY = 0;     // 確定パン
-  let liveX = 0, liveY = 0;     // 2本指ドラッグ中の一時差分
-  let naturalW=0, naturalH=0;
-
-  img.addEventListener('load', ()=>{
-    naturalW = img.naturalWidth; naturalH = img.naturalHeight;
-    resetFit();
-  });
-
-  function resetFit(){ baseScale=1; baseX=0; baseY=0; liveX=0; liveY=0; apply(); }
-  function apply(){ img.style.transform = `translate(${baseX+liveX}px, ${baseY+liveY}px) scale(${baseScale})`; badge.textContent = `${baseScale.toFixed(2)}×`; }
-  function clampTranslate(){
-    const vw = frame.clientWidth, vh = frame.clientHeight;
-    const ar = naturalH / naturalW;
-    const baseW = vw, baseH = baseW * ar; // 横幅フィット基準
-    const dispW = baseW * baseScale, dispH = baseH * baseScale;
-    const minX = Math.min(0, vw - dispW), maxX = 0;
-    const minY = Math.min(0, vh - dispH), maxY = 0;
-    baseX = Math.max(minX, Math.min(maxX, baseX));
-    baseY = Math.max(minY, Math.min(maxY, baseY));
-  }
-  function zoomTo2xCenter(){
-    const rect = frame.getBoundingClientRect();
-    const cx = rect.left + rect.width/2;
-    const cy = rect.top  + rect.height/2;
-    const next = 2;
-    const k = next / baseScale;
-    baseX = (cx - rect.left) - ((cx - rect.left) - baseX) * k;
-    baseY = (cy - rect.top ) - ((cy - rect.top ) - baseY) * k;
-    baseScale = next;
-    clampTranslate(); apply();
-  }
-
-  // 画像タップは何もしない（pointerdownを拾わない）
-  // 2本指ドラッグ＝画像パン
-  frame.addEventListener('pointerdown', (e)=>{
-    frame.setPointerCapture(e.pointerId);
-    const r = frame.getBoundingClientRect();
-    pointers.set(e.pointerId, {x:e.clientX - r.left, y:e.clientY - r.top});
-  }, { passive:true });
-
-  frame.addEventListener('pointermove', (e)=>{
-    if (!pointers.has(e.pointerId)) return;
-    const r = frame.getBoundingClientRect();
-    pointers.set(e.pointerId, {x:e.clientX - r.left, y:e.clientY - r.top});
-
-    if (pointers.size >= 2) {
-      // 2本指＝パン（ピンチ倍率変更はしない）
-      frame.style.touchAction = 'none'; // ページスクロール停止
+    function onDown(e) {
+      if (e.pointerType !== "touch" && e.pointerType !== "mouse") return;
       e.preventDefault();
-      const vals = [...pointers.values()];
-      const mid = (a,b)=>({x:(a.x+b.x)/2, y:(a.y+b.y)/2});
-      if (!frame._startMid) frame._startMid = mid(vals[0], vals[1]);
-      const m = mid(vals[0], vals[1]);
-      liveX = (m.x - frame._startMid.x);
-      liveY = (m.y - frame._startMid.y);
-      apply();
-    } else {
-      // 1本指＝縦スクロール（何もしない）
-      frame.style.touchAction = 'pan-y';
+      frame.setPointerCapture(e.pointerId);
+      startX = e.clientX - moveX;
+      startY = e.clientY - moveY;
     }
-  }, { passive:false });
+    function onMove(e) {
+      if (!frame.hasPointerCapture(e.pointerId)) return;
+      e.preventDefault();
+      moveX = e.clientX - startX;
+      moveY = e.clientY - startY;
+      img.style.transform = `translate(${moveX}px, ${moveY}px) scale(2)`;
+    }
+    function onUp(e) {
+      frame.releasePointerCapture(e.pointerId);
+    }
 
-  function endPointer(id){
-    const wasTwo = pointers.size >= 2;
-    pointers.delete(id);
-    if (wasTwo) {
-      baseX += liveX; baseY += liveY;
-      liveX = 0; liveY = 0; frame._startMid = null;
-      clampTranslate(); apply();
+  } else {
+    // ---- 1倍へ戻す ----
+    zoomed = false;
+    btnZoom.textContent = "2倍";
+    document.body.style.overflow = "auto";
+    img.style.transform = "scale(1)";
+    badge.textContent = "1.00×";
+
+    // ハンドラ解除
+    if (activeFrame) {
+      activeFrame.replaceWith(activeFrame.cloneNode(true)); // シンプルにイベント全解除
+      sections[i].querySelector(".viewer-inner").replaceChild(activeFrame, sections[i].querySelector(".viewer-inner").firstChild);
     }
-    if (pointers.size < 2) frame.style.touchAction = 'pan-y';
   }
-  frame.addEventListener('pointerup',     e=>endPointer(e.pointerId));
-  frame.addEventListener('pointercancel', e=>endPointer(e.pointerId));
+});
 
-  // ホイールズーム等のブラウザズームを抑止
-  frame.addEventListener('wheel', (e)=>{ e.preventDefault(); }, {passive:false});
-
-  // このフレーム専用の2倍ボタン動作を登録（現在ページのみ操作）
-  btnZoom2.addEventListener('click', ()=>{
-    // 現在表示中セクションと一致しているときのみ実行
-    const idx = indexByScroll();
-    if (Number(frame.parentElement.parentElement.dataset.index) !== idx) return;
-    zoomTo2xCenter();
-  });
-}
-
-/* ========= 初期表示 ========= */
-function init(){
-  // 「原寸で開く」を1ページ目に合わせる
-  markActive(0);
-  // 4ボタンのうち ← → は load 時点の有効/無効も更新
-  window.dispatchEvent(new Event('scroll'));
-}
-function markActive(i){
-  tocLinks.forEach((el,idx)=>el.classList.toggle('active', idx===i));
-  const img = sections[i]?.querySelector('img');
-  if (img) btnOpen.href = img.currentSrc || img.src;
-}
-init();
+/* ========= 初期化 ========= */
+markActive(0);
+btnOpen.href = sections[0].querySelector("img").src;
 </script>
 </body>
 </html>
