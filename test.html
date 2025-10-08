@@ -167,26 +167,25 @@
         position: absolute;
         inset: 0;
         pointer-events: none;
-        /* フェザー幅 96px に拡張 */
         background: linear-gradient(
             to right,
             rgba(255, 255, 255, var(--gL, 0)),
-            rgba(255, 255, 255, 0) 96px
+            rgba(255, 255, 255, 0) 128px
           ),
           linear-gradient(
             to left,
             rgba(255, 255, 255, var(--gR, 0)),
-            rgba(255, 255, 255, 0) 96px
+            rgba(255, 255, 255, 0) 128px
           ),
           linear-gradient(
             to bottom,
             rgba(255, 255, 255, var(--gT, 0)),
-            rgba(255, 255, 255, 0) 96px
+            rgba(255, 255, 255, 0) 128px
           ),
           linear-gradient(
             to top,
             rgba(255, 255, 255, var(--gB, 0)),
-            rgba(255, 255, 255, 0) 96px
+            rgba(255, 255, 255, 0) 128px
           );
         mix-blend-mode: multiply;
       }
@@ -284,7 +283,7 @@
       const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
       let currentIndex = 0;
 
-      /* ========= 現在地判定（70%ルール＋最終ページ補正） ========= */
+      /* ========= 現在地判定 ========= */
       function detectCurrentPage() {
         const baseline = dockEl.getBoundingClientRect().bottom;
         let idx = 0;
@@ -293,11 +292,9 @@
           const th = r.top + r.height * 0.7;
           if (baseline >= th) idx = i + 1;
         }
-        // 最終ページ：一部でも見えたらそれが現在地
+        // ✅ 最終ページは「下端が見えた時点で現在地」
         const last = sections[sections.length - 1].getBoundingClientRect();
-        if (last.top < window.innerHeight && last.bottom > 0)
-          idx = sections.length - 1;
-
+        if (last.bottom <= window.innerHeight) idx = sections.length - 1;
         if (idx >= sections.length) idx = sections.length - 1;
         if (idx !== currentIndex) setActive(idx);
       }
@@ -318,25 +315,26 @@
         window.scrollTo({ top: s.offsetTop, behavior: "auto" });
         requestAnimationFrame(detectCurrentPage);
       }
-      function centerCurrentToc() {
+      function ensureVisibleEdge(direction) {
         const link = tocLinks[currentIndex];
         if (!link) return;
-        link.scrollIntoView({
-          behavior: "auto",
-          block: "nearest",
-          inline: "center",
-        });
+        const cr = tocEl.getBoundingClientRect(),
+          lr = link.getBoundingClientRect();
+        if (direction === "right" && lr.right > cr.right)
+          tocEl.scrollLeft += lr.right - cr.right;
+        if (direction === "left" && lr.left < cr.left)
+          tocEl.scrollLeft -= cr.left - lr.left;
       }
       pgPrev.onclick = () => {
         if (currentIndex > 0) {
           scrollToSection(currentIndex - 1);
-          centerCurrentToc();
+          ensureVisibleEdge("left");
         }
       };
       pgNext.onclick = () => {
         if (currentIndex < sections.length - 1) {
           scrollToSection(currentIndex + 1);
-          centerCurrentToc();
+          ensureVisibleEdge("right");
         }
       };
       tocLinks.forEach(
@@ -344,7 +342,6 @@
           (a.onclick = (e) => {
             e.preventDefault();
             scrollToSection(Number(a.dataset.index));
-            centerCurrentToc();
           })
       );
 
@@ -352,7 +349,6 @@
       function pageSize() {
         return Math.max(200, tocEl.clientWidth * 0.8);
       }
-      /* ≪≫ では“現在地非表示”を許容（自動センタリングしない） */
       carPrev.onclick = () =>
         tocEl.scrollBy({ left: -pageSize(), behavior: "auto" });
       carNext.onclick = () =>
@@ -360,9 +356,7 @@
 
       /* ========= 虫眼鏡 ========= */
       let zoomedFrame = null,
-        magFrame = null,
-        magActive = false;
-
+        magFrame = null;
       function visibleVerticalBounds(frame) {
         const fr = frame.getBoundingClientRect();
         const topBound = Math.max(
@@ -373,49 +367,36 @@
         return { top: topBound, bottom: bottomBound };
       }
       function setMagGradient(m, gL, gR, gT, gB) {
-        const s = 0.35; /* 濃さを少し弱め視認性アップ */
+        const s = 0.4;
         m.style.setProperty("--gL", (gL * s).toFixed(3));
         m.style.setProperty("--gR", (gR * s).toFixed(3));
         m.style.setProperty("--gT", (gT * s).toFixed(3));
         m.style.setProperty("--gB", (gB * s).toFixed(3));
       }
-
       function positionMagnifier(frame, mag, left, top) {
         const fr = frame.getBoundingClientRect();
         const w = mag.offsetWidth,
           h = mag.offsetHeight;
-
-        /* 左右＝画像端でクランプ */
         left = Math.max(0, Math.min(fr.width - w, left));
-
-        /* 上下＝表示範囲端でクランプ（上：dock bottom、下：viewport bottom） */
         const vb = visibleVerticalBounds(frame);
-        const minT = vb.top;
-        const maxT = Math.max(vb.top, vb.bottom - h);
+        const minT = vb.top,
+          maxT = Math.max(vb.top, vb.bottom - h);
         top = Math.max(minT, Math.min(maxT, top));
-
-        /* 位置反映 */
         mag.style.left = `${left}px`;
         mag.style.top = `${top}px`;
-
-        /* 背景：2倍＋オーバースキャンで右上／右下の見切れ解消 */
         const Z = 2,
-          OVER = 128; // 端の余裕分
+          OVER = 256;
         mag.style.backgroundSize = `${fr.width * Z + OVER}px ${
           fr.height * Z + OVER
         }px`;
-        const maxBgX = fr.width * Z - w + OVER; // 右側に余裕
-        const maxBgY = fr.height * Z - h + OVER; // 下側に余裕
-        const bgX = -Math.min(left * Z, maxBgX);
-        const bgY = -Math.min(top * Z, maxBgY);
+        const bgX = -Math.min(left * Z, fr.width * Z - w + OVER);
+        const bgY = -Math.min(top * Z, fr.height * Z - h + OVER);
         mag.style.backgroundPosition = `${bgX}px ${bgY}px`;
-
-        /* グラデーション：左右は画像端距離、上下は表示範囲端距離 */
-        const th = 120;
-        const distL = left;
-        const distR = fr.width - (left + w);
-        const distT = top - vb.top;
-        const distB = vb.bottom - (top + h);
+        const th = 128;
+        const distL = left,
+          distR = fr.width - (left + w);
+        const distT = top - vb.top,
+          distB = vb.bottom - (top + h);
         setMagGradient(
           mag,
           Math.max(0, Math.min(1, 1 - distL / th)),
@@ -424,24 +405,16 @@
           Math.max(0, Math.min(1, 1 - distB / th))
         );
       }
-
       function enterMagnifier(frame) {
         if (zoomedFrame) exitZoom(zoomedFrame);
         const mag = frame.querySelector(".magnifier");
         const img = frame.querySelector("img");
-
-        /* 画像セット（size は positionMagnifier で都度更新） */
         mag.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
         mag.style.display = "block";
-
-        /* 初期位置＝表示範囲中央 */
         const vb = visibleVerticalBounds(frame);
         const left = (frame.clientWidth - mag.offsetWidth) / 2;
-        const top =
-          vb.top + Math.max(0, (vb.bottom - vb.top - mag.offsetHeight) / 2);
+        const top = vb.top + (vb.bottom - vb.top - mag.offsetHeight) / 2;
         positionMagnifier(frame, mag, left, top);
-
-        /* レンズ移動 */
         frame.style.touchAction = "none";
         let sx, sy, l0, t0;
         frame.onpointerdown = (e) => {
@@ -466,7 +439,6 @@
           } catch {}
         };
         magFrame = frame;
-        magActive = true;
         btnMag.textContent = "オフ";
       }
       function exitMagnifier(frame) {
@@ -475,7 +447,6 @@
         setMagGradient(mag, 0, 0, 0, 0);
         frame.onpointerdown = frame.onpointermove = frame.onpointerup = null;
         magFrame = null;
-        magActive = false;
         btnMag.textContent = "虫眼鏡";
       }
       btnMag.onclick = () => {
@@ -487,7 +458,7 @@
         }
       };
 
-      /* ========= 2倍ズーム（据え置き） ========= */
+      /* ========= 2倍ズーム ========= */
       function enterZoom(frame) {
         if (magFrame) exitMagnifier(magFrame);
         const img = frame.querySelector("img");
@@ -539,21 +510,6 @@
         if (btnZoom.textContent === "2倍") enterZoom(f);
         else exitZoom(f);
       };
-
-      /* ========= ダブルタップズーム無効 ========= */
-      let lastTouchEnd = 0;
-      document.addEventListener(
-        "touchend",
-        (e) => {
-          const now = Date.now();
-          if (now - lastTouchEnd <= 400) e.preventDefault();
-          lastTouchEnd = now;
-        },
-        { passive: false }
-      );
-
-      /* ========= 起動 ========= */
-      window.addEventListener("load", detectCurrentPage);
     </script>
   </body>
 </html>
