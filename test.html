@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>PDFビューア 修正版</title>
+    <style>
+      :root {
+        --lens-size: 50vmin; /* 画面の半分 */
+      }
+      body {
+        margin: 0;
+        background: #000;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        overflow: hidden;
+      }
+      .viewer {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+      }
+      img.page {
+        max-width: 100%;
+        max-height: 100%;
+        user-select: none;
+        -webkit-user-drag: none;
+        object-fit: contain;
+        touch-action: none;
+      }
+      button {
+        position: fixed;
+        bottom: 1rem;
+        padding: 0.6rem 1.2rem;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: #fff;
+        font-size: 1rem;
+        border-radius: 8px;
+      }
+      button:hover {
+        background: rgba(255, 255, 255, 0.35);
+      }
+      #prev {
+        left: 1rem;
+      }
+      #next {
+        right: 1rem;
+      }
+      #zoom2x {
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 4.5rem;
+      }
+      #lensBtn {
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 8.5rem;
+      }
+      #lens {
+        position: absolute;
+        pointer-events: none;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+        display: none;
+      }
+      #lens img {
+        position: absolute;
+        transform-origin: top left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="viewer">
+      <img id="main" class="page" src="" alt="page" />
+      <div id="lens"><img src="" alt="" /></div>
+    </div>
+    <button id="prev">←</button>
+    <button id="next">→</button>
+    <button id="zoom2x">2倍</button>
+    <button id="lensBtn">虫眼鏡</button>
+
+    <script>
+      const pages = [
+        "001.jpg",
+        "002.jpg",
+        "003.jpg",
+        "004.jpg",
+        "005.jpg",
+        "006.jpg",
+        "007.jpg",
+        "008.jpg",
+        "009.jpg",
+        "010.jpg",
+        "011.jpg",
+        "012.jpg",
+        "013.jpg",
+        "014.jpg",
+        "015.jpg",
+        "016.jpg",
+        "017.jpg",
+        "018.jpg",
+        "019.jpg",
+        "020.jpg",
+        "021.jpg",
+        "022.jpg",
+        "023.jpg",
+        "024.jpg",
+        "025.jpg",
+        "026.jpg",
+        "027.jpg",
+        "028.jpg",
+        "029.jpg",
+        "030.jpg",
+        "031.jpg",
+        "032.jpg",
+        "033.jpg",
+        "034.jpg",
+        "035.jpg",
+        "036.jpg",
+        "037.jpg",
+        "038.jpg",
+        "039.jpg",
+        "040.jpg",
+        "041.jpg",
+        "042.jpg",
+        "043.jpg",
+        "044.jpg",
+        "045.jpg",
+        "046.jpg",
+        "047.jpg",
+        "048.jpg",
+        "049.jpg",
+        "050.jpg",
+        "051.jpg",
+        "052.jpg",
+        "053.jpg",
+        "054.jpg",
+        "055.jpg",
+        "056.jpg",
+        "057.jpg",
+        "058.jpg",
+        "059.jpg",
+      ];
+
+      let current = 48; // 49ページ（0基準）
+      const main = document.getElementById("main");
+      const lens = document.getElementById("lens");
+      const lensImg = lens.querySelector("img");
+      const lensBtn = document.getElementById("lensBtn");
+      const zoomBtn = document.getElementById("zoom2x");
+      const prev = document.getElementById("prev");
+      const next = document.getElementById("next");
+
+      let zoomMode = false;
+      let lensMode = false;
+      let scale = 1;
+      let startX = 0,
+        startY = 0,
+        originX = 0,
+        originY = 0;
+
+      // ページ読み込み
+      function showPage(i) {
+        current = Math.max(0, Math.min(i, pages.length - 1));
+        main.src = pages[current];
+        lensImg.src = pages[current];
+        scale = 1;
+        main.style.transform = "";
+        lens.style.display = "none";
+      }
+      showPage(current);
+
+      // ページ送り
+      prev.onclick = () => showPage(current - 1);
+      next.onclick = () => showPage(current + 1);
+
+      // ==== 虫眼鏡 ====
+      lensBtn.onclick = () => {
+        lensMode = !lensMode;
+        zoomMode = false;
+        zoomBtn.style.background = "rgba(255,255,255,0.2)";
+        lens.style.display = lensMode ? "block" : "none";
+      };
+
+      const lensSize = window.innerWidth * 0.5; // 画面の半分
+      lens.style.width = lens.style.height = lensSize + "px";
+
+      main.addEventListener("pointermove", (e) => {
+        if (!lensMode) return;
+        const rect = main.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const lensRadius = lensSize / 2;
+        const imgW = rect.width;
+        const imgH = rect.height;
+
+        // 範囲制限
+        const lx = Math.max(lensRadius, Math.min(x, imgW - lensRadius));
+        const ly = Math.max(lensRadius, Math.min(y, imgH - lensRadius));
+        lens.style.left = rect.left + lx - lensRadius + "px";
+        lens.style.top = rect.top + ly - lensRadius + "px";
+
+        const zoom = 2;
+        lensImg.style.width = imgW * zoom + "px";
+        lensImg.style.height = imgH * zoom + "px";
+        lensImg.style.left = -(lx * zoom - lensRadius) + "px";
+        lensImg.style.top = -(ly * zoom - lensRadius) + "px";
+      });
+
+      // ==== 2倍 ====
+      zoomBtn.onclick = () => {
+        zoomMode = !zoomMode;
+        lensMode = false;
+        lens.style.display = "none";
+        zoomBtn.style.background = zoomMode
+          ? "rgba(255,255,255,0.4)"
+          : "rgba(255,255,255,0.2)";
+        scale = zoomMode ? 2 : 1;
+        main.style.transform = `scale(${scale})`;
+        main.style.transformOrigin = "center center";
+      };
+
+      // パン操作
+      main.addEventListener("pointerdown", (e) => {
+        if (!zoomMode) return;
+        e.preventDefault();
+        startX = e.clientX;
+        startY = e.clientY;
+        const style = getComputedStyle(main);
+        const matrix = new WebKitCSSMatrix(style.transform);
+        originX = matrix.m41;
+        originY = matrix.m42;
+        main.setPointerCapture(e.pointerId);
+      });
+      main.addEventListener("pointermove", (e) => {
+        if (!zoomMode || !main.hasPointerCapture(e.pointerId)) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const rect = main.getBoundingClientRect();
+        const imgW = rect.width * scale;
+        const imgH = rect.height * scale;
+        const limitX = (imgW - rect.width) / 2;
+        const limitY = (imgH - rect.height) / 2;
+        const moveX = Math.max(-limitX, Math.min(limitX, originX + dx));
+        const moveY = Math.max(-limitY, Math.min(limitY, originY + dy));
+        main.style.transform = `scale(${scale}) translate(${moveX / scale}px,${
+          moveY / scale
+        }px)`;
+      });
+      main.addEventListener("pointerup", (e) => {
+        if (main.hasPointerCapture(e.pointerId))
+          main.releasePointerCapture(e.pointerId);
+      });
+    </script>
+  </body>
+</html>
