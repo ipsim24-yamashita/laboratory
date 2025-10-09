@@ -6,7 +6,6 @@
   <title>GENESIS 解答ビューア</title>
   <style>
     :root { --dock-h: 0px; --line-green: #22c55e; }
-
     html, body {
       margin: 0; background: #fff; color: #111;
       font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
@@ -58,39 +57,24 @@
       transform-origin: 0 0; will-change: transform;
     }
 
-    /* ===== グローバル虫眼鏡（body直下 / 常に最前面） ===== */
+    /* ===== グローバル虫眼鏡 ===== */
     .magnifier {
-      position: fixed;
-      z-index: 3000;
-      display: none;
-      border: 2px solid var(--line-green);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,.25);
-      background: #fff;
+      position: fixed; z-index: 3000; display: none;
+      border: 2px solid var(--line-green); border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,.25); background: #fff;
       -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
-      pointer-events: none; /* 中身はクリック不可 */
+      pointer-events: none;
     }
-    .magnifier img {
-      position: absolute; left: 0; top: 0;
-      pointer-events: none; user-select: none; -webkit-user-drag: none;
-    }
-
-    .mag-controls {
-      position: absolute; inset: 0;
-      pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
-    }
+    .magnifier img { position: absolute; left: 0; top: 0; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+    .mag-controls { position: absolute; inset: 0; pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     .mag-btn {
-      position: absolute;
-      width: 44px; height: 44px; border-radius: 999px;
-      background: rgba(17,17,17,.85); border: none;
-      display: grid; place-items: center;
-      pointer-events: auto; touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
+      position: absolute; width: 44px; height: 44px; border-radius: 999px;
+      background: rgba(17,17,17,.85); border: none; display: grid; place-items: center;
+      pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
     }
     .mag-btn:active { transform: scale(.98); }
-    .mag-btn svg { width: 22px; height: 22px; fill: #fff; }
+    .mag-btn svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
     .mag-btn.n  { top: 8px; left: 50%; transform: translate(-50%,0); }
     .mag-btn.s  { bottom: 8px; left: 50%; transform: translate(-50%,0); }
@@ -109,9 +93,7 @@
         <button class="btn" id="car-prev">≪</button>
         <button class="btn" id="car-next">≫</button>
         <div class="toc-container">
-          <nav class="toc" id="toc">
-            <ul class="toc-list" id="toc-list"></ul>
-          </nav>
+          <nav class="toc" id="toc"><ul class="toc-list" id="toc-list"></ul></nav>
         </div>
         <div class="toolbar-right">
           <button class="btn" id="pg-prev">←</button>
@@ -126,7 +108,7 @@
 
   <main class="wrap" id="content"></main>
 
-  <!-- ★ body直下のグローバル虫眼鏡（最初に1回だけ生成） -->
+  <!-- グローバル虫眼鏡（body直下） -->
   <div class="magnifier" id="global-mag">
     <img alt="" />
     <div class="mag-controls">
@@ -150,9 +132,7 @@
       { prefix: "3-", start: 1, end: 11 },
     ];
     const pad3 = (n) => String(n).padStart(3, "0");
-    const files = groups.flatMap((g) =>
-      Array.from({ length: g.end - g.start + 1 }, (_, i) => `${g.prefix}${pad3(g.start + i)}.jpeg`)
-    );
+    const files = groups.flatMap(g => Array.from({ length: g.end - g.start + 1 }, (_, i) => `${g.prefix}${pad3(g.start + i)}.jpeg`));
 
     /* ========= 要素 ========= */
     const tocEl = document.getElementById("toc");
@@ -205,7 +185,7 @@
       let idx = 0;
       for (let i = 0; i < sections.length; i++) {
         const r = sections[i].getBoundingClientRect();
-        const th = r.top + r.height * 0.6; // 60%
+        const th = r.top + r.height * 0.6;
         if (baseline >= th) idx = i + 1;
       }
       const last = sections[sections.length - 1].getBoundingClientRect();
@@ -219,10 +199,10 @@
       const img = sections[i]?.querySelector("img");
       if (img) btnOpen.href = img.currentSrc || img.src;
 
-      // レンズがONなら対象画像だけ切替（レンズはそのまま中央固定）
+      // 虫眼鏡ONなら対象画像だけ現在ページに切り替え
       if (magState.on) {
         magState.frame = sections[i].querySelector(".frame");
-        resetMagStateToCenter(); // 新ページの中央から
+        resetMagStateToCenter();
         renderMagnifier();
       }
     }
@@ -237,7 +217,7 @@
       requestAnimationFrame(detectCurrentPage);
     }
 
-    /* ======== カルーセル（←/→ 端固定、≪/≫はそのままスクロール） ======== */
+    /* ======== カルーセル ======== */
     function pinLinkToEdge(link, side) {
       if (!link) return;
       if (side === "left") tocEl.scrollLeft = link.offsetLeft;
@@ -258,7 +238,6 @@
     pgPrev.onclick = movePrevWithPin;
     pgNext.onclick = moveNextWithPin;
     tocLinks.forEach(a => a.onclick = (e) => { e.preventDefault(); scrollToSection(Number(a.dataset.index)); });
-
     function pageSize() { return Math.max(200, tocEl.clientWidth * 0.8); }
     carPrev.onclick = () => tocEl.scrollBy({ left: -pageSize(), behavior: "auto" });
     carNext.onclick = () => tocEl.scrollBy({ left:  pageSize(), behavior: "auto" });
@@ -267,28 +246,22 @@
     const magEl = document.getElementById('global-mag');
     const magImg = magEl.querySelector('img');
 
+    // 見やすいストローク矢印（N/E/S/W & 斜め）
     const ARROWS = {
-      n:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l-6 6h4v8h4V10h4z"/></svg>',
-      s:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20l6-6h-4V6h-4v8H6z"/></svg>',
-      w:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l6 6v-4h8v-4H10V6z"/></svg>',
-      e:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12l-6-6v4H6v4h8v4z"/></svg>',
-      nw: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h6V5l8 8-2.8 2.8L11 10.6V17H5z"/></svg>',
-      ne: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9h-6V5L5 13l2.8 2.8L13 10.6V17h6z"/></svg>',
-      sw: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15h6v4l8-8-2.8-2.8L11 13.4V7H5z"/></svg>',
-      se: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 15h-6v4L5 11l2.8-2.8L13 13.4V7h6z"/></svg>',
+      n:  '<svg viewBox="0 0 24 24"><path d="M12 4v16M12 4l-6 6M12 4l6 6"/></svg>',
+      s:  '<svg viewBox="0 0 24 24"><path d="M12 20V4M12 20l-6-6M12 20l6-6"/></svg>',
+      w:  '<svg viewBox="0 0 24 24"><path d="M4 12h16M4 12l6-6M4 12l6 6"/></svg>',
+      e:  '<svg viewBox="0 0 24 24"><path d="M20 12H4M20 12l-6-6M20 12l-6 6"/></svg>',
+      nw: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 6h8M6 6v8"/></svg>',
+      ne: '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M18 6h-8M18 6v8"/></svg>',
+      sw: '<svg viewBox="0 0 24 24"><path d="M6 18L18 6M6 18h8M6 18v-8"/></svg>',
+      se: '<svg viewBox="0 0 24 24"><path d="M18 18L6 6M18 18h-8M18 18v-8"/></svg>',
     };
-    // ボタンにSVGを挿入
     magEl.querySelectorAll('.mag-btn').forEach(btn => {
-      const dir = Array.from(btn.classList).find(c => ARROWS[c]);
-      btn.innerHTML = ARROWS[dir];
+      const dir = Array.from(btn.classList).find(c => ARROWS[c]); btn.innerHTML = ARROWS[dir];
     });
 
-    const magState = {
-      on: false,
-      frame: null,   // 対象画像の .frame
-      cx: 0, cy: 0,  // 表示画像座標系の中心
-      scale: 2,
-    };
+    const magState = { on: false, frame: null, cx: 0, cy: 0, scale: 2 };
 
     function visibleAreaBounds() {
       return {
@@ -308,162 +281,140 @@
       magEl.style.left = Math.round((vb.left + vb.right - w) / 2) + "px";
       magEl.style.top  = Math.round((vb.top  + vb.bottom - h) / 2) + "px";
     }
-    function lockScroll() { document.body.style.overflow = "hidden"; document.body.style.touchAction = "none"; }
-    function unlockScroll() { document.body.style.overflow = ""; document.body.style.touchAction = ""; }
-
+    function lockScroll(){ document.body.style.overflow="hidden"; document.body.style.touchAction="none"; }
+    function unlockScroll(){ document.body.style.overflow=""; document.body.style.touchAction=""; }
     function resetMagStateToCenter() {
       const ir = magState.frame.querySelector("img").getBoundingClientRect();
-      magState.cx = ir.width / 2;
-      magState.cy = ir.height / 2;
+      magState.cx = ir.width/2; magState.cy = ir.height/2;
     }
-
     function renderMagnifier() {
       if (!magState.on || !magState.frame) return;
       const img = magState.frame.querySelector("img");
       const ir  = img.getBoundingClientRect();
       const w = magEl.clientWidth, h = magEl.clientHeight;
+      const src = img.currentSrc || img.src; if (magImg.src !== src) magImg.src = src;
 
-      // ソース更新
-      const src = img.currentSrc || img.src;
-      if (magImg.src !== src) magImg.src = src;
-
-      // 2倍固定
       const s = magState.scale;
-      const imgW = ir.width  * s;
-      const imgH = ir.height * s;
-      magImg.style.width  = imgW + "px";
-      magImg.style.height = imgH + "px";
+      const imgW = ir.width*s, imgH = ir.height*s;
+      magImg.style.width = imgW+"px"; magImg.style.height = imgH+"px";
 
-      // レンズ中心に (cx,cy) を置く
-      let offX = Math.round(w/2 - magState.cx * s);
-      let offY = Math.round(h/2 - magState.cy * s);
+      let offX = Math.round(w/2 - magState.cx*s);
+      let offY = Math.round(h/2 - magState.cy*s);
+      const minX = w - imgW, maxX = 0;
+      const minY = h - imgH, maxY = 0;
+      offX = Math.max(minX, Math.min(maxX, offX));
+      offY = Math.max(minY, Math.min(maxY, offY));
+      magImg.style.transform = `translate(${offX}px, ${offY}px)`;
+    }
+    function enterMagnifier(frame) {
+      if (zoomState.on) exitZoom(zoomState.frame);
+      magState.on = true; magState.frame = frame;
+      sizeMagnifierTwoThirds(); magEl.style.display = "block"; centerMagnifier();
+      resetMagStateToCenter(); renderMagnifier(); btnMag.textContent = "オフ"; lockScroll();
 
-      // 端クランプ（四隅ピタ）
+      const step = () => {
+        const ir = magState.frame.querySelector("img").getBoundingClientRect();
+        return Math.max(12, Math.round(Math.min(ir.width, ir.height)/18));
+      };
+      const moveBy = (dx,dy) => {
+        const ir = magState.frame.querySelector("img").getBoundingClientRect();
+        const sp = step();
+        magState.cx = Math.max(0, Math.min(ir.width,  magState.cx + dx*sp));
+        magState.cy = Math.max(0, Math.min(ir.height, magState.cy + dy*sp));
+        renderMagnifier();
+      };
+      const map = { n:[0,-1], s:[0,1], w:[-1,0], e:[1,0], nw:[-1,-1], ne:[1,-1], sw:[-1,1], se:[1,1] };
+      magEl.querySelectorAll(".mag-btn").forEach(btn=>{
+        const dir = Array.from(btn.classList).find(c=>map[c]); const [dx,dy]=map[dir];
+        let t, run=false;
+        const once=()=>moveBy(dx,dy);
+        const start=(e)=>{ e.preventDefault(); if(run) return; run=true; document.body.style.webkitUserSelect='none'; document.body.style.userSelect='none'; once(); t=setInterval(once,50); };
+        const stop=()=>{ run=false; clearInterval(t); document.body.style.webkitUserSelect=''; document.body.style.userSelect=''; };
+        btn.addEventListener("pointerdown",start); btn.addEventListener("pointerup",stop);
+        btn.addEventListener("pointercancel",stop); btn.addEventListener("pointerleave",stop);
+      });
+
+      const onResize = () => { sizeMagnifierTwoThirds(); centerMagnifier(); renderMagnifier(); };
+      window.addEventListener("resize", onResize, { passive: true });
+      magEl._onResize = onResize;
+    }
+    function exitMagnifier() {
+      magState.on = false; magEl.style.display = "none";
+      if (magEl._onResize) { window.removeEventListener("resize", magEl._onResize); magEl._onResize=null; }
+      unlockScroll(); btnMag.textContent = "虫眼鏡";
+    }
+    btnMag.onclick = () => {
+      const f = sections[currentIndex].querySelector(".frame");
+      if (magState.on) exitMagnifier(); else enterMagnifier(f);
+    };
+
+    /* ========= 2倍ズーム（四隅ピタ保証版） ========= */
+    const zoomState = { on:false, frame:null, scale:2, cx:0, cy:0 };
+
+    function renderZoom() {
+      if (!zoomState.on) return;
+      const frame = zoomState.frame; const img = frame.querySelector('img');
+      const w = frame.clientWidth, h = frame.clientHeight;
+      const ir = img.getBoundingClientRect();
+      const s = zoomState.scale;
+      const imgW = ir.width*s, imgH = ir.height*s;
+
+      // レンズと同じ数式：拡大後の左上オフセットを直接算出＆クランプ（四隅ピタ）
+      let offX = Math.round(w/2 - zoomState.cx*s);
+      let offY = Math.round(h/2 - zoomState.cy*s);
       const minX = w - imgW, maxX = 0;
       const minY = h - imgH, maxY = 0;
       offX = Math.max(minX, Math.min(maxX, offX));
       offY = Math.max(minY, Math.min(maxY, offY));
 
-      magImg.style.transform = `translate(${offX}px, ${offY}px)`;
+      img.style.transform = `translate(${offX}px, ${offY}px) scale(${s})`;
     }
 
-    function enterMagnifier(frame) {
-      // 2倍モードと排反
-      if (zoomedFrame) exitZoom(zoomedFrame);
-
-      magState.on = true;
-      magState.frame = frame;
-      sizeMagnifierTwoThirds();
-      magEl.style.display = "block";
-      centerMagnifier();
-      resetMagStateToCenter();
-      renderMagnifier();
-      btnMag.textContent = "オフ";
-      lockScroll();
-
-      // 長押し連続移動
-      const stepBase = () => {
-        const ir = magState.frame.querySelector("img").getBoundingClientRect();
-        return Math.max(12, Math.round(Math.min(ir.width, ir.height) / 18));
-      };
-      const moveBy = (dx, dy) => {
-        const ir = magState.frame.querySelector("img").getBoundingClientRect();
-        const sp = stepBase();
-        magState.cx = Math.max(0, Math.min(ir.width,  magState.cx + dx * sp));
-        magState.cy = Math.max(0, Math.min(ir.height, magState.cy + dy * sp));
-        renderMagnifier();
-      };
-
-      const map = { n:[0,-1], s:[0,1], w:[-1,0], e:[1,0], nw:[-1,-1], ne:[1,-1], sw:[-1,1], se:[1,1] };
-      magEl.querySelectorAll(".mag-btn").forEach(btn => {
-        const dir = Array.from(btn.classList).find(c => map[c]);
-        const [dx, dy] = map[dir];
-        let t, running = false;
-
-        const stepOnce = () => moveBy(dx, dy);
-        const start = (e) => {
-          e.preventDefault();
-          if (running) return; running = true;
-          // iOSの選択/コールアウト抑止（保険）
-          document.body.style.webkitUserSelect = 'none';
-          document.body.style.userSelect = 'none';
-          stepOnce();
-          t = setInterval(stepOnce, 50);
-        };
-        const stop = () => {
-          running = false; clearInterval(t);
-          document.body.style.webkitUserSelect = '';
-          document.body.style.userSelect = '';
-        };
-
-        btn.addEventListener("pointerdown", start);
-        btn.addEventListener("pointerup", stop);
-        btn.addEventListener("pointercancel", stop);
-        btn.addEventListener("pointerleave", stop);
-      });
-
-      // 画面回転/サイズ変更：レンズは中央に再配置、表示対象は維持
-      const onResize = () => {
-        sizeMagnifierTwoThirds();
-        centerMagnifier();
-        renderMagnifier();
-      };
-      window.addEventListener("resize", onResize, { passive: true });
-      magEl._onResize = onResize;
-    }
-
-    function exitMagnifier() {
-      magState.on = false;
-      magEl.style.display = "none";
-      if (magEl._onResize) {
-        window.removeEventListener("resize", magEl._onResize);
-        magEl._onResize = null;
-      }
-      unlockScroll();
-      btnMag.textContent = "虫眼鏡";
-    }
-
-    btnMag.onclick = () => {
-      const f = sections[currentIndex].querySelector(".frame");
-      if (magState.on) exitMagnifier();
-      else enterMagnifier(f);
-    };
-
-    /* ========= 2倍ズーム（既存そのまま／虫眼鏡と排反） ========= */
-    let zoomedFrame = null;
     function enterZoom(frame) {
       if (magState.on) exitMagnifier();
-      const img = frame.querySelector("img");
-      let sx, sy, tx = 0, ty = 0;
-      img.style.transform = `translate(0,0) scale(2)`;
+      const img = frame.querySelector('img');
+      zoomState.on = true; zoomState.frame = frame; zoomState.scale = 2;
+
+      // 画像座標の中心からスタート（両方向に動ける）
+      const ir = img.getBoundingClientRect();
+      zoomState.cx = ir.width/2; zoomState.cy = ir.height/2;
+
       frame.style.touchAction = "none";
-      frame.onpointerdown = (e) => { sx = e.clientX; sy = e.clientY; frame.setPointerCapture(e.pointerId); };
-      frame.onpointermove = (e) => {
-        if (sx == null) return;
-        const dx = e.clientX - sx, dy = e.clientY - sy;
-        tx += dx; ty += dy;
-        const maxX = (img.clientWidth * 2 - frame.clientWidth) / 2;
-        const maxY = (img.clientHeight * 2 - frame.clientHeight) / 2;
-        tx = Math.max(-maxX, Math.min(maxX, tx));
-        ty = Math.max(-maxY, Math.min(maxY, ty));
-        img.style.transform = `translate(${tx}px,${ty}px) scale(2)`;
-        sx = e.clientX; sy = e.clientY;
+      let px=null, py=null;
+      frame.onpointerdown = (e)=>{ px=e.clientX; py=e.clientY; frame.setPointerCapture(e.pointerId); };
+      frame.onpointermove = (e)=>{
+        if (px==null) return;
+        const dx = e.clientX - px, dy = e.clientY - py;
+        // 画像座標で中心を動かす（スケールで割るのがコツ）
+        zoomState.cx -= dx/zoomState.scale;
+        zoomState.cy -= dy/zoomState.scale;
+        // 範囲クランプ（操作範囲＝元画像）
+        const irNow = img.getBoundingClientRect();
+        zoomState.cx = Math.max(0, Math.min(irNow.width,  zoomState.cx));
+        zoomState.cy = Math.max(0, Math.min(irNow.height, zoomState.cy));
+        px=e.clientX; py=e.clientY;
+        renderZoom();
       };
-      frame.onpointerup = (e) => { sx = null; try { frame.releasePointerCapture(e.pointerId); } catch {} };
-      zoomedFrame = frame; btnZoom.textContent = "1倍";
+      frame.onpointerup = (e)=>{ px=null; try{ frame.releasePointerCapture(e.pointerId);}catch{} };
+      renderZoom();
+      btnZoom.textContent = "1倍";
     }
+
     function exitZoom(frame) {
-      const img = frame.querySelector("img");
+      const f = frame || zoomState.frame;
+      if (!f) return;
+      const img = f.querySelector('img');
       img.style.transform = "scale(1)";
-      frame.style.touchAction = "pan-y";
-      frame.onpointerdown = frame.onpointermove = frame.onpointerup = null;
-      zoomedFrame = null; btnZoom.textContent = "2倍";
+      f.style.touchAction = "pan-y";
+      f.onpointerdown = f.onpointermove = f.onpointerup = null;
+      zoomState.on = false; zoomState.frame = null;
+      btnZoom.textContent = "2倍";
     }
+
     btnZoom.onclick = () => {
       const f = sections[currentIndex].querySelector(".frame");
-      if (zoomedFrame && zoomedFrame !== f) exitZoom(zoomedFrame);
-      if (btnZoom.textContent === "2倍") enterZoom(f);
-      else exitZoom(f);
+      if (zoomState.on && zoomState.frame !== f) exitZoom(zoomState.frame);
+      if (!zoomState.on) enterZoom(f); else exitZoom(f);
     };
   </script>
 </body>
