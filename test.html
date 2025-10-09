@@ -8,76 +8,38 @@
     />
     <title>GENESIS 解答ビューア</title>
     <style>
-      :root {
-        --dock-h: 0px;
-        --line-green: #22c55e;
-      }
+      :root { --dock-h: 0px; --line-green: #22c55e; }
 
       html, body {
-        margin: 0;
-        background: #fff;
-        color: #111;
+        margin: 0; background: #fff; color: #111;
         font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
-        overscroll-behavior-y: contain;
-        overflow-x: hidden;
-        touch-action: pan-y;
+        overscroll-behavior-y: contain; overflow-x: hidden; touch-action: pan-y;
       }
-      .wrap {
-        width: 100%;
-        margin: 0 auto;
-        padding: 0 12px;
-        box-sizing: border-box;
-      }
+      .wrap { width: 100%; margin: 0 auto; padding: 0 12px; box-sizing: border-box; }
 
       /* ===== カルーセル ===== */
       .toc-dock {
-        position: fixed;
-        top: 0; left: 0; right: 0;
-        z-index: 1000;
-        background: #fff;
-        border-bottom: 1px solid #eee;
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+        background: #fff; border-bottom: 1px solid #eee;
         padding: 8px 0 env(safe-area-inset-top) 0;
       }
-      .toc-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-      }
+      .toc-bar { display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; overflow: hidden; }
       .btn {
-        height: 34px;
-        padding: 0 12px;
-        border: 1px solid #ddd;
-        border-radius: 999px;
-        background: #f9fafb;
-        color: #111;
-        cursor: pointer;
-        font-size: 14px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
+        height: 34px; padding: 0 12px; border: 1px solid #ddd; border-radius: 999px;
+        background: #f9fafb; color: #111; cursor: pointer; font-size: 14px; text-decoration: none;
+        display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+        -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
       }
-      .btn:disabled { opacity: 0.4; cursor: default; }
+      .btn:disabled { opacity: .4; cursor: default; }
 
       .toc-container { flex: 1 1 auto; min-width: 0; overflow: hidden; }
-      .toc {
-        overflow-x: auto; overflow-y: hidden; white-space: nowrap;
-        -webkit-overflow-scrolling: touch; scrollbar-width: none;
-        overscroll-behavior-x: contain;
-      }
+      .toc { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain; }
       .toc::-webkit-scrollbar { display: none; }
-      .toc-list {
-        display: flex; gap: 8px; padding: 0; margin: 0; list-style: none;
-      }
+      .toc-list { display: flex; gap: 8px; padding: 0; margin: 0; list-style: none; }
       .toc-list a {
-        display: inline-block; padding: 6px 12px;
-        border: 1px solid #ddd; border-radius: 999px;
-        background: #f0f6ff; color: #0366d6; text-decoration: none;
-        user-select: none; transition: background-color .12s, color .12s, border-color .12s;
+        display: inline-block; padding: 6px 12px; border: 1px solid #ddd; border-radius: 999px;
+        background: #f0f6ff; color: #0366d6; text-decoration: none; user-select: none;
+        transition: background-color .12s, color .12s, border-color .12s;
       }
       .toc-list a.active { background: var(--line-green); border-color: #16a34a; color: #fff; }
       .toolbar-right { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
@@ -100,16 +62,17 @@
         transform-origin: 0 0; will-change: transform;
       }
 
-      /* ===== 虫眼鏡（中央固定ウィンドウ + 8方向ボタン） ===== */
+      /* ===== 虫眼鏡（中央固定 + 8方向ボタン） ===== */
       .magnifier {
         position: fixed !important;
         display: none;
-        pointer-events: none; /* 中身の画像にポインタ通さない */
         border: 2px solid var(--line-green);
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,.25);
         background: #fff;
+        /* 長押しテキスト選択や呼び出しメニューを抑止 */
+        -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
       }
       .magnifier img {
         position: absolute; left: 0; top: 0;
@@ -118,20 +81,21 @@
 
       .mag-controls {
         position: absolute; inset: 0;
-        pointer-events: none; /* ボタン以外はクリック不可 */
+        pointer-events: none; /* ボタン以外は反応しない */
+        -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
       }
       .mag-btn {
         position: absolute;
         width: 44px; height: 44px; border-radius: 999px;
-        background: rgba(17,17,17,.8); color: #fff; border: none;
+        background: rgba(17,17,17,.85); border: none;
         display: grid; place-items: center;
-        font-size: 20px; line-height: 1;
-        pointer-events: auto; /* ボタンだけ押せる */
-        touch-action: manipulation;
+        pointer-events: auto; touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
       }
       .mag-btn:active { transform: scale(.98); }
-      /* 8方向配置（内側に重ならない程度に寄せ） */
+
+      /* 8方向の配置 */
       .mag-btn.n  { top: 8px; left: 50%; transform: translate(-50%,0); }
       .mag-btn.s  { bottom: 8px; left: 50%; transform: translate(-50%,0); }
       .mag-btn.w  { left: 8px; top: 50%; transform: translate(0,-50%); }
@@ -140,7 +104,9 @@
       .mag-btn.ne { top: 8px; right: 8px; }
       .mag-btn.sw { bottom: 8px; left: 8px; }
       .mag-btn.se { bottom: 8px; right: 8px; }
-      /* 矢印はシンプルなUnicode。必要ならSVGに差し替え可 */
+
+      /* 矢印SVGのサイズ調整 */
+      .mag-btn svg { width: 22px; height: 22px; fill: #fff; }
     </style>
   </head>
   <body>
@@ -245,6 +211,16 @@
         tocLinks.forEach((el, idx) => el.classList.toggle("active", idx === i));
         const img = sections[i]?.querySelector("img");
         if (img) btnOpen.href = img.currentSrc || img.src;
+
+        // 虫眼鏡がONなら、対象画像を「現在ページ」に切替（位置は中央にリセット）
+        if (magFrame) {
+          magFrame = sections[i].querySelector(".frame");
+          const mag = document.querySelector(".magnifier");
+          // レンズのサイズ・位置は維持（固定）
+          const ir = magFrame.querySelector("img").getBoundingClientRect();
+          _magState = { cx: ir.width / 2, cy: ir.height / 2 };
+          renderMagnifier(magFrame, mag, _magState);
+        }
       }
       window.addEventListener("scroll", detectCurrentPage, { passive: true });
       window.addEventListener("resize", detectCurrentPage);
@@ -284,7 +260,7 @@
       carNext.onclick = () => tocEl.scrollBy({ left:  pageSize(), behavior: "auto" });
 
       /* ========= 虫眼鏡（中央固定 2倍 / 8方向ボタンでシームレス走査） ========= */
-      let zoomedFrame = null, magFrame = null;
+      let zoomedFrame = null, magFrame = null, _magState = null;
 
       function visibleAreaBounds() {
         return {
@@ -313,33 +289,32 @@
         mag.style.top  = Math.round((vb.top  + vb.bottom - h) / 2) + "px";
       }
 
-      // レンズ描画：cx,cy は「画面上の表示画像座標系」の中心点
+      // レンズ描画：cx,cy は「表示画像座標系」の中心点（操作範囲＝元画像）
       function renderMagnifier(frame, mag, state) {
         const img = frame.querySelector("img");
-        const ir = img.getBoundingClientRect();
+        const ir = img.getBoundingClientRect(); // 表示上の画像サイズ
         const w = mag.clientWidth, h = mag.clientHeight;
 
         const s = 2; // 2倍固定
-        const mi = mag.querySelector("img") || (() => {
-          const el = document.createElement("img");
-          el.alt = ""; el.draggable = false;
-          el.src = img.currentSrc || img.src;
-          mag.appendChild(el);
-          return el;
-        })();
-
-        if (mi.src !== (img.currentSrc || img.src)) mi.src = img.currentSrc || img.src;
+        let mi = mag.querySelector("img");
+        if (!mi) {
+          mi = document.createElement("img");
+          mi.alt = ""; mi.draggable = false;
+          mag.appendChild(mi);
+        }
+        const src = img.currentSrc || img.src;
+        if (mi.src !== src) mi.src = src;
 
         const imgW = ir.width  * s;
         const imgH = ir.height * s;
         mi.style.width  = imgW + "px";
         mi.style.height = imgH + "px";
 
-        // 画像左上をレンズ内に配置するオフセット（中央にcx,cyを置く）
+        // 画像左上をレンズ内に配置する平行移動量（レンズ中心＝state(cx,cy)）
         let offX = Math.round(w/2 - state.cx * s);
         let offY = Math.round(h/2 - state.cy * s);
 
-        // 端クランプ：四隅までピッタリ映す
+        // 端クランプ（四隅ピタ表示）
         const minX = w - imgW, maxX = 0;
         const minY = h - imgH, maxY = 0;
         offX = Math.max(minX, Math.min(maxX, offX));
@@ -348,42 +323,61 @@
         mi.style.transform = `translate(${offX}px, ${offY}px)`;
       }
 
+      // SVGアイコン（文字選択を回避）
+      const ARROWS = {
+        n:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l-6 6h4v8h4V10h4z"/></svg>',
+        s:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20l6-6h-4V6h-4v8H6z"/></svg>',
+        w:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l6 6v-4h8v-4H10V6z"/></svg>',
+        e:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12l-6-6v4H6v4h8v4z"/></svg>',
+        nw: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h6V5l8 8-2.8 2.8L11 10.6V17H5z"/></svg>',
+        ne: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9h-6V5L5 13l2.8 2.8L13 10.6V17h6z"/></svg>',
+        sw: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15h6v4l8-8-2.8-2.8L11 13.4V7H5z"/></svg>',
+        se: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 15h-6v4L5 11l2.8-2.8L13 13.4V7h6z"/></svg>',
+      };
+
       function ensureMagControls(mag, onStep) {
         if (mag.querySelector(".mag-controls")) return;
         const box = document.createElement("div");
         box.className = "mag-controls";
         box.innerHTML = `
-          <button class="mag-btn n"  aria-label="上">↑</button>
-          <button class="mag-btn s"  aria-label="下">↓</button>
-          <button class="mag-btn w"  aria-label="左">←</button>
-          <button class="mag-btn e"  aria-label="右">→</button>
-          <button class="mag-btn nw" aria-label="左上">↖</button>
-          <button class="mag-btn ne" aria-label="右上">↗</button>
-          <button class="mag-btn sw" aria-label="左下">↙</button>
-          <button class="mag-btn se" aria-label="右下">↘</button>
+          <button class="mag-btn n"  aria-label="上">${ARROWS.n}</button>
+          <button class="mag-btn s"  aria-label="下">${ARROWS.s}</button>
+          <button class="mag-btn w"  aria-label="左">${ARROWS.w}</button>
+          <button class="mag-btn e"  aria-label="右">${ARROWS.e}</button>
+          <button class="mag-btn nw" aria-label="左上">${ARROWS.nw}</button>
+          <button class="mag-btn ne" aria-label="右上">${ARROWS.ne}</button>
+          <button class="mag-btn sw" aria-label="左下">${ARROWS.sw}</button>
+          <button class="mag-btn se" aria-label="右下">${ARROWS.se}</button>
         `;
         mag.appendChild(box);
 
-        // 連続移動（長押し対応）
+        // 長押し連続移動（50ms刻み）。押下中は一切の選択・コールアウトを抑止。
         const map = {
-          n:  [ 0,-1], s:[ 0, 1], w:[-1, 0], e:[ 1, 0],
-          nw: [-1,-1], ne:[ 1,-1], sw:[-1, 1], se:[ 1, 1],
+          n:[0,-1], s:[0,1], w:[-1,0], e:[1,0],
+          nw:[-1,-1], ne:[1,-1], sw:[-1,1], se:[1,1],
         };
         box.querySelectorAll(".mag-btn").forEach(btn => {
-          const cls = Array.from(btn.classList).find(c => map[c]);
-          const [dx, dy] = map[cls];
+          const dir = Array.from(btn.classList).find(c => map[c]);
+          const [dx, dy] = map[dir];
           let t, running = false;
 
           const stepOnce = () => onStep(dx, dy);
-          const start = () => {
+          const start = (e) => {
+            e.preventDefault();
             if (running) return; running = true;
+            // iOSの選択/メニュー抑止（保険）
+            document.body.style.webkitUserSelect = 'none';
+            document.body.style.userSelect = 'none';
             stepOnce();
-            t = setInterval(stepOnce, 50); // 長押し連続
+            t = setInterval(stepOnce, 50);
           };
-          const stop = () => { running = false; clearInterval(t); };
+          const stop = () => {
+            running = false; clearInterval(t);
+            document.body.style.webkitUserSelect = '';
+            document.body.style.userSelect = '';
+          };
 
-          // Pointer + Touch 両対応
-          btn.addEventListener("pointerdown", (e) => { e.preventDefault(); start(); });
+          btn.addEventListener("pointerdown", start);
           btn.addEventListener("pointerup", stop);
           btn.addEventListener("pointercancel", stop);
           btn.addEventListener("pointerleave", stop);
@@ -392,70 +386,70 @@
 
       function enterMagnifier(frame) {
         if (zoomedFrame) exitZoom(zoomedFrame); // 2倍とは排反
+        const mag = document.querySelector(".magnifier") || (() => {
+          const m = frame.querySelector(".magnifier");
+          return m;
+        })();
 
-        const mag = frame.querySelector(".magnifier");
         mag.style.display = "block";
         sizeMagnifierTwoThirds(mag);
         centerMagnifier(mag);
-        magFrame = frame;
+        magFrame = sections[currentIndex].querySelector(".frame");
         btnMag.textContent = "オフ";
         lockScroll();
 
-        // 表示画像の中心から開始
-        const ir = frame.querySelector("img").getBoundingClientRect();
-        const state = { cx: ir.width / 2, cy: ir.height / 2 };
+        // 現在ページの画像中央から開始
+        const ir = magFrame.querySelector("img").getBoundingClientRect();
+        _magState = { cx: ir.width / 2, cy: ir.height / 2 };
 
         const stepBase = Math.max(12, Math.round(Math.min(ir.width, ir.height) / 18)); // 端末差を吸収
         const onStep = (dx, dy) => {
-          state.cx += dx * stepBase;
-          state.cy += dy * stepBase;
-          // 画像範囲にクランプ（cx,cyは表示座標系）
-          state.cx = Math.max(0, Math.min(ir.width,  state.cx));
-          state.cy = Math.max(0, Math.min(ir.height, state.cy));
-          renderMagnifier(frame, mag, state);
+          // 最新の表示サイズを毎回取得（回転・リフロー対応）
+          const irNow = magFrame.querySelector("img").getBoundingClientRect();
+          const speed = stepBase;
+          _magState.cx += dx * speed;
+          _magState.cy += dy * speed;
+          // 操作範囲＝元画像（表示座標）にクランプ
+          _magState.cx = Math.max(0, Math.min(irNow.width,  _magState.cx));
+          _magState.cy = Math.max(0, Math.min(irNow.height, _magState.cy));
+          renderMagnifier(magFrame, mag, _magState);
         };
 
         // 初回描画
-        renderMagnifier(frame, mag, state);
-
-        // コントロール生成（初回のみ）
+        renderMagnifier(magFrame, mag, _magState);
+        // コントロール（初回のみ生成）
         ensureMagControls(mag, onStep);
 
-        // 画面回転・リサイズ時に中央に再配置＆同じ位置を再描画
+        // 画面回転・リサイズ時：レンズは中央維持、画像比に合わせて位置補正
         const onResize = () => {
           sizeMagnifierTwoThirds(mag);
           centerMagnifier(mag);
-          // irが変わるので割合で保持
-          const ir2 = frame.querySelector("img").getBoundingClientRect();
-          const rx = ir2.width  / ir.width;
-          const ry = ir2.height / ir.height;
-          state.cx = state.cx * rx;
-          state.cy = state.cy * ry;
-          renderMagnifier(frame, mag, state);
+          const ir2 = magFrame.querySelector("img").getBoundingClientRect();
+          // 端まで表示できるよう毎回クランプ
+          _magState.cx = Math.max(0, Math.min(ir2.width,  _magState.cx));
+          _magState.cy = Math.max(0, Math.min(ir2.height, _magState.cy));
+          renderMagnifier(magFrame, mag, _magState);
         };
         window.addEventListener("resize", onResize, { passive: true });
         frame._magResizeHandler = onResize;
       }
 
       function exitMagnifier(frame) {
-        const mag = frame.querySelector(".magnifier");
-        mag.style.display = "none";
-        if (frame._magResizeHandler) {
+        const mag = document.querySelector(".magnifier");
+        if (mag) mag.style.display = "none";
+        if (frame?._magResizeHandler) {
           window.removeEventListener("resize", frame._magResizeHandler);
           frame._magResizeHandler = null;
         }
         unlockScroll();
-        magFrame = null;
+        magFrame = null; _magState = null;
         btnMag.textContent = "虫眼鏡";
       }
 
       btnMag.onclick = () => {
         const f = sections[currentIndex].querySelector(".frame");
-        if (magFrame && magFrame === f) exitMagnifier(f);
-        else {
-          if (magFrame && magFrame !== f) exitMagnifier(magFrame);
-          enterMagnifier(f);
-        }
+        if (magFrame) exitMagnifier(f);
+        else enterMagnifier(f);
       };
 
       /* ========= 2倍ズーム（既存そのまま／虫眼鏡と排反） ========= */
