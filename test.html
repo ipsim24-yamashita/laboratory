@@ -154,12 +154,13 @@
         position: absolute;
         display: none;
         pointer-events: none;
-        /* サイズはJSで“表示エリアの2/3”に設定（vw/vh 固定はやめる） */
+        /* ← サイズはJSで「表示エリアの2/3」に設定。固定のvw/vh指定はしない */
         border: 2px solid var(--line-green);
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
         background-repeat: no-repeat;
+        background-origin: content-box;
       }
       .magnifier::after {
         content: "";
@@ -314,43 +315,36 @@
         requestAnimationFrame(detectCurrentPage);
       }
 
-      /* ======== ★ カルーセル：←/→ 端固定（常時可視） ======== */
-      function pinLinkToEdge(link, side /* 'left' | 'right' */) {
+      /* ======== カルーセル（←/→ 端固定、≪/≫そのまま） ======== */
+      function pinLinkToEdge(link, side) {
         if (!link) return;
-        // tocEl はスクロールコンテナ。link.offsetLeft はその左端からの距離。
         if (side === "left") {
-          tocEl.scrollLeft = link.offsetLeft; // 左端に一致
+          tocEl.scrollLeft = link.offsetLeft;
         } else {
           tocEl.scrollLeft =
-            link.offsetLeft - (tocEl.clientWidth - link.offsetWidth); // 右端に一致
+            link.offsetLeft - (tocEl.clientWidth - link.offsetWidth);
         }
       }
       function movePrevWithPin() {
         if (currentIndex <= 0) {
-          // 先頭でさらに左
           pinLinkToEdge(tocLinks[currentIndex], "left");
           return;
         }
         const next = currentIndex - 1;
         scrollToSection(next);
-        // 少し後で確実に“現在地を左端”に固定
         requestAnimationFrame(() => pinLinkToEdge(tocLinks[next], "left"));
       }
       function moveNextWithPin() {
         if (currentIndex >= sections.length - 1) {
-          // 末尾でさらに右
           pinLinkToEdge(tocLinks[currentIndex], "right");
           return;
         }
         const next = currentIndex + 1;
         scrollToSection(next);
-        // 少し後で確実に“現在地を右端”に固定
         requestAnimationFrame(() => pinLinkToEdge(tocLinks[next], "right"));
       }
-
       pgPrev.onclick = movePrevWithPin;
       pgNext.onclick = moveNextWithPin;
-
       tocLinks.forEach(
         (a) =>
           (a.onclick = (e) => {
@@ -359,7 +353,6 @@
           })
       );
 
-      /* ========= カルーセル左右（≪/≫は非表示許容でスクロールだけ） ========= */
       function pageSize() {
         return Math.max(200, tocEl.clientWidth * 0.8);
       }
@@ -368,10 +361,11 @@
       carNext.onclick = () =>
         tocEl.scrollBy({ left: pageSize(), behavior: "auto" });
 
-      /* ========= 虫眼鏡（表示エリア2/3・四隅スナップ・四分割拡大） ========= */
+      /* ========= 虫眼鏡：3×3 のみ存在・常に 2倍・縦横比維持 ========= */
       let zoomedFrame = null,
         magFrame = null;
 
+      /* 表示エリア（ドック下〜下端） */
       function visibleAreaBounds() {
         return {
           left: 0,
@@ -382,7 +376,7 @@
         };
       }
 
-      /* グラデは既存のまま（端で淡く） */
+      /* 端のグラデ（既存と同じ） */
       function setMagGradient(m, gL, gR, gT, gB) {
         const s = 0.4;
         m.style.setProperty("--gL", (gL * s).toFixed(3));
@@ -391,101 +385,61 @@
         m.style.setProperty("--gB", (gB * s).toFixed(3));
       }
 
-      /* === 四隅・象限判定（表示エリア基準） === */
-      function getQuadrantByCenter(cx, cy) {
+      /* ==== 3×3 格子のセル座標（magnifier の “左上位置” を返す） ==== */
+      function computeCellLeftTop(mag, col /*0..2*/, row /*0..2*/) {
         const vb = visibleAreaBounds();
-        const midX = (vb.left + vb.right) / 2;
-        const midY = (vb.top + vb.bottom) / 2;
-        const horiz = cx < midX ? "l" : "r";
-        const vert = cy < midY ? "t" : "b";
-        return vert + horiz; // 'tl', 'tr', 'bl', 'br'
-      }
-
-      /* === 虫眼鏡サイズ：表示エリアの 2/3 === */
-      function sizeMagnifier(mag) {
-        const vb = visibleAreaBounds();
-        const vw = vb.right - vb.left;
-        const vh = vb.bottom - vb.top;
-        mag.style.width = Math.round((vw * 2) / 3) + "px";
-        mag.style.height = Math.round((vh * 2) / 3) + "px";
-      }
-
-      /* === 指を離したら最寄りの四隅へ吸着 === */
-      function snapMagnifierToCorner(mag) {
-        const vb = visibleAreaBounds();
+        const vw = vb.right - vb.left,
+          vh = vb.bottom - vb.top;
         const w = mag.offsetWidth,
           h = mag.offsetHeight;
-        const corners = [
-          { q: "tl", x: vb.left, y: vb.top },
-          { q: "tr", x: vb.right - w, y: vb.top },
-          { q: "bl", x: vb.left, y: vb.bottom - h },
-          { q: "br", x: vb.right - w, y: vb.bottom - h },
-        ];
-        const r = mag.getBoundingClientRect();
-        const cx = r.left + r.width / 2,
-          cy = r.top + r.height / 2;
-        let best = corners[0],
-          bestD = Infinity;
-        for (const c of corners) {
-          const dx = c.x + w / 2 - cx,
-            dy = c.y + h / 2 - cy;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < bestD) {
-            best = c;
-            bestD = d2;
-          }
-        }
-        mag.style.left = best.x + "px";
-        mag.style.top = best.y + "px";
-        updateMagnifierContentForQuadrant(mag, best.q);
+
+        const lefts = [vb.left, vb.left + (vw - w) / 2, vb.right - w];
+        const tops = [vb.top, vb.top + (vh - h) / 2, vb.bottom - h];
+        return [Math.round(lefts[col]), Math.round(tops[row])];
       }
 
-      /* === 四分割拡大：その象限を虫眼鏡いっぱいにフィット ===
-     背景サイズは常に「虫眼鏡の幅×2, 高さ×2」
-     位置は tl:(0,0) / tr:(-w,0) / bl:(0,-h) / br:(-w,-h) */
-      function updateMagnifierContentForQuadrant(mag, q) {
+      /* ==== 背景（拡大元）を 2倍で描く：画像表示サイズを基準にズーム ==== */
+      function updateMagnifierBackgroundForCell(frame, mag, col, row) {
+        const Z = 2; // 常に2倍
+        const img = frame.querySelector("img");
+        const fr = frame.getBoundingClientRect();
+        const ir = img.getBoundingClientRect(); // 画面上の実表示サイズ（縦横比維持）
+
         const w = mag.clientWidth,
           h = mag.clientHeight;
-        mag.dataset.quadrant = q;
-        mag.style.backgroundSize = `${2 * w}px ${2 * h}px`;
-        const pos =
-          {
-            tl: "0px 0px",
-            tr: `-${w}px 0px`,
-            bl: `0px -${h}px`,
-            br: `-${w}px -${h}px`,
-          }[q] || "0px 0px";
-        mag.style.backgroundPosition = pos;
-      }
 
-      /* === 表示位置（ドラッグ中は一時的にどこでもOK / 指を離すと四隅へ） === */
-      function positionMagnifier(mag, left, top) {
+        // 背景サイズ = 画像の表示サイズ × 2（縦横比をそのまま維持）
+        mag.style.backgroundSize = `${ir.width * Z}px ${ir.height * Z}px`;
+        mag.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+
+        // 画像上の 3×3 セルの「中心点（表示座標）」を求める
+        const cx = ir.left + (col + 0.5) * (ir.width / 3);
+        const cy = ir.top + (row + 0.5) * (ir.height / 3);
+
+        // その中心点が虫眼鏡の中央に来るように背景位置をオフセット
+        // 背景の原点は画像の表示原点（frame内左上）と一致させる
+        const imgLocalX = cx - fr.left; // 画像内X（frame基準）
+        const imgLocalY = cy - fr.top; // 画像内Y（frame基準）
+
+        const bgX = -(imgLocalX * Z - w / 2);
+        const bgY = -(imgLocalY * Z - h / 2);
+
+        mag.style.backgroundPosition = `${Math.round(bgX)}px ${Math.round(
+          bgY
+        )}px`;
+
+        // 見切れ近傍のグラデ（お好みで）
         const vb = visibleAreaBounds();
-        const w = mag.offsetWidth,
-          h = mag.offsetHeight;
+        const [left, top] = computeCellLeftTop(mag, col, row);
         const minL = vb.left,
           maxL = vb.right - w;
         const minT = vb.top,
           maxT = vb.bottom - h;
-        left = Math.max(minL, Math.min(maxL, left));
-        top = Math.max(minT, Math.min(maxT, top));
-        mag.style.left = `${left}px`;
-        mag.style.top = `${top}px`;
-
-        // ドラッグ中は中心で象限をプレビュー
-        const r = mag.getBoundingClientRect();
-        const q = getQuadrantByCenter(
-          r.left + r.width / 2,
-          r.top + r.height / 2
-        );
-        updateMagnifierContentForQuadrant(mag, q);
-
-        // エッジ近傍のグラデ（既存を踏襲）
-        const th = 128;
         const distL = left - minL,
-          distR = maxL - (left + w);
-        const distT = top - minT,
-          distB = maxT - (top + h);
+          distR = maxL - left,
+          distT = top - minT,
+          distB = maxT - top;
+        const th = 128;
         setMagGradient(
           mag,
           Math.max(0, Math.min(1, 1 - distL / th)),
@@ -495,71 +449,84 @@
         );
       }
 
-      /* === ON / OFF === */
+      /* ==== 3×3 のセルへ配置（唯一の存在位置） ==== */
+      function placeMagnifierAtCell(frame, mag, col, row) {
+        const [left, top] = computeCellLeftTop(mag, col, row);
+        mag.style.left = left + "px";
+        mag.style.top = top + "px";
+        mag.dataset.col = String(col);
+        mag.dataset.row = String(row);
+        updateMagnifierBackgroundForCell(frame, mag, col, row);
+      }
+
+      /* ==== サイズは表示エリアの 2/3 ==== */
+      function sizeMagnifier(mag) {
+        const vb = visibleAreaBounds();
+        const vw = vb.right - vb.left,
+          vh = vb.bottom - vb.top;
+        mag.style.width = Math.round((vw * 2) / 3) + "px";
+        mag.style.height = Math.round((vh * 2) / 3) + "px";
+      }
+
+      /* ==== ポインタ位置 → 3×3 セルを求める（最近傍のセル） ==== */
+      function pickCellFromPointer(clientX, clientY) {
+        const vb = visibleAreaBounds();
+        const vw = vb.right - vb.left,
+          vh = vb.bottom - vb.top;
+        const nx = (clientX - vb.left) / vw;
+        const ny = (clientY - vb.top) / vh;
+        const col = Math.max(0, Math.min(2, Math.round(nx * 3 - 0.5)));
+        const row = Math.max(0, Math.min(2, Math.round(ny * 3 - 0.5)));
+        return [col, row];
+      }
+
+      /* ==== ON / OFF（※2倍ズームと排反） ==== */
       function enterMagnifier(frame) {
-        if (zoomedFrame) exitZoom(zoomedFrame); // 2倍と排反
+        if (zoomedFrame) exitZoom(zoomedFrame);
+
         const mag = frame.querySelector(".magnifier");
         const img = frame.querySelector("img");
 
-        sizeMagnifier(mag); // 表示エリアの2/3
-        mag.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+        // サイズ設定（表示エリアの 2/3）
+        sizeMagnifier(mag);
         mag.style.display = "block";
+        magFrame = frame;
+        btnMag.textContent = "オフ";
 
-        // 初期位置は右上隅へ吸着
-        const vb = visibleAreaBounds();
-        mag.style.left = vb.right - mag.offsetWidth + "px";
-        mag.style.top = vb.top + "px";
-        updateMagnifierContentForQuadrant(mag, "tr");
+        // 既定は「右上」（col=2,row=0）
+        placeMagnifierAtCell(frame, mag, 2, 0);
 
-        frame.style.touchAction = "none"; // 1本指ドラッグ有効化
-        let sx, sy, l0, t0;
+        // ドラッグ中も“9セルのみ”に存在：最寄りセルへ即スナップ
+        frame.style.touchAction = "none";
         frame.onpointerdown = (e) => {
-          const r = mag.getBoundingClientRect();
-          sx = e.clientX;
-          sy = e.clientY;
-          l0 = r.left;
-          t0 = r.top;
           frame.setPointerCapture(e.pointerId);
+          const [c, r] = pickCellFromPointer(e.clientX, e.clientY);
+          placeMagnifierAtCell(frame, mag, c, r);
         };
         frame.onpointermove = (e) => {
-          if (sx == null) return;
-          const dx = e.clientX - sx,
-            dy = e.clientY - sy;
-          positionMagnifier(mag, l0 + dx, t0 + dy);
+          if (e.pressure === 0) return; // 押してない移動は無視
+          const [c, r] = pickCellFromPointer(e.clientX, e.clientY);
+          // 同じセルなら何もしない（無駄な再描画を避ける）
+          if (String(c) === mag.dataset.col && String(r) === mag.dataset.row)
+            return;
+          placeMagnifierAtCell(frame, mag, c, r);
         };
         frame.onpointerup = (e) => {
-          sx = null;
           try {
             frame.releasePointerCapture(e.pointerId);
           } catch {}
-          // 指を離したら四隅へ吸着＆象限固定
-          snapMagnifierToCorner(mag);
         };
 
-        // リサイズ時：サイズ再計算＆今の象限に吸着し直す
+        // リサイズ時：サイズ再計算→現在セルに再配置（2倍維持）
         const handleResize = () => {
           if (mag.style.display !== "block") return;
-          const q = mag.dataset.quadrant || "tr";
           sizeMagnifier(mag);
-          // 象限 q の隅へ再配置
-          const vb = visibleAreaBounds();
-          const w = mag.offsetWidth,
-            h = mag.offsetHeight;
-          const pos = {
-            tl: [vb.left, vb.top],
-            tr: [vb.right - w, vb.top],
-            bl: [vb.left, vb.bottom - h],
-            br: [vb.right - w, vb.bottom - h],
-          }[q];
-          mag.style.left = pos[0] + "px";
-          mag.style.top = pos[1] + "px";
-          updateMagnifierContentForQuadrant(mag, q);
+          const c = Number(mag.dataset.col || 2);
+          const r = Number(mag.dataset.row || 0);
+          placeMagnifierAtCell(frame, mag, c, r);
         };
         window.addEventListener("resize", handleResize, { passive: true });
         frame._magResizeHandler = handleResize;
-
-        magFrame = frame;
-        btnMag.textContent = "オフ";
       }
       function exitMagnifier(frame) {
         const mag = frame.querySelector(".magnifier");
