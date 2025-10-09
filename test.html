@@ -13,11 +13,14 @@
     }
     .wrap { width: 100%; margin: 0 auto; padding: 0 12px; box-sizing: border-box; }
 
-    /* ===== カルーセル ===== */
+    /* ===== 固定バー（iPadの消失対策あり） ===== */
     .toc-dock {
       position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
       background: #fff; border-bottom: 1px solid #eee;
       padding: 8px 0 env(safe-area-inset-top) 0;
+      transform: translateZ(0); /* iPadのスクロール時ちらつき/消失対策 */
+      -webkit-transform: translateZ(0);
+      will-change: transform;
     }
     .toc-bar { display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; overflow: hidden; }
     .btn {
@@ -28,7 +31,10 @@
     }
     .btn:disabled { opacity: .4; cursor: default; }
     .toc-container { flex: 1 1 auto; min-width: 0; overflow: hidden; }
-    .toc { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain; }
+    .toc {
+      overflow-x: auto; overflow-y: hidden; white-space: nowrap;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain;
+    }
     .toc::-webkit-scrollbar { display: none; }
     .toc-list { display: flex; gap: 8px; padding: 0; margin: 0; list-style: none; }
     .toc-list a {
@@ -63,18 +69,21 @@
       border: 2px solid var(--line-green); border-radius: 12px; overflow: hidden;
       box-shadow: 0 2px 6px rgba(0,0,0,.25); background: #fff;
       -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
-      pointer-events: none;
+      pointer-events: none; /* レンズ自体はクリック透過 */
     }
     .magnifier img { position: absolute; left: 0; top: 0; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+
+    /* 白い丸ボタン（矢印なし） */
     .mag-controls { position: absolute; inset: 0; pointer-events: none; }
     .mag-btn {
-      position: absolute; width: 44px; height: 44px; border-radius: 999px;
-      background: rgba(17,17,17,.85); border: none; display: grid; place-items: center;
-      pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none; user-select: none;
+      position: absolute;
+      width: 44px; height: 44px; border-radius: 999px;
+      background: #fff; border: 1px solid #ddd; box-shadow: 0 1px 2px rgba(0,0,0,.12);
+      pointer-events: auto; touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
     }
     .mag-btn:active { transform: scale(.98); }
-    .mag-btn svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
     .mag-btn.n  { top: 8px; left: 50%; transform: translate(-50%,0); }
     .mag-btn.s  { bottom: 8px; left: 50%; transform: translate(-50%,0); }
@@ -108,7 +117,7 @@
 
   <main class="wrap" id="content"></main>
 
-  <!-- グローバル虫眼鏡 -->
+  <!-- グローバル虫眼鏡（白丸ボタンのみ） -->
   <div class="magnifier" id="global-mag">
     <img alt="" />
     <div class="mag-controls">
@@ -134,14 +143,15 @@
     const pad3 = (n) => String(n).padStart(3, "0");
     const files = groups.flatMap(g => Array.from({ length: g.end - g.start + 1 }, (_, i) => `${g.prefix}${pad3(g.start + i)}.jpeg`));
 
-    const tocEl = document.getElementById("toc");
+    /* ========= 要素 ========= */
+    const tocEl   = document.getElementById("toc");
     const tocList = document.getElementById("toc-list");
     const content = document.getElementById("content");
     const btnOpen = document.getElementById("btn-open");
     const btnZoom = document.getElementById("btn-zoom");
     const btnMag  = document.getElementById("btn-mag");
-    const pgPrev = document.getElementById("pg-prev");
-    const pgNext = document.getElementById("pg-next");
+    const pgPrev  = document.getElementById("pg-prev");
+    const pgNext  = document.getElementById("pg-next");
     const carPrev = document.getElementById("car-prev");
     const carNext = document.getElementById("car-next");
     const dockEl  = document.getElementById("toc-dock");
@@ -175,6 +185,7 @@
     const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
     let currentIndex = 0;
 
+    /* ========= 現在地判定 ========= */
     function detectCurrentPage() {
       const baseline = dockEl.getBoundingClientRect().bottom;
       let idx = 0;
@@ -188,9 +199,19 @@
       if (idx >= sections.length) idx = sections.length - 1;
       if (idx !== currentIndex) setActive(idx);
     }
+    function ensureActiveLinkVisible() {
+      const link = tocLinks[currentIndex];
+      if (!link) return;
+      const lr = link.getBoundingClientRect();
+      const tr = tocEl.getBoundingClientRect();
+      if (lr.left < tr.left || lr.right > tr.right) {
+        link.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'auto' });
+      }
+    }
     function setActive(i) {
       currentIndex = i;
       tocLinks.forEach((el, idx) => el.classList.toggle("active", idx === i));
+      ensureActiveLinkVisible();
       const img = sections[i]?.querySelector("img");
       if (img) btnOpen.href = img.currentSrc || img.src;
 
@@ -204,35 +225,43 @@
     window.addEventListener("resize", detectCurrentPage);
     window.addEventListener("load", detectCurrentPage);
 
+    /* ========= ページ移動 ========= */
     function scrollToSection(i) {
       const s = sections[i]; if (!s) return;
       window.scrollTo({ top: s.offsetTop, behavior: "auto" });
-      requestAnimationFrame(detectCurrentPage);
+      requestAnimationFrame(() => { detectCurrentPage(); ensureActiveLinkVisible(); });
     }
-
-    pgPrev.onclick = () => scrollToSection(Math.max(0, currentIndex - 1));
-    pgNext.onclick = () => scrollToSection(Math.min(sections.length - 1, currentIndex + 1));
+    function movePrevWithPin(){
+      const next = Math.max(0, currentIndex - 1);
+      scrollToSection(next);
+    }
+    function moveNextWithPin(){
+      const next = Math.min(sections.length - 1, currentIndex + 1);
+      scrollToSection(next);
+    }
+    pgPrev.onclick = movePrevWithPin;
+    pgNext.onclick = moveNextWithPin;
     tocLinks.forEach(a => a.onclick = (e) => { e.preventDefault(); scrollToSection(Number(a.dataset.index)); });
+
+    function pageSize() { return Math.max(200, tocEl.clientWidth * 0.8); }
+    carPrev.onclick = () => tocEl.scrollBy({ left: -pageSize(), behavior: "auto" });
+    carNext.onclick = () => tocEl.scrollBy({ left:  pageSize(), behavior: "auto" });
 
     /* ========= グローバル虫眼鏡 ========= */
     const magEl = document.getElementById('global-mag');
     const magImg = magEl.querySelector('img');
     const magState = { on: false, frame: null, cx: 0, cy: 0, scale: 2 };
 
-    // iPhone縦長なら3倍に
+    // iPhone縦長なら3倍
     function isIPhonePortrait() {
       return /iPhone/i.test(navigator.userAgent) && window.matchMedia("(orientation: portrait)").matches;
     }
-    function updateMagScale() {
-      magState.scale = isIPhonePortrait() ? 3 : 2;
-    }
+    function updateMagScale() { magState.scale = isIPhonePortrait() ? 3 : 2; }
 
     function visibleAreaBounds() {
-      return {
-        left: 0, right: window.innerWidth,
+      return { left: 0, right: window.innerWidth,
         top:  document.getElementById("toc-dock").getBoundingClientRect().bottom,
-        bottom: window.innerHeight,
-      };
+        bottom: window.innerHeight };
     }
     function sizeMagnifierTwoThirds() {
       const vb = visibleAreaBounds();
@@ -248,18 +277,19 @@
     function lockScroll(){ document.body.style.overflow="hidden"; document.body.style.touchAction="none"; }
     function unlockScroll(){ document.body.style.overflow=""; document.body.style.touchAction=""; }
     function resetMagStateToCenter() {
-      const ir = magState.frame.querySelector("img").getBoundingClientRect();
-      magState.cx = ir.width/2; magState.cy = ir.height/2;
+      const img = magState.frame.querySelector("img");
+      const iw = img.clientWidth, ih = img.clientHeight; /* 変形に影響されない表示サイズ */
+      magState.cx = iw/2; magState.cy = ih/2;
     }
     function renderMagnifier() {
       if (!magState.on || !magState.frame) return;
       const img = magState.frame.querySelector("img");
-      const ir  = img.getBoundingClientRect();
+      const iw = img.clientWidth, ih = img.clientHeight;   // 変形前の表示サイズ
       const w = magEl.clientWidth, h = magEl.clientHeight;
       const src = img.currentSrc || img.src; if (magImg.src !== src) magImg.src = src;
 
       const s = magState.scale;
-      const imgW = ir.width*s, imgH = ir.height*s;
+      const imgW = iw*s, imgH = ih*s;
       magImg.style.width = imgW+"px"; magImg.style.height = imgH+"px";
 
       let offX = Math.round(w/2 - magState.cx*s);
@@ -275,18 +305,20 @@
       if (zoomState.on) exitZoom(zoomState.frame);
       magState.on = true; magState.frame = frame;
       sizeMagnifierTwoThirds(); magEl.style.display = "block"; centerMagnifier();
-      updateMagScale(); // ← iPhone縦なら3倍
-      resetMagStateToCenter(); renderMagnifier(); btnMag.textContent = "オフ"; lockScroll();
+      updateMagScale(); resetMagStateToCenter(); renderMagnifier();
+      btnMag.textContent = "オフ"; lockScroll();
 
       const step = () => {
-        const ir = magState.frame.querySelector("img").getBoundingClientRect();
-        return Math.max(12, Math.round(Math.min(ir.width, ir.height)/18));
+        const img = magState.frame.querySelector("img");
+        const iw = img.clientWidth, ih = img.clientHeight;
+        return Math.max(12, Math.round(Math.min(iw, ih)/18));
       };
       const moveBy = (dx,dy) => {
-        const ir = magState.frame.querySelector("img").getBoundingClientRect();
+        const img = magState.frame.querySelector("img");
+        const iw = img.clientWidth, ih = img.clientHeight;
         const sp = step();
-        magState.cx = Math.max(0, Math.min(ir.width,  magState.cx + dx*sp));
-        magState.cy = Math.max(0, Math.min(ir.height, magState.cy + dy*sp));
+        magState.cx = Math.max(0, Math.min(iw, magState.cx + dx*sp));
+        magState.cy = Math.max(0, Math.min(ih, magState.cy + dy*sp));
         renderMagnifier();
       };
       const map = { n:[0,-1], s:[0,1], w:[-1,0], e:[1,0], nw:[-1,-1], ne:[1,-1], sw:[-1,1], se:[1,1] };
@@ -313,21 +345,21 @@
       unlockScroll(); btnMag.textContent = "虫眼鏡";
     }
 
-    btnMag.onclick = () => {
+    document.getElementById("btn-mag").onclick = () => {
       const f = sections[currentIndex].querySelector(".frame");
       if (magState.on) exitMagnifier(); else enterMagnifier(f);
     };
 
-    /* ========= 2倍ズーム ========= */
+    /* ========= 2倍ズーム（表示サイズ基準で厳密クランプ） ========= */
     const zoomState = { on:false, frame:null, scale:2, cx:0, cy:0 };
 
     function renderZoom() {
       if (!zoomState.on) return;
       const frame = zoomState.frame; const img = frame.querySelector('img');
       const w = frame.clientWidth, h = frame.clientHeight;
-      const ir = img.getBoundingClientRect();
+      const iw = img.clientWidth, ih = img.clientHeight; // 変形前の表示サイズ
       const s = zoomState.scale;
-      const imgW = ir.width*s, imgH = ir.height*s;
+      const imgW = iw*s, imgH = ih*s;
 
       let offX = Math.round(w/2 - zoomState.cx*s);
       let offY = Math.round(h/2 - zoomState.cy*s);
@@ -343,19 +375,24 @@
       if (magState.on) exitMagnifier();
       const img = frame.querySelector('img');
       zoomState.on = true; zoomState.frame = frame; zoomState.scale = 2;
-      const ir = img.getBoundingClientRect();
-      zoomState.cx = ir.width/2; zoomState.cy = ir.height/2;
+
+      const iw = img.clientWidth, ih = img.clientHeight;
+      zoomState.cx = iw/2; zoomState.cy = ih/2;
+
       frame.style.touchAction = "none";
       let px=null, py=null;
       frame.onpointerdown = (e)=>{ px=e.clientX; py=e.clientY; frame.setPointerCapture(e.pointerId); };
       frame.onpointermove = (e)=>{
         if (px==null) return;
         const dx = e.clientX - px, dy = e.clientY - py;
+        // 画像座標中心を移動（表示サイズ基準）
         zoomState.cx -= dx/zoomState.scale;
         zoomState.cy -= dy/zoomState.scale;
-        const irNow = img.getBoundingClientRect();
-        zoomState.cx = Math.max(0, Math.min(irNow.width,  zoomState.cx));
-        zoomState.cy = Math.max(0, Math.min(irNow.height, zoomState.cy));
+
+        const iwNow = img.clientWidth, ihNow = img.clientHeight;
+        zoomState.cx = Math.max(0, Math.min(iwNow,  zoomState.cx));
+        zoomState.cy = Math.max(0, Math.min(ihNow, zoomState.cy));
+
         px=e.clientX; py=e.clientY;
         renderZoom();
       };
@@ -364,8 +401,7 @@
     }
 
     function exitZoom(frame) {
-      const f = frame || zoomState.frame;
-      if (!f) return;
+      const f = frame || zoomState.frame; if (!f) return;
       const img = f.querySelector('img');
       img.style.transform = "scale(1)";
       f.style.touchAction = "pan-y";
