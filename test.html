@@ -426,15 +426,6 @@
         }
       }
 
-      /* グラデ（既存踏襲） */
-      function setMagGradient(m, gL, gR, gT, gB) {
-        const s = 0.4;
-        m.style.setProperty("--gL", (gL * s).toFixed(3));
-        m.style.setProperty("--gR", (gR * s).toFixed(3));
-        m.style.setProperty("--gT", (gT * s).toFixed(3));
-        m.style.setProperty("--gB", (gB * s).toFixed(3));
-      }
-
       /* === サイズ：表示エリアの 2/3 === */
       function sizeMagnifierTwoThirds(mag) {
         const vb = visibleAreaBounds();
@@ -459,13 +450,6 @@
         const distR = vb.right - w - left;
         const distT = top - vb.top;
         const distB = vb.bottom - h - top;
-        setMagGradient(
-          mag,
-          Math.max(0, Math.min(1, 1 - distL / th)),
-          Math.max(0, Math.min(1, 1 - distR / th)),
-          Math.max(0, Math.min(1, 1 - distT / th)),
-          Math.max(0, Math.min(1, 1 - distB / th))
-        );
       }
 
       /* === pointer座標を表示エリア内にクランプして 5×5 セルを決定（上段無反応対策） === */
@@ -578,7 +562,7 @@
       function exitMagnifier(frame) {
         const mag = frame.querySelector(".magnifier");
         mag.style.display = "none";
-        setMagGradient(mag, 0, 0, 0, 0);
+
         if (frame._magMoveHandler) {
           window.removeEventListener("pointermove", frame._magMoveHandler, {
             capture: true,
