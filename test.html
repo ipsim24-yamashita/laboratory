@@ -66,12 +66,12 @@
       pointer-events: none;
     }
     .magnifier img { position: absolute; left: 0; top: 0; pointer-events: none; user-select: none; -webkit-user-drag: none; }
-    .mag-controls { position: absolute; inset: 0; pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    .mag-controls { position: absolute; inset: 0; pointer-events: none; }
     .mag-btn {
       position: absolute; width: 44px; height: 44px; border-radius: 999px;
       background: rgba(17,17,17,.85); border: none; display: grid; place-items: center;
       pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+      -webkit-user-select: none; user-select: none;
     }
     .mag-btn:active { transform: scale(.98); }
     .mag-btn svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
@@ -108,7 +108,7 @@
 
   <main class="wrap" id="content"></main>
 
-  <!-- グローバル虫眼鏡（body直下） -->
+  <!-- グローバル虫眼鏡 -->
   <div class="magnifier" id="global-mag">
     <img alt="" />
     <div class="mag-controls">
@@ -134,7 +134,6 @@
     const pad3 = (n) => String(n).padStart(3, "0");
     const files = groups.flatMap(g => Array.from({ length: g.end - g.start + 1 }, (_, i) => `${g.prefix}${pad3(g.start + i)}.jpeg`));
 
-    /* ========= 要素 ========= */
     const tocEl = document.getElementById("toc");
     const tocList = document.getElementById("toc-list");
     const content = document.getElementById("content");
@@ -160,10 +159,7 @@
       const sec = document.createElement("section");
       sec.dataset.index = idx;
       sec.id = `p-${name.replace(/\.[^.]+$/, "")}`;
-      sec.innerHTML = `
-        <figure class="frame">
-          <img src="${BASE}${encodeURIComponent(name)}" alt="">
-        </figure>`;
+      sec.innerHTML = `<figure class="frame"><img src="${BASE}${encodeURIComponent(name)}" alt=""></figure>`;
       content.appendChild(sec);
     });
 
@@ -179,7 +175,6 @@
     const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
     let currentIndex = 0;
 
-    /* ========= 現在地判定 ========= */
     function detectCurrentPage() {
       const baseline = dockEl.getBoundingClientRect().bottom;
       let idx = 0;
@@ -199,7 +194,6 @@
       const img = sections[i]?.querySelector("img");
       if (img) btnOpen.href = img.currentSrc || img.src;
 
-      // 虫眼鏡ONなら対象画像だけ現在ページに切り替え
       if (magState.on) {
         magState.frame = sections[i].querySelector(".frame");
         resetMagStateToCenter();
@@ -210,58 +204,28 @@
     window.addEventListener("resize", detectCurrentPage);
     window.addEventListener("load", detectCurrentPage);
 
-    /* ========= ページ移動 ========= */
     function scrollToSection(i) {
       const s = sections[i]; if (!s) return;
       window.scrollTo({ top: s.offsetTop, behavior: "auto" });
       requestAnimationFrame(detectCurrentPage);
     }
 
-    /* ======== カルーセル ======== */
-    function pinLinkToEdge(link, side) {
-      if (!link) return;
-      if (side === "left") tocEl.scrollLeft = link.offsetLeft;
-      else tocEl.scrollLeft = link.offsetLeft - (tocEl.clientWidth - link.offsetWidth);
-    }
-    function movePrevWithPin() {
-      if (currentIndex <= 0) { pinLinkToEdge(tocLinks[currentIndex], "left"); return; }
-      const next = currentIndex - 1;
-      scrollToSection(next);
-      requestAnimationFrame(() => pinLinkToEdge(tocLinks[next], "left"));
-    }
-    function moveNextWithPin() {
-      if (currentIndex >= sections.length - 1) { pinLinkToEdge(tocLinks[currentIndex], "right"); return; }
-      const next = currentIndex + 1;
-      scrollToSection(next);
-      requestAnimationFrame(() => pinLinkToEdge(tocLinks[next], "right"));
-    }
-    pgPrev.onclick = movePrevWithPin;
-    pgNext.onclick = moveNextWithPin;
+    pgPrev.onclick = () => scrollToSection(Math.max(0, currentIndex - 1));
+    pgNext.onclick = () => scrollToSection(Math.min(sections.length - 1, currentIndex + 1));
     tocLinks.forEach(a => a.onclick = (e) => { e.preventDefault(); scrollToSection(Number(a.dataset.index)); });
-    function pageSize() { return Math.max(200, tocEl.clientWidth * 0.8); }
-    carPrev.onclick = () => tocEl.scrollBy({ left: -pageSize(), behavior: "auto" });
-    carNext.onclick = () => tocEl.scrollBy({ left:  pageSize(), behavior: "auto" });
 
     /* ========= グローバル虫眼鏡 ========= */
     const magEl = document.getElementById('global-mag');
     const magImg = magEl.querySelector('img');
-
-    // 見やすいストローク矢印（N/E/S/W & 斜め）
-    const ARROWS = {
-      n:  '<svg viewBox="0 0 24 24"><path d="M12 4v16M12 4l-6 6M12 4l6 6"/></svg>',
-      s:  '<svg viewBox="0 0 24 24"><path d="M12 20V4M12 20l-6-6M12 20l6-6"/></svg>',
-      w:  '<svg viewBox="0 0 24 24"><path d="M4 12h16M4 12l6-6M4 12l6 6"/></svg>',
-      e:  '<svg viewBox="0 0 24 24"><path d="M20 12H4M20 12l-6-6M20 12l-6 6"/></svg>',
-      nw: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 6h8M6 6v8"/></svg>',
-      ne: '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M18 6h-8M18 6v8"/></svg>',
-      sw: '<svg viewBox="0 0 24 24"><path d="M6 18L18 6M6 18h8M6 18v-8"/></svg>',
-      se: '<svg viewBox="0 0 24 24"><path d="M18 18L6 6M18 18h-8M18 18v-8"/></svg>',
-    };
-    magEl.querySelectorAll('.mag-btn').forEach(btn => {
-      const dir = Array.from(btn.classList).find(c => ARROWS[c]); btn.innerHTML = ARROWS[dir];
-    });
-
     const magState = { on: false, frame: null, cx: 0, cy: 0, scale: 2 };
+
+    // iPhone縦長なら3倍に
+    function isIPhonePortrait() {
+      return /iPhone/i.test(navigator.userAgent) && window.matchMedia("(orientation: portrait)").matches;
+    }
+    function updateMagScale() {
+      magState.scale = isIPhonePortrait() ? 3 : 2;
+    }
 
     function visibleAreaBounds() {
       return {
@@ -306,10 +270,12 @@
       offY = Math.max(minY, Math.min(maxY, offY));
       magImg.style.transform = `translate(${offX}px, ${offY}px)`;
     }
+
     function enterMagnifier(frame) {
       if (zoomState.on) exitZoom(zoomState.frame);
       magState.on = true; magState.frame = frame;
       sizeMagnifierTwoThirds(); magEl.style.display = "block"; centerMagnifier();
+      updateMagScale(); // ← iPhone縦なら3倍
       resetMagStateToCenter(); renderMagnifier(); btnMag.textContent = "オフ"; lockScroll();
 
       const step = () => {
@@ -328,27 +294,31 @@
         const dir = Array.from(btn.classList).find(c=>map[c]); const [dx,dy]=map[dir];
         let t, run=false;
         const once=()=>moveBy(dx,dy);
-        const start=(e)=>{ e.preventDefault(); if(run) return; run=true; document.body.style.webkitUserSelect='none'; document.body.style.userSelect='none'; once(); t=setInterval(once,50); };
-        const stop=()=>{ run=false; clearInterval(t); document.body.style.webkitUserSelect=''; document.body.style.userSelect=''; };
-        btn.addEventListener("pointerdown",start); btn.addEventListener("pointerup",stop);
-        btn.addEventListener("pointercancel",stop); btn.addEventListener("pointerleave",stop);
+        const start=(e)=>{ e.preventDefault(); if(run) return; run=true; once(); t=setInterval(once,50); };
+        const stop=()=>{ run=false; clearInterval(t); };
+        btn.addEventListener("pointerdown",start);
+        btn.addEventListener("pointerup",stop);
+        btn.addEventListener("pointercancel",stop);
+        btn.addEventListener("pointerleave",stop);
       });
 
-      const onResize = () => { sizeMagnifierTwoThirds(); centerMagnifier(); renderMagnifier(); };
+      const onResize = () => { sizeMagnifierTwoThirds(); centerMagnifier(); updateMagScale(); renderMagnifier(); };
       window.addEventListener("resize", onResize, { passive: true });
       magEl._onResize = onResize;
     }
+
     function exitMagnifier() {
       magState.on = false; magEl.style.display = "none";
       if (magEl._onResize) { window.removeEventListener("resize", magEl._onResize); magEl._onResize=null; }
       unlockScroll(); btnMag.textContent = "虫眼鏡";
     }
+
     btnMag.onclick = () => {
       const f = sections[currentIndex].querySelector(".frame");
       if (magState.on) exitMagnifier(); else enterMagnifier(f);
     };
 
-    /* ========= 2倍ズーム（四隅ピタ保証版） ========= */
+    /* ========= 2倍ズーム ========= */
     const zoomState = { on:false, frame:null, scale:2, cx:0, cy:0 };
 
     function renderZoom() {
@@ -359,7 +329,6 @@
       const s = zoomState.scale;
       const imgW = ir.width*s, imgH = ir.height*s;
 
-      // レンズと同じ数式：拡大後の左上オフセットを直接算出＆クランプ（四隅ピタ）
       let offX = Math.round(w/2 - zoomState.cx*s);
       let offY = Math.round(h/2 - zoomState.cy*s);
       const minX = w - imgW, maxX = 0;
@@ -374,21 +343,16 @@
       if (magState.on) exitMagnifier();
       const img = frame.querySelector('img');
       zoomState.on = true; zoomState.frame = frame; zoomState.scale = 2;
-
-      // 画像座標の中心からスタート（両方向に動ける）
       const ir = img.getBoundingClientRect();
       zoomState.cx = ir.width/2; zoomState.cy = ir.height/2;
-
       frame.style.touchAction = "none";
       let px=null, py=null;
       frame.onpointerdown = (e)=>{ px=e.clientX; py=e.clientY; frame.setPointerCapture(e.pointerId); };
       frame.onpointermove = (e)=>{
         if (px==null) return;
         const dx = e.clientX - px, dy = e.clientY - py;
-        // 画像座標で中心を動かす（スケールで割るのがコツ）
         zoomState.cx -= dx/zoomState.scale;
         zoomState.cy -= dy/zoomState.scale;
-        // 範囲クランプ（操作範囲＝元画像）
         const irNow = img.getBoundingClientRect();
         zoomState.cx = Math.max(0, Math.min(irNow.width,  zoomState.cx));
         zoomState.cy = Math.max(0, Math.min(irNow.height, zoomState.cy));
@@ -396,8 +360,7 @@
         renderZoom();
       };
       frame.onpointerup = (e)=>{ px=null; try{ frame.releasePointerCapture(e.pointerId);}catch{} };
-      renderZoom();
-      btnZoom.textContent = "1倍";
+      renderZoom(); btnZoom.textContent = "1倍";
     }
 
     function exitZoom(frame) {
