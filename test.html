@@ -320,6 +320,10 @@
       }
 
       /* ======== カルーセル（←/→ 端固定、≪/≫そのまま） ======== */
+      /* ======== カルーセル（←/→ 端固定、≪/≫そのまま） ======== */
+      /* ======== カルーセル（←/→ 端固定、≪/≫そのまま） ======== */
+      /* ======== カルーセル（←/→ 端固定、≪/≫そのまま） ======== */
+      /* ======== カルーセル（←/→ 端固定、≪/≫そのまま） ======== */
       function pinLinkToEdge(link, side) {
         if (!link) return;
         if (side === "left") {
@@ -364,7 +368,12 @@
         tocEl.scrollBy({ left: -pageSize(), behavior: "auto" });
       carNext.onclick = () =>
         tocEl.scrollBy({ left: pageSize(), behavior: "auto" });
-      /* ========= 虫眼鏡：位置は中央固定 / 表示エリア&元画像は4×4 / スクロール制御 ========= */
+
+      /* ========= 虫眼鏡：中央固定 / 5×5マッピング / 画面の2/3 / スクロール制御 ========= */
+      /* ========= 虫眼鏡：中央固定 / 5×5マッピング / 画面の2/3 / スクロール制御 ========= */
+      /* ========= 虫眼鏡：中央固定 / 5×5マッピング / 画面の2/3 / スクロール制御 ========= */
+      /* ========= 虫眼鏡：中央固定 / 5×5マッピング / 画面の2/3 / スクロール制御 ========= */
+      /* ========= 虫眼鏡：中央固定 / 5×5マッピング / 画面の2/3 / スクロール制御 ========= */
       let zoomedFrame = null,
         magFrame = null;
 
@@ -379,13 +388,13 @@
         };
       }
 
-      /* スクロール禁止/許可（虫眼鏡ONでページスクロールを完全ロック） */
+      /* スクロール禁止/許可（ONでロック、OFFで解除） */
       let _wheelBlocker = null,
         _touchBlocker = null;
       function lockScroll() {
         if (_wheelBlocker || _touchBlocker) return;
         document.body.style.overflow = "hidden";
-        document.body.style.touchAction = "none"; // iOS/タッチ用
+        document.body.style.touchAction = "none";
         _wheelBlocker = (e) => {
           e.preventDefault();
         };
@@ -408,7 +417,7 @@
         }
       }
 
-      /* 端のグラデ（既存と同じ処理） */
+      /* グラデ（既存踏襲） */
       function setMagGradient(m, gL, gR, gT, gB) {
         const s = 0.4;
         m.style.setProperty("--gL", (gL * s).toFixed(3));
@@ -417,16 +426,16 @@
         m.style.setProperty("--gB", (gB * s).toFixed(3));
       }
 
-      /* === 虫眼鏡サイズ：表示エリアの 1/2（画面の半分） === */
-      function sizeMagnifierHalf(mag) {
+      /* === 虫眼鏡サイズ：表示エリアの 2/3 === */
+      function sizeMagnifierTwoThirds(mag) {
         const vb = visibleAreaBounds();
         const vw = vb.right - vb.left,
           vh = vb.bottom - vb.top;
-        mag.style.width = Math.round(vw * 0.5) + "px";
-        mag.style.height = Math.round(vh * 0.5) + "px";
+        mag.style.width = Math.round((vw * 2) / 3) + "px";
+        mag.style.height = Math.round((vh * 2) / 3) + "px";
       }
 
-      /* === 画面中央に固定配置（位置は常に中央） === */
+      /* === 画面中央へ固定 === */
       function centerMagnifier(mag) {
         const vb = visibleAreaBounds();
         const w = mag.offsetWidth,
@@ -436,7 +445,6 @@
         mag.style.left = left + "px";
         mag.style.top = top + "px";
 
-        // エッジ近傍のグラデ（中央固定なので弱めに）
         const th = 128;
         const distL = left - vb.left;
         const distR = vb.right - w - left;
@@ -451,51 +459,48 @@
         );
       }
 
-      /* === 表示エリアを4×4に分割 → ポインタ位置からセル(col,row)を求める === */
-      function pickCell4x4(clientX, clientY) {
+      /* === 表示エリアを5×5に分割 → ポインタ位置からセル(col,row) === */
+      function pickCell5x5(clientX, clientY) {
         const vb = visibleAreaBounds();
         const vw = vb.right - vb.left,
           vh = vb.bottom - vb.top;
         const nx = (clientX - vb.left) / vw;
         const ny = (clientY - vb.top) / vh;
-        const col = Math.max(0, Math.min(3, Math.floor(nx * 4)));
-        const row = Math.max(0, Math.min(3, Math.floor(ny * 4)));
+        const col = Math.max(0, Math.min(4, Math.floor(nx * 5)));
+        const row = Math.max(0, Math.min(4, Math.floor(ny * 5)));
         return [col, row];
       }
 
-      /* === 指定セル（4×4）に対応する“元画像側の象限”を虫眼鏡に表示（縦横比維持） === */
+      /* === 指定セル（5×5）に対応する“元画像側の象限”を虫眼鏡へ（比率維持） === */
       function updateMagnifierForCell(frame, mag, col, row) {
         const img = frame.querySelector("img");
-        const ir = img.getBoundingClientRect(); // 画面上の画像表示サイズ（比率は維持されている）
-        const mr = mag.getBoundingClientRect(); // 虫眼鏡の位置（中央固定）
+        const ir = img.getBoundingClientRect(); // 表示中の画像サイズ（比率維持済み）
+        const mr = mag.getBoundingClientRect(); // 虫眼鏡（中央固定）
 
         const w = mag.clientWidth,
           h = mag.clientHeight;
 
-        // 画像側 4×4 の対象矩形（表示座標系）
-        const srcW = ir.width / 4;
-        const srcH = ir.height / 4;
+        // 画像側 5×5 の対象領域（表示座標系）
+        const srcW = ir.width / 5;
+        const srcH = ir.height / 5;
         const srcX = col * srcW;
         const srcY = row * srcH;
 
-        // “歪みなし”でできるだけ大きく表示（letterboxなしで全面フィット優先なら Math.max に変更）
+        // 歪みなしでフィット（letterboxは必要最小限 / 余白なしなら Math.max に変更可）
         const scale = Math.min(w / srcW, h / srcH);
 
-        // 背景サイズは画像の表示サイズ × scale（縦横比を保つ）
+        // 背景サイズは「画像表示サイズ × scale」（縦横比はそのまま）
         const bgW = ir.width * scale;
         const bgH = ir.height * scale;
         mag.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
         mag.style.backgroundSize = `${Math.round(bgW)}px ${Math.round(bgH)}px`;
 
-        // 背景の基準点は「虫眼鏡の左上」。
-        // 画面上の画像左上から虫眼鏡左上への相対位置（scale後）を引いて、選択象限が中央に来るように補正。
+        // 背景の原点補正：画像左上→虫眼鏡左上の相対を scale して、選択セル中心を虫眼鏡中心へ
         const dx = (ir.left - mr.left) * scale;
         const dy = (ir.top - mr.top) * scale;
 
-        // 選択象限の中心を虫眼鏡中央に合わせる
         const srcCX = srcX + srcW / 2;
         const srcCY = srcY + srcH / 2;
-
         const bgX = -(dx + srcCX * scale) + w / 2;
         const bgY = -(dy + srcCY * scale) + h / 2;
 
@@ -503,52 +508,47 @@
           bgY
         )}px`;
 
-        // 記録（再計算用）
+        // 記録
         mag.dataset.col = String(col);
         mag.dataset.row = String(row);
         mag.dataset.scale = String(scale);
       }
 
-      /* === ON / OFF（虫眼鏡は中央固定 / 2倍ズームと排反 / スクロール制御） === */
+      /* === ON / OFF（中央固定 / 5×5マッピング / スクロール制御 / 2倍ズームと排反） === */
       function enterMagnifier(frame) {
         if (zoomedFrame) exitZoom(zoomedFrame); // 2倍とは排反
 
         const mag = frame.querySelector(".magnifier");
-        sizeMagnifierHalf(mag); // 画面の半分
+        sizeMagnifierTwoThirds(mag); // 画面の2/3
         mag.style.display = "block";
         magFrame = frame;
         btnMag.textContent = "オフ";
 
-        // 画面中央へ固定
+        // 中央固定
         centerMagnifier(mag);
 
-        // 初期表示：表示エリアの右上あたり（col=2,row=0）に対応する象限
+        // 初期セル：右上寄り（2,0）など任意。要求に合わせて(1,2)へも即変更可。
         updateMagnifierForCell(frame, mag, 2, 0);
 
         // スクロール禁止
         lockScroll();
 
-        // ポインタ移動で「表示エリア4×4セル」を選び、その対応象限を表示
+        // 画面上の“今ポイントしている5×5セル”に合わせて表示（ホバー／ドラッグ不要で追従）
         const onMove = (e) => {
-          const x =
-            e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX;
-          const y =
-            e.touches && e.touches[0] ? e.touches[0].clientY : e.clientY;
-          const [c, r] = pickCell4x4(x, y);
+          const t = (e.touches && e.touches[0]) || e;
+          const [c, r] = pickCell5x5(t.clientX, t.clientY);
           if (String(c) === mag.dataset.col && String(r) === mag.dataset.row)
             return;
           updateMagnifierForCell(frame, mag, c, r);
         };
-
-        // 画面全体で追従（指を押していなくても“指している辺り”で切替）
         window.addEventListener("pointermove", onMove, { passive: true });
         window.addEventListener("touchmove", onMove, { passive: true });
         frame._magMoveHandler = onMove;
 
-        // リサイズ時：サイズを再計算し、中央に再固定＆同じセルで再描画
+        // リサイズ時：サイズ再計算→中央再固定→同セルで再描画
         const onResize = () => {
           if (mag.style.display !== "block") return;
-          sizeMagnifierHalf(mag);
+          sizeMagnifierTwoThirds(mag);
           centerMagnifier(mag);
           const c = Number(mag.dataset.col || 2);
           const r = Number(mag.dataset.row || 0);
@@ -571,12 +571,12 @@
           window.removeEventListener("resize", frame._magResizeHandler);
           frame._magResizeHandler = null;
         }
-        unlockScroll(); // スクロール許可に戻す
+        unlockScroll(); // スクロールを許可に戻す
         magFrame = null;
         btnMag.textContent = "虫眼鏡";
       }
 
-      /* 既存のボタンハンドラはそのまま流用 */
+      /* 既存のボタンハンドラはそのまま利用 */
       btnMag.onclick = () => {
         const f = sections[currentIndex].querySelector(".frame");
         if (magFrame && magFrame === f) exitMagnifier(f);
@@ -586,6 +586,10 @@
         }
       };
 
+      /* ========= 2倍ズーム（既存そのまま／虫眼鏡と排反） ========= */
+      /* ========= 2倍ズーム（既存そのまま／虫眼鏡と排反） ========= */
+      /* ========= 2倍ズーム（既存そのまま／虫眼鏡と排反） ========= */
+      /* ========= 2倍ズーム（既存そのまま／虫眼鏡と排反） ========= */
       /* ========= 2倍ズーム（既存そのまま／虫眼鏡と排反） ========= */
       function enterZoom(frame) {
         if (magFrame) exitMagnifier(magFrame);
