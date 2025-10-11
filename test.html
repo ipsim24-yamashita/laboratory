@@ -273,34 +273,34 @@
     // 可視領域90%に、元画像のアスペクト比で最大フィット＆中央配置
 // 可視領域(カルーセル下端〜画面端)の 95% を、
 // 元画像のアスペクト比を正確に保ったまま最大フィット＆中央配置
+
+// 可視領域(カルーセル下端〜画面端)の 96% x 92% を上限に
+// 元画像のアスペクト比で最大フィット（フレーム自体が歪まない）
 function sizeAndCenterMagnifierKeepAspect() {
   const vb = visibleAreaBounds();
-  const maxW = (vb.right - vb.left) * 0.95; // ← 横幅を広く
-  const maxH = (vb.bottom - vb.top) * 0.90;
+  const maxW = (vb.right - vb.left) * 0.96; // 横、もう少し広く
+  const maxH = (vb.bottom - vb.top) * 0.92; // 縦、少し余裕
 
-  const img = magState.frame.querySelector("img");
-  const iw = img.naturalWidth || img.clientWidth || 1;
-  const ih = img.naturalHeight || img.clientHeight || 1;
-  const aspect = iw / ih;
+  // 現在ページ画像の元解像度から厳密なアスペクト比を得る
+  const baseImg = magState.frame.querySelector("img");
+  const natW = baseImg.naturalWidth || baseImg.clientWidth || 1;
+  const natH = baseImg.naturalHeight || baseImg.clientHeight || 1;
+  const aspect = natW / natH;
 
-  // 元画像の比率で最大化
   let w = maxW;
   let h = w / aspect;
-  if (h > maxH) {
-    h = maxH;
-    w = h * aspect;
-  }
+  if (h > maxH) { h = maxH; w = h * aspect; }
 
-  // ピクセル単位で丸め
+  // content-box に対してpx丸め（border分はブラウザが外側に足す）
   w = Math.round(w);
   h = Math.round(h);
 
-  // 中央配置
   magEl.style.width  = `${w}px`;
   magEl.style.height = `${h}px`;
-  magEl.style.left   = `${Math.round((vb.left + vb.right - w) / 2)}px`;
-  magEl.style.top    = `${Math.round((vb.top + vb.bottom - h) / 2)}px`;
+  magEl.style.left   = `${Math.round((vb.left + vb.right  - w)/2)}px`;
+  magEl.style.top    = `${Math.round((vb.top  + vb.bottom - h)/2)}px`;
 }
+
 
     function lockScroll(){ document.body.style.overflow="hidden"; document.body.style.touchAction="none"; }
     function unlockScroll(){ document.body.style.overflow=""; document.body.style.touchAction=""; }
@@ -311,28 +311,53 @@ function sizeAndCenterMagnifierKeepAspect() {
       magState.cx = iw/2; magState.cy = ih/2;
     }
 
-    function renderMagnifier() {
-      if (!magState.on || !magState.frame) return;
-      const img = magState.frame.querySelector("img");
-      const iw = img.clientWidth, ih = img.clientHeight;
-      const w = magEl.clientWidth, h = magEl.clientHeight;
-      const src = img.currentSrc || img.src;
-      if (magImg.src !== src) magImg.src = src;
+    // レンズ内描画：元解像度ベースで拡大（歪みゼロ）＆範囲外はクランプ
+function renderMagnifier() {
+  if (!magState.on || !magState.frame) return;
 
-      const s = magState.scale; // 1.5x
-      const imgW = iw * s, imgH = ih * s;
-      magImg.style.width = imgW + "px";
-      magImg.style.height = imgH + "px";
+  const pageImg = magState.frame.querySelector("img");
 
-      // レンズ中心を (cx,cy) に。範囲外を見せないようクランプ
-      let offX = Math.round(w/2 - magState.cx * s);
-      let offY = Math.round(h/2 - magState.cy * s);
-      const minX = w - imgW, maxX = 0;
-      const minY = h - imgH, maxY = 0;
-      offX = Math.max(minX, Math.min(maxX, offX));
-      offY = Math.max(minY, Math.min(maxY, offY));
-      magImg.style.transform = `translate(${offX}px, ${offY}px)`;
-    }
+  // 元画像の実解像度（正しい比率）
+  const natW = pageImg.naturalWidth  || 1;
+  const natH = pageImg.naturalHeight || 1;
+
+  // ページ上での表示倍率（ページ画像が画面幅に縮小されている分）
+  const dispW = pageImg.clientWidth  || natW;
+  const dispH = pageImg.clientHeight || natH;
+  const dispScaleX = dispW / natW;
+  const dispScaleY = dispH / natH;   // 念のため両軸計算（理論上同じになる）
+
+  // 1) レンズサイズ
+  const w = magEl.clientWidth, h = magEl.clientHeight;
+
+  // 2) レンズ内で使う拡大倍率（ページ表示倍率 × レンズ倍率1.5）
+  const sX = dispScaleX * magState.scale;
+  const sY = dispScaleY * magState.scale;
+
+  // 3) レンズ内イメージのサイズをCSS pxで設定（比率は natural 基準）
+  const imgW = natW * sX;
+  const imgH = natH * sY;
+  const src  = pageImg.currentSrc || pageImg.src;
+  if (magImg.src !== src) magImg.src = src;
+  magImg.style.width  = `${imgW}px`;
+  magImg.style.height = `${imgH}px`;
+
+  // 4) レンズ中心に (cx,cy) を合わせる（cx,cy は「ページ表示座標系」）
+  //    natural座標に直してから拡大を掛けると、端まで正確に合う
+  const cxNat = (magState.cx / dispScaleX);
+  const cyNat = (magState.cy / dispScaleY);
+
+  let offX = Math.round(w/2 - cxNat * sX);
+  let offY = Math.round(h/2 - cyNat * sY);
+
+  // 5) はみ出しクランプ（右・下へ空白が出ない／範囲外を見せない）
+  const minX = w - imgW, maxX = 0;
+  const minY = h - imgH, maxY = 0;
+  if (imgW <= w) { offX = Math.round((w - imgW)/2); } else { offX = Math.max(minX, Math.min(maxX, offX)); }
+  if (imgH <= h) { offY = Math.round((h - imgH)/2); } else { offY = Math.max(minY, Math.min(maxY, offY)); }
+
+  magImg.style.transform = `translate(${offX}px, ${offY}px)`;
+}
 
     function enterMagnifier(frame) {
       magState.on = true; magState.frame = frame;
