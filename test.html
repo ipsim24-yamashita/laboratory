@@ -2,11 +2,12 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
+  <!-- ブラウザ標準のページズームを無効化（自前ピンチのみ有効） -->
   <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>GENESIS 解答ビューア</title>
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -14,7 +15,7 @@
         extend: {
           colors: {
             linegreen: '#22c55e',
-            carYellow: '#fde047',
+            carYellow: '#fde047'
           }
         }
       }
@@ -22,17 +23,20 @@
   </script>
 
   <style>
-    /* カルーセル固定 */
+    /* カルーセル（固定） */
     .toc-dock { transform: translateZ(0); -webkit-transform: translateZ(0); will-change: transform; }
     .toc { overflow: hidden; -webkit-overflow-scrolling: auto; position: relative; height: 44px; }
     .toc-list { padding-left: 8px; padding-right: 8px; }
 
-    /* 拡大対象エリア */
+    /* 本文全体のズーム対象 */
     #zoom-area {
       transform-origin: 0 0;
       will-change: transform;
-      touch-action: none; /* ピンチ・パンはJSで処理 */
+      /* JSで scale>1 or ピンチ中のみ 'none' に切替。初期は縦スクロールOK */
+      touch-action: pan-y;
     }
+    /* 子要素でもブラウザ標準ジェスチャが発動しないよう保険（iOS対策） */
+    #zoom-area * { touch-action: none; }
 
     /* ページ画像 */
     .page-img {
@@ -41,7 +45,7 @@
       height: auto;
       user-select: none;
       -webkit-user-drag: none;
-      pointer-events: none;
+      pointer-events: none; /* イベントは親で受ける */
     }
   </style>
 </head>
@@ -54,24 +58,24 @@
       <div class="flex items-center gap-2 w-full">
         <button id="car-prev" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">≪</button>
         <button id="car-next" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">≫</button>
+
         <div class="flex-1 min-w-0">
           <nav id="toc" class="toc flex items-center">
             <ul id="toc-list" class="toc-list flex gap-2 items-center"></ul>
           </nav>
         </div>
+
         <button id="pg-prev" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">←</button>
         <button id="pg-next" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">→</button>
-        <a id="btn-open" href="#" target="_blank"
+        <a id="btn-open" href="#" target="_blank" rel="noopener"
            class="h-9 px-3 rounded-full bg-neutral-100 text-neutral-900 border border-neutral-300 flex items-center justify-center">Tab</a>
       </div>
     </div>
   </div>
 
-  <!-- 本文（ズーム対象） -->
+  <!-- 本文（ズーム対象をラップ） -->
   <main id="content" class="max-w-full mx-auto px-3">
-    <div id="zoom-area">
-      <!-- ページがJSで挿入される -->
-    </div>
+    <div id="zoom-area"></div>
   </main>
 
   <script>
@@ -106,7 +110,7 @@
       a.dataset.index = idx;
       a.textContent = name.replace(".jpeg", "");
       a.className = "inline-block px-3 py-1.5 border rounded-full select-none whitespace-nowrap border-neutral-300 bg-blue-50 text-blue-600";
-      if (idx === 0) a.classList.add("bg-linegreen", "text-white", "border-green-600");
+      if (idx === 0) a.classList.add("bg-linegreen","text-white","border-green-600");
       li.appendChild(a);
       tocList.appendChild(li);
 
@@ -120,19 +124,28 @@
       zoomArea.appendChild(sec);
     });
 
-    /* ===== 現在ページ検出 ===== */
+    /* ===== 固定バー高さを本文に反映 ===== */
+    function applyDockPadding() {
+      const h = tocDock?.offsetHeight || 60;
+      document.getElementById('content').style.paddingTop = (h + 12) + "px";
+    }
+    new ResizeObserver(applyDockPadding).observe(tocDock);
+    window.addEventListener("resize", applyDockPadding);
+    applyDockPadding();
+
+    /* ===== 現在ページ & Tabリンク ===== */
     const sections = Array.from(document.querySelectorAll("main section"));
     const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
     let currentIndex = 0;
 
-    function setActive(i, ensureVisible = false) {
+    function setActive(i, ensureVisible=false) {
       currentIndex = i;
       tocLinks.forEach((el, idx) => {
         el.classList.toggle("bg-linegreen", idx === i);
-        el.classList.toggle("text-white", idx === i);
+        el.classList.toggle("text-white",   idx === i);
         el.classList.toggle("border-green-600", idx === i);
-        el.classList.toggle("bg-blue-50", idx !== i);
-        el.classList.toggle("text-blue-600", idx !== i);
+        el.classList.toggle("bg-blue-50",   idx !== i);
+        el.classList.toggle("text-blue-600",idx !== i);
         el.classList.toggle("border-neutral-300", idx !== i);
       });
       const img = sections[i]?.querySelector("img");
@@ -142,11 +155,10 @@
         const link = tocLinks[i];
         const lr = link.getBoundingClientRect();
         const tr = tocEl.getBoundingClientRect();
-        if (lr.left < tr.left) tocEl.scrollLeft += (lr.left - tr.left);
+        if (lr.left < tr.left)        tocEl.scrollLeft += (lr.left - tr.left);
         else if (lr.right > tr.right) tocEl.scrollLeft += (lr.right - tr.right);
       }
     }
-
     function detectCurrentPage() {
       const baseline = tocDock.getBoundingClientRect().bottom;
       let idx = 0;
@@ -165,84 +177,70 @@
     window.addEventListener("load", detectCurrentPage);
 
     /* ===== ページ送り ===== */
-    pgPrev.onclick = () => {
-      const next = Math.max(0, currentIndex - 1);
-      window.scrollTo({ top: sections[next].offsetTop, behavior: "auto" });
-      requestAnimationFrame(() => setActive(next, true));
-    };
-    pgNext.onclick = () => {
-      const next = Math.min(sections.length - 1, currentIndex + 1);
-      window.scrollTo({ top: sections[next].offsetTop, behavior: "auto" });
-      requestAnimationFrame(() => setActive(next, true));
-    };
+    pgPrev.onclick = () => { const next = Math.max(0, currentIndex - 1); window.scrollTo({ top: sections[next].offsetTop, behavior: "auto" }); setActive(next, true); };
+    pgNext.onclick = () => { const next = Math.min(sections.length - 1, currentIndex + 1); window.scrollTo({ top: sections[next].offsetTop, behavior: "auto" }); setActive(next, true); };
 
-    /* ===== カルーセル長押し ===== */
-    function pageSize() {
-      const tr = tocEl.getBoundingClientRect();
-      return Math.max(200, tr.width * 0.8);
-    }
-    let carTimer = null;
-    function startCarScroll(dir) {
-      if (carTimer) return;
-      const step = Math.round(pageSize() * 0.25);
-      const tick = () => tocEl.scrollBy({ left: dir * step, behavior: "auto" });
-      tick();
-      carTimer = setInterval(tick, 60);
-    }
-    function stopCarScroll() { if (carTimer) { clearInterval(carTimer); carTimer = null; } }
-    ["pointerup", "pointercancel", "pointerleave", "touchend"].forEach(ev => {
-      carPrev.addEventListener(ev, stopCarScroll);
-      carNext.addEventListener(ev, stopCarScroll);
-    });
-    carPrev.addEventListener("pointerdown", e => { e.preventDefault(); startCarScroll(-1); });
-    carNext.addEventListener("pointerdown", e => { e.preventDefault(); startCarScroll(+1); });
+    /* ===== カルーセル 長押し ===== */
+    function pageSize(){ const tr=tocEl.getBoundingClientRect(); return Math.max(200, tr.width*0.8); }
+    let carTimer=null;
+    function startCarScroll(dir){ if(carTimer) return; const step=Math.round(pageSize()*0.25); const tick=()=>tocEl.scrollBy({left:dir*step,behavior:'auto'}); tick(); carTimer=setInterval(tick,60); }
+    function stopCarScroll(){ if(carTimer){ clearInterval(carTimer); carTimer=null; } }
+    ["pointerup","pointercancel","pointerleave","touchend"].forEach(ev=>{ carPrev.addEventListener(ev,stopCarScroll); carNext.addEventListener(ev,stopCarScroll); });
+    carPrev.addEventListener("pointerdown", e=>{ e.preventDefault(); startCarScroll(-1); });
+    carNext.addEventListener("pointerdown", e=>{ e.preventDefault(); startCarScroll(+1); });
+    tocLinks.forEach(a => a.onclick = (e)=>{ e.preventDefault(); const i=Number(a.dataset.index); window.scrollTo({top:sections[i].offsetTop, behavior:"auto"}); setActive(i, true); });
 
-    tocLinks.forEach(a => a.onclick = (e) => {
-      e.preventDefault();
-      const i = Number(a.dataset.index);
-      window.scrollTo({ top: sections[i].offsetTop, behavior: "auto" });
-      setActive(i, true);
-    });
-
-    /* ===== ページ全体ピンチズーム（カルーセル除外） ===== */
-    (function initGlobalZoom() {
+    /* === ここから：本文全体ピンチズーム（カルーセル除外） === */
+    (function initGlobalZoom(){
       const area = zoomArea;
       let scale = 1, tx = 0, ty = 0;
       let startScale = 1, startTx = 0, startTy = 0;
-      let startDist = 0, startMid = { x: 0, y: 0 };
+      let startDist = 0, startMid = {x:0,y:0};
       const pts = new Map();
 
-      function dist(a, b) { const dx = a.x - b.x, dy = a.y - b.y; return Math.hypot(dx, dy); }
-      function mid(a, b) { return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; }
-
-      function apply() {
+      function apply(){
         area.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
       }
+      function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
+      function mid(a,b){ return {x:(a.x+b.x)/2, y:(a.y+b.y)/2}; }
 
-      area.addEventListener("pointerdown", e => {
-        area.setPointerCapture(e.pointerId);
-        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-        if (pts.size === 2) {
-          const [p1, p2] = [...pts.values()];
-          startDist = dist(p1, p2);
-          startMid = mid(p1, p2);
-          startScale = scale;
-          startTx = tx; startTy = ty;
-        }
+      // iOSのネイティブピンチを完全に無効化（ズームは自前のみ）
+      ['gesturestart','gesturechange','gestureend','dblclick'].forEach(type=>{
+        area.addEventListener(type, e => e.preventDefault(), { passive:false });
       });
 
-      area.addEventListener("pointermove", e => {
-        if (!pts.has(e.pointerId)) return;
-        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      function updateTouchAction(){
+        // ピンチ中 or scale>1 の時だけスクロールを止める
+        area.style.touchAction = (pts.size>=2 || scale>1) ? 'none' : 'pan-y';
+      }
 
-        if (pts.size === 2) {
-          const [p1, p2] = [...pts.values()];
-          const curDist = dist(p1, p2);
-          let newScale = startScale * (curDist / startDist);
-          newScale = Math.max(1, Math.min(6, newScale));
+      area.addEventListener('pointerdown', e=>{
+        area.setPointerCapture(e.pointerId);
+        pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+        if(pts.size===2){
+          const [p1,p2]=[...pts.values()];
+          startDist = dist(p1,p2);
+          startMid  = mid(p1,p2);
+          startScale= scale;
+          startTx = tx; startTy = ty;
+        }else if(pts.size===1){
+          startMid = {x:e.clientX, y:e.clientY};
+        }
+        updateTouchAction();
+      });
+
+      area.addEventListener('pointermove', e=>{
+        if(!pts.has(e.pointerId)) return;
+        pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+        if(pts.size===2){
+          const [p1,p2]=[...pts.values()];
+          const curDist = dist(p1,p2) || 1;
+          let newScale = startScale * (curDist / (startDist || 1));
+          newScale = Math.max(1, Math.min(6, newScale)); // 最小1
 
           const rect = area.getBoundingClientRect();
-          const midP = mid(p1, p2);
+          const midP = mid(p1,p2);
           const mx = midP.x - rect.left;
           const my = midP.y - rect.top;
 
@@ -250,28 +248,34 @@
           const preY = (my - startTy) / startScale;
           tx = mx - preX * newScale;
           ty = my - preY * newScale;
+
           scale = newScale;
           apply();
-        } else if (pts.size === 1 && scale > 1) {
+        }else if(pts.size===1 && scale>1){
           const p = [...pts.values()][0];
           const dx = p.x - startMid.x;
           const dy = p.y - startMid.y;
-          startMid = { x: p.x, y: p.y };
+          startMid = {x:p.x, y:p.y};
           tx += dx; ty += dy;
           apply();
         }
       });
 
-      ["pointerup", "pointercancel", "pointerleave"].forEach(ev => {
-        area.addEventListener(ev, e => {
-          pts.delete(e.pointerId);
-          if (pts.size === 1) startMid = [...pts.values()][0];
-          if (pts.size === 0) startMid = { x: 0, y: 0 };
-        });
+      function endPointer(e){
+        pts.delete(e.pointerId);
+        if(pts.size===1){ startMid = [...pts.values()][0]; }
+        if(pts.size===0){ startMid = {x:0,y:0}; }
+        updateTouchAction();
+      }
+      ['pointerup','pointercancel','pointerleave'].forEach(ev=>{
+        area.addEventListener(ev, endPointer);
       });
+
+      // 初期適用
+      apply();
     })();
 
-    setActive(0, false);
+    setActive(0,false);
   </script>
 </body>
 </html>
