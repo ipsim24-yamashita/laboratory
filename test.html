@@ -271,26 +271,36 @@
     }
 
     // 可視領域90%に、元画像のアスペクト比で最大フィット＆中央配置
-    function sizeAndCenterMagnifierKeepAspect() {
-      const vb = visibleAreaBounds();
-      const maxW = (vb.right - vb.left) * 0.90;
-      const maxH = (vb.bottom - vb.top) * 0.90;
+// 可視領域(カルーセル下端〜画面端)の 95% を、
+// 元画像のアスペクト比を正確に保ったまま最大フィット＆中央配置
+function sizeAndCenterMagnifierKeepAspect() {
+  const vb = visibleAreaBounds();
+  const maxW = (vb.right - vb.left) * 0.95; // ← 横幅を広く
+  const maxH = (vb.bottom - vb.top) * 0.90;
 
-      const img = magState.frame.querySelector("img");
-      const iw = img.clientWidth || 1;
-      const ih = img.clientHeight || 1;
-      const aspect = iw / ih;
+  const img = magState.frame.querySelector("img");
+  const iw = img.naturalWidth || img.clientWidth || 1;
+  const ih = img.naturalHeight || img.clientHeight || 1;
+  const aspect = iw / ih;
 
-      let w = maxW, h = w / aspect;
-      if (h > maxH) { h = maxH; w = h * aspect; }
+  // 元画像の比率で最大化
+  let w = maxW;
+  let h = w / aspect;
+  if (h > maxH) {
+    h = maxH;
+    w = h * aspect;
+  }
 
-      w = Math.round(w); h = Math.round(h);
+  // ピクセル単位で丸め
+  w = Math.round(w);
+  h = Math.round(h);
 
-      magEl.style.width  = w + "px";
-      magEl.style.height = h + "px";
-      magEl.style.left = Math.round((vb.left + vb.right - w) / 2) + "px";
-      magEl.style.top  = Math.round((vb.top  + vb.bottom - h) / 2) + "px";
-    }
+  // 中央配置
+  magEl.style.width  = `${w}px`;
+  magEl.style.height = `${h}px`;
+  magEl.style.left   = `${Math.round((vb.left + vb.right - w) / 2)}px`;
+  magEl.style.top    = `${Math.round((vb.top + vb.bottom - h) / 2)}px`;
+}
 
     function lockScroll(){ document.body.style.overflow="hidden"; document.body.style.touchAction="none"; }
     function unlockScroll(){ document.body.style.overflow=""; document.body.style.touchAction=""; }
