@@ -84,6 +84,13 @@
     .mag-btn.ne { top: 8px; right: 8px; }
     .mag-btn.sw { bottom: 8px; left: 8px; }
     .mag-btn.se { bottom: 8px; right: 8px; }
+    /* 虫眼鏡ボタンON時のハイライト（#f97316 = Tailwind text-orange-500 相当） */
+.btn-on {
+  background: #f97316 !important;
+  color: #fff !important;
+  border-color: #f97316 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,.16);
+}
   </style>
 </head>
 
@@ -216,14 +223,16 @@
       if (img) btnOpen.href = img.currentSrc || img.src;
 
       // ←/→は現在チップを必ず可視化（≪/≫は不要）
-      if (ensureVisible) {
-        const link = tocLinks[i];
-        const lr = link.getBoundingClientRect();
-        const tr = tocEl.getBoundingClientRect();
-        if (lr.left < tr.left || lr.right > tr.right) {
-          link.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'auto' });
-        }
-      }
+if (ensureVisible) {
+  const link = tocLinks[i];
+  const lr = link.getBoundingClientRect();
+  const tr = tocEl.getBoundingClientRect();
+  if (lr.left < tr.left) {
+    tocEl.scrollLeft += (lr.left - tr.left); // 即時
+  } else if (lr.right > tr.right) {
+    tocEl.scrollLeft += (lr.right - tr.right); // 即時
+  }
+}
     }
 
     function detectCurrentPage() {
@@ -275,8 +284,31 @@
       const tr = tocEl.getBoundingClientRect();
       return Math.max(200, tr.width * 0.8);
     }
-    carPrev.onclick = () => { deactivateMag(); tocEl.scrollBy({ left: -pageSize(), behavior: "auto" }); };
-    carNext.onclick = () => { deactivateMag(); tocEl.scrollBy({ left:  pageSize(), behavior: "auto" }); };
+    
+    // ≪/≫ を長押し対応（約60fps）。指を離したら停止。
+function pageSize() {
+  const tr = tocEl.getBoundingClientRect();
+  return Math.max(200, tr.width * 0.8);
+}
+let carTimer = null;
+
+function startCarScroll(dir) { // dir: -1 (≪), +1 (≫)
+  if (carTimer) return;
+  const step = Math.round(pageSize() * 0.25); // 連打時は1/4ページずつ小刻みに
+  const tick = () => tocEl.scrollBy({ left: dir * step, behavior: 'auto' });
+  tick();
+  carTimer = setInterval(tick, 60);
+}
+function stopCarScroll() {
+  if (carTimer) { clearInterval(carTimer); carTimer = null; }
+}
+
+['pointerup','pointercancel','pointerleave','touchend'].forEach(ev => {
+  carPrev.addEventListener(ev, stopCarScroll);
+  carNext.addEventListener(ev, stopCarScroll);
+});
+carPrev.addEventListener('pointerdown', (e)=>{ e.preventDefault(); deactivateMag(); startCarScroll(-1); });
+carNext.addEventListener('pointerdown', (e)=>{ e.preventDefault(); deactivateMag(); startCarScroll(+1); });
 
     // 目次クリック
     tocLinks.forEach(a => a.onclick = (e) => {
@@ -299,23 +331,33 @@
       };
     }
     // レンズを「カルーセル下端〜画面端の90%」に収めつつ、元画像のアスペクトに合わせて最大化
-    function sizeAndCenterMagnifierKeepAspect() {
-      const vb = visibleAreaBounds();
-      const maxW = (vb.right - vb.left) * 0.90;
-      const maxH = (vb.bottom - vb.top) * 0.90;
+// 可視領域(カルーセル下端〜画面端)の 90% を、元画像のアスペクト比で最大限フィット
+function sizeAndCenterMagnifierKeepAspect() {
+  const vb = visibleAreaBounds();
+  const maxW = (vb.right - vb.left) * 0.90;
+  const maxH = (vb.bottom - vb.top) * 0.90;
 
-      const img = magState.frame.querySelector("img");
-      const iw = img.clientWidth, ih = img.clientHeight;
-      const aspect = iw / ih;
+  const img = magState.frame.querySelector("img");
+  // 表示中の実サイズ（縦横比＝元画像と同じ）
+  const iw = img.clientWidth || 1;
+  const ih = img.clientHeight || 1;
+  const aspect = iw / ih;
 
-      let w = maxW, h = w / aspect;
-      if (h > maxH) { h = maxH; w = h * aspect; }
+  let w = maxW;
+  let h = w / aspect;
+  if (h > maxH) { h = maxH; w = h * aspect; }
 
-      magEl.style.width = Math.round(w) + "px";
-      magEl.style.height = Math.round(h) + "px";
-      magEl.style.left = Math.round((vb.left + vb.right - w)/2) + "px";
-      magEl.style.top  = Math.round((vb.top  + vb.bottom - h)/2) + "px";
-    }
+  // 端数は四捨五入（サブピクセル誤差で 90% を下回るのを防ぐ）
+  w = Math.round(w); h = Math.round(h);
+
+  magEl.style.width  = w + "px";
+  magEl.style.height = h + "px";
+  magEl.style.left = Math.round((vb.left + vb.right - w) / 2) + "px";
+  magEl.style.top  = Math.round((vb.top  + vb.bottom - h) / 2) + "px";
+}
+    
+
+
     function lockScroll(){ document.body.style.overflow="hidden"; document.body.style.touchAction="none"; }
     function unlockScroll(){ document.body.style.overflow=""; document.body.style.touchAction=""; }
 
@@ -349,18 +391,25 @@
 
     function enterMagnifier(frame) {
       magState.on = true; magState.frame = frame;
-      sizeAndCenterMagnifierKeepAspect();
+        sizeAndCenterMagnifierKeepAspect();
++ // レイアウト確定→再計算（iOSでの初期サブピクセル誤差対策）
++ requestAnimationFrame(() => {
++   sizeAndCenterMagnifierKeepAspect();
++   renderMagnifier();
++ });
       magEl.style.display = "block";
       resetMagCenter();
       renderMagnifier();
       lockScroll();
-      attachMagPointerHandlers();
+        attachMagPointerHandlers();
++ setUiStates();
     }
     function exitMagnifier() {
       magState.on = false;
       magEl.style.display = "none";
       unlockScroll();
-      detachMagPointerHandlers();
+        detachMagPointerHandlers();
++ setUiStates();
     }
     function deactivateMag(){ if (magState.on) exitMagnifier(); }
 
@@ -454,6 +503,12 @@
       }
       lastTouchEnd = now;
     }, { passive:false });
+
+    function setUiStates() {
+  // 虫眼鏡ボタンのON/OFF色
+  const on = magState?.on === true;
+  btnMag.classList.toggle('btn-on', on);
+}
   </script>
 </body>
 </html>
