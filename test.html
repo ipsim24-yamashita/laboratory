@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <!-- ピンチ禁止 & ズーム禁止 -->
+  <!-- ピンチ/ズーム禁止（iOS含む） -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>GENESIS 解答ビューア</title>
 
@@ -13,7 +13,7 @@
       theme: {
         extend: {
           colors: {
-            linegreen: '#22c55e',   // 現在ページ用
+            linegreen: '#22c55e',   // 現在ページchip
             carYellow: '#fde047',   // yellow-300
           }
         }
@@ -22,12 +22,12 @@
   </script>
 
   <style>
-    /* iPadのちらつき/消失対策 */
+    /* iPadのちらつき/消失対策 & 完全固定 */
     .toc-dock { transform: translateZ(0); -webkit-transform: translateZ(0); will-change: transform; }
 
-    /* カルーセルはユーザー手動スクロール不可（固定） */
+    /* カルーセルはユーザー手動スクロール不可（完全固定） */
     .toc { overflow: hidden; -webkit-overflow-scrolling: auto; position: relative; height: 44px; }
-    .toc-list { padding-left: 8px; padding-right: 8px; }
+    .toc-list { padding-left: 8px; padding-right: 8px; } /* 楕円chipが切れない余白 */
 
     /* 虫眼鏡（固定・中央） */
     .magnifier {
@@ -42,7 +42,7 @@
       transform-origin: 0 0;
     }
 
-    /* 8方向ボタン（丸・透過） */
+    /* 8方向ボタン（丸・中身透過） */
     .mag-btn {
       position: absolute; width: 44px; height: 44px; border-radius: 9999px;
       background: transparent; border: 2px solid rgba(255,255,255,0.9);
@@ -60,13 +60,14 @@
     .mag-btn.sw { bottom: 8px; left: 8px; }
     .mag-btn.se { bottom: 8px; right: 8px; }
 
-    /* 虫眼鏡ONのボタン色（#f97316） */
+    /* 虫眼鏡ONのボタン色（Tailwind text-orange-500 と同値） */
     .btn-on { background: #f97316 !important; color: #fff !important; border-color: #f97316 !important; box-shadow: 0 1px 2px rgba(0,0,0,.16); }
   </style>
 </head>
 
 <body class="bg-white text-neutral-900 touch-manipulation select-none">
-  <!-- 固定カルーセル -->
+
+  <!-- ===== 固定カルーセル ===== -->
   <div id="toc-dock" class="toc-dock fixed top-0 left-0 right-0 z-[2000] bg-white border-b border-neutral-200 pt-2 pb-2">
     <div class="max-w-full mx-auto px-3">
       <div class="flex items-center gap-2 w-full box-border">
@@ -74,7 +75,7 @@
         <button id="car-prev" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">≪</button>
         <button id="car-next" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">≫</button>
 
-        <!-- ページリスト（固定） -->
+        <!-- ページリスト（完全固定） -->
         <div class="flex-1 min-w-0">
           <nav id="toc" class="toc flex items-center">
             <ul id="toc-list" class="toc-list flex gap-2 items-center"></ul>
@@ -92,10 +93,10 @@
     </div>
   </div>
 
-  <!-- 本文 -->
+  <!-- ===== 本文 ===== -->
   <main id="content" class="max-w-full mx-auto px-3"></main>
 
-  <!-- グローバル虫眼鏡 -->
+  <!-- ===== グローバル虫眼鏡 ===== -->
   <div id="global-mag" class="magnifier">
     <img alt="" />
     <button class="mag-btn n"  aria-label="上"></button>
@@ -133,7 +134,7 @@
 
     /* ===== DOM生成 ===== */
     files.forEach((name, idx) => {
-      // ページチップ
+      // ページchip
       const li = document.createElement("li");
       const a = document.createElement("a");
       a.href = `#p-${name.replace(/\.[^.]+$/, "")}`;
@@ -185,16 +186,13 @@
       const img = sections[i]?.querySelector("img");
       if (img) btnOpen.href = img.currentSrc || img.src;
 
-      // ←/→は現在チップを必ず可視化（≪/≫は不要）
+      // ←/→：現在チップを必ず可視化（≪/≫は不要）
       if (ensureVisible) {
         const link = tocLinks[i];
         const lr = link.getBoundingClientRect();
         const tr = tocEl.getBoundingClientRect();
-        if (lr.left < tr.left) {
-          tocEl.scrollLeft += (lr.left - tr.left); // 即時
-        } else if (lr.right > tr.right) {
-          tocEl.scrollLeft += (lr.right - tr.right); // 即時
-        }
+        if (lr.left < tr.left)  tocEl.scrollLeft += (lr.left - tr.left);
+        else if (lr.right > tr.right) tocEl.scrollLeft += (lr.right - tr.right);
       }
     }
 
@@ -215,7 +213,7 @@
     window.addEventListener("resize", detectCurrentPage);
     window.addEventListener("load", detectCurrentPage);
 
-    /* ===== カルーセルのユーザースクロールを完全禁止 ===== */
+    /* ===== カルーセルを完全固定（手スクロール禁止） ===== */
     tocEl.addEventListener('wheel', (e) => { e.preventDefault(); }, { passive:false });
     let touching = false;
     tocEl.addEventListener('touchstart', () => { touching = true; }, { passive:true });
@@ -228,12 +226,11 @@
       window.scrollTo({ top: s.offsetTop, behavior: "auto" });
       requestAnimationFrame(() => { detectCurrentPage(); if (ensureVisible) setActive(i, true); });
     }
-
-    // ←/→：現在ページチップを必ず可視化
+    // ←/→：現在チップを必ず可視化
     pgPrev.onclick = () => { deactivateMag(); const next = Math.max(0, currentIndex - 1); scrollToSection(next, true); };
     pgNext.onclick = () => { deactivateMag(); const next = Math.min(sections.length - 1, currentIndex + 1); scrollToSection(next, true); };
 
-    // ≪/≫：長押しで高速連続スクロール（現在ページの可視化は不要）
+    // ≪/≫：長押しで高速連続スクロール（現在チップの可視化は不要）
     function pageSize() {
       const tr = tocEl.getBoundingClientRect();
       return Math.max(200, tr.width * 0.8);
@@ -241,7 +238,7 @@
     let carTimer = null;
     function startCarScroll(dir) { // dir: -1 (≪), +1 (≫)
       if (carTimer) return;
-      const step = Math.round(pageSize() * 0.25); // 細かく刻む
+      const step = Math.round(pageSize() * 0.25); // 小刻みに
       const tick = () => tocEl.scrollBy({ left: dir * step, behavior: 'auto' });
       tick();
       carTimer = setInterval(tick, 60);
@@ -261,7 +258,7 @@
       scrollToSection(Number(a.dataset.index), true);
     });
 
-    /* ===== 虫眼鏡（1.5x / アスペクト維持 / 範囲外非表示） ===== */
+    /* ===== 虫眼鏡（1.5x / 歪みゼロ / 白紙なし / パンOK） ===== */
     const magEl = document.getElementById('global-mag');
     const magImg = magEl.querySelector('img');
     const magState = { on:false, frame:null, cx:0, cy:0, scale:1.5 };
@@ -270,78 +267,67 @@
       return { left: 0, right: window.innerWidth, top: tocDock.getBoundingClientRect().bottom, bottom: window.innerHeight };
     }
 
-    // レンズが常に画像の内側だけを見るように中心を拘束（表示座標系で計算）
-function enforceCenterWithinImage() {
-  if (!magState.on || !magState.frame) return;
-  const img = magState.frame.querySelector("img");
-  const iw = img.clientWidth || 1;
-  const ih = img.clientHeight || 1;
-  const s = magState.scale;
+    // レンズ中心を常に画像内に拘束（表示座標系）
+    function enforceCenterWithinImage() {
+      if (!magState.on || !magState.frame) return;
+      const img = magState.frame.querySelector("img");
+      const iw = img.clientWidth  || 1;   // 表示幅
+      const ih = img.clientHeight || 1;   // 表示高
+      const s  = magState.scale;          // 1.5
 
-  // レンズの半径を画像座標に換算（w,h はレンズのピクセルサイズ）
-  const w = magEl.clientWidth || 1;
-  const h = magEl.clientHeight || 1;
-  const marginX = (w / 2) / s;
-  const marginY = (h / 2) / s;
+      const w = magEl.clientWidth  || 1;
+      const h = magEl.clientHeight || 1;
 
-  // 画像の端から margin を越えないように中心を拘束
-  const minCX = Math.max(0, marginX);
-  const maxCX = Math.max(minCX, iw - marginX);
-  const minCY = Math.max(0, marginY);
-  const maxCY = Math.max(minCY, ih - marginY);
+      // レンズ半径（画像座標）＝ レンズ半分を倍率で割る
+      const rx = (w / 2) / s;
+      const ry = (h / 2) / s;
 
-  magState.cx = Math.min(Math.max(magState.cx, minCX), maxCX);
-  magState.cy = Math.min(Math.max(magState.cy, minCY), maxCY);
-}
+      const minCX = rx, maxCX = Math.max(rx, iw - rx);
+      const minCY = ry, maxCY = Math.max(ry, ih - ry);
 
-    // 可視領域90%に、元画像のアスペクト比で最大フィット＆中央配置
-// 可視領域(カルーセル下端〜画面端)の 95% を、
-// 元画像のアスペクト比を正確に保ったまま最大フィット＆中央配置
+      magState.cx = Math.min(Math.max(magState.cx, minCX), maxCX);
+      magState.cy = Math.min(Math.max(magState.cy, minCY), maxCY);
+    }
 
-// 可視領域(カルーセル下端〜画面端)の 96% x 92% を上限に
-// 元画像のアスペクト比で最大フィット（フレーム自体が歪まない）// 可視領域の 96%×92% を上限にしつつ、拡大後の画像よりレンズを大きくしない
-// レンズ自体は元画像のアスペクト比でフィット（歪みゼロ）
-function sizeAndCenterMagnifierKeepAspect() {
-  const vb = visibleAreaBounds();
-  const maxW = (vb.right - vb.left) * 0.96; // 横を広めに
-  const maxH = (vb.bottom - vb.top) * 0.92; // 縦は少し余裕
+    // 可視領域の 96%x92% を上限、かつ拡大画像より必ず一回り小さく（パン可能）
+    function sizeAndCenterMagnifierKeepAspect() {
+      const vb = visibleAreaBounds();
+      const maxW = (vb.right - vb.left) * 0.96;
+      const maxH = (vb.bottom - vb.top) * 0.92;
 
-  const pageImg = magState.frame.querySelector("img");
-  // 元解像度の比率でフレーム比を決める
-  const natW = pageImg.naturalWidth  || pageImg.clientWidth  || 1;
-  const natH = pageImg.naturalHeight || pageImg.clientHeight || 1;
-  const aspect = natW / natH;
+      const pageImg = magState.frame.querySelector("img");
 
-  // ページ上の表示サイズ（画像が画面幅に縮んでいる分）
-  const dispW = pageImg.clientWidth  || natW;
-  const dispH = pageImg.clientHeight || natH;
+      const natW = pageImg.naturalWidth  || pageImg.clientWidth  || 1;
+      const natH = pageImg.naturalHeight || pageImg.clientHeight || 1;
+      const aspect = natW / natH;
 
-  // 拡大後の画像サイズ（この範囲内にレンズを収める）
-  const s = magState.scale;              // 1.5 固定
-  const imgW = dispW * s;
-  const imgH = dispH * s;
+      const dispW = pageImg.clientWidth  || natW;
+      const dispH = pageImg.clientHeight || natH;
 
-  // レンズの最大サイズ＝「可視領域上限」かつ「拡大画像サイズ」以下
-  const hardMaxW = Math.min(maxW, imgW);
-  const hardMaxH = Math.min(maxH, imgH);
+      const s     = magState.scale; // 1.5
+      const imgW  = dispW * s;
+      const imgH  = dispH * s;
 
-  // 元画像のアスペクト比で最大化
-  let w = hardMaxW;
-  let h = w / aspect;
-  if (h > hardMaxH) { h = hardMaxH; w = h * aspect; }
+      // レンズは拡大画像より常に少し小さく（2pxの安全マージン）
+      const hardMaxW = Math.max(1, Math.min(maxW, imgW - 2));
+      const hardMaxH = Math.max(1, Math.min(maxH, imgH - 2));
 
-  w = Math.round(w);
-  h = Math.round(h);
+      // 元比率で最大フィット
+      let w = hardMaxW;
+      let h = w / aspect;
+      if (h > hardMaxH) { h = hardMaxH; w = h * aspect; }
 
-  magEl.style.width  = `${w}px`;
-  magEl.style.height = `${h}px`;
-  magEl.style.left   = `${Math.round((vb.left + vb.right  - w)/2)}px`;
-  magEl.style.top    = `${Math.round((vb.top  + vb.bottom - h)/2)}px`;
+      w = Math.floor(w);
+      h = Math.floor(h);
 
-  // レンズが決まったら、中心が必ず画像内に収まるよう拘束
-  enforceCenterWithinImage();
-}
+      magEl.style.width  = `${w}px`;
+      magEl.style.height = `${h}px`;
+      magEl.style.left   = `${Math.round((vb.left + vb.right  - w)/2)}px`;
+      magEl.style.top    = `${Math.round((vb.top  + vb.bottom - h)/2)}px`;
 
+      // パン可能範囲を保証
+      enforceCenterWithinImage();
+    }
 
     function lockScroll(){ document.body.style.overflow="hidden"; document.body.style.touchAction="none"; }
     function unlockScroll(){ document.body.style.overflow=""; document.body.style.touchAction=""; }
@@ -352,63 +338,58 @@ function sizeAndCenterMagnifierKeepAspect() {
       magState.cx = iw/2; magState.cy = ih/2;
     }
 
-    // レンズ内描画：元解像度ベースで拡大（歪みゼロ）＆範囲外はクランプ
-    // レンズ内描画：歪みゼロ＆白紙なし（拡大画像サイズ内に収める）
-function renderMagnifier() {
-  if (!magState.on || !magState.frame) return;
+    // レンズ内描画：歪みゼロ＆白紙なし
+    function renderMagnifier() {
+      if (!magState.on || !magState.frame) return;
 
-  const pageImg = magState.frame.querySelector("img");
+      const pageImg = magState.frame.querySelector("img");
+      const natW = pageImg.naturalWidth  || 1;
+      const natH = pageImg.naturalHeight || 1;
+      const dispW = pageImg.clientWidth  || natW;
+      const dispH = pageImg.clientHeight || natH;
 
-  // 元解像度（比率用）とページ表示倍率
-  const natW = pageImg.naturalWidth  || 1;
-  const natH = pageImg.naturalHeight || 1;
-  const dispW = pageImg.clientWidth  || natW;
-  const dispH = pageImg.clientHeight || natH;
+      const s  = magState.scale;                 // 1.5
+      const sx = (dispW / natW) * s;
+      const sy = (dispH / natH) * s;
 
-  const s  = magState.scale;                // 1.5
-  const sx = (dispW / natW) * s;            // 横方向のCSS拡大率
-  const sy = (dispH / natH) * s;            // 縦方向のCSS拡大率（理論上sx=sy）
+      const w = magEl.clientWidth  || 1;
+      const h = magEl.clientHeight || 1;
 
-  // レンズの実サイズ
-  const w = magEl.clientWidth  || 1;
-  const h = magEl.clientHeight || 1;
+      // 画像外を見ないよう必ず拘束
+      enforceCenterWithinImage();
 
-  // レンズが画像外を見ないよう中心を拘束
-  enforceCenterWithinImage();
+      const cssW = natW * sx;
+      const cssH = natH * sy;
+      const src  = pageImg.currentSrc || pageImg.src;
+      if (magImg.src !== src) magImg.src = src;
+      magImg.style.width  = `${cssW}px`;
+      magImg.style.height = `${cssH}px`;
 
-  // レンズ内に描画する拡大画像のサイズ（CSS px）
-  const cssW = natW * sx;
-  const cssH = natH * sy;
-  const src  = pageImg.currentSrc || pageImg.src;
-  if (magImg.src !== src) magImg.src = src;
-  magImg.style.width  = `${cssW}px`;
-  magImg.style.height = `${cssH}px`;
+      const cxNat = magState.cx / (dispW / natW);
+      const cyNat = magState.cy / (dispH / natH);
 
-  // natural座標で中心 → CSS座標へ変換してオフセット
-  const cxNat = magState.cx / (dispW / natW);
-  const cyNat = magState.cy / (dispH / natH);
+      let offX = Math.round(w/2 - cxNat * sx);
+      let offY = Math.round(h/2 - cyNat * sy);
 
-  let offX = Math.round(w/2 - cxNat * sx);
-  let offY = Math.round(h/2 - cyNat * sy);
+      const minX = w - cssW, maxX = 0;
+      const minY = h - cssH, maxY = 0;
+      offX = Math.max(minX, Math.min(maxX, offX));
+      offY = Math.max(minY, Math.min(maxY, offY));
 
-  // 画像の端内に収める（白紙が出ないようクランプ）
-  const minX = w - cssW, maxX = 0;
-  const minY = h - cssH, maxY = 0;
-  offX = Math.max(minX, Math.min(maxX, offX));
-  offY = Math.max(minY, Math.min(maxY, offY));
-
-  magImg.style.transform = `translate(${offX}px, ${offY}px)`;
-}
+      magImg.style.transform = `translate(${offX}px, ${offY}px)`;
+    }
 
     function enterMagnifier(frame) {
       magState.on = true; magState.frame = frame;
-      magEl.style.display = "block";           // 先に表示してサイズ計測を安定
+      magEl.style.display = "block";           // 先に表示して計測安定
       sizeAndCenterMagnifierKeepAspect();
-      // iOS初期サブピクセル誤差対策で1フレーム後に再計算
+
+      // iOS初期誤差対策：1フレーム後に再計算
       requestAnimationFrame(() => {
         sizeAndCenterMagnifierKeepAspect();
         renderMagnifier();
       });
+
       resetMagCenter();
       renderMagnifier();
       lockScroll();
@@ -426,7 +407,7 @@ function renderMagnifier() {
 
     function deactivateMag(){ if (magState.on) exitMagnifier(); }
 
-    // 1本指/2本指パン（平均移動で中心を動かす）
+    // 1本指/2本指パン（平均移動）
     let activePointers = new Map(); // id -> {x,y}
     function attachMagPointerHandlers() {
       magEl.addEventListener('pointerdown', onMagPointerDown);
@@ -459,10 +440,10 @@ function renderMagnifier() {
         const dy = curr.y - lastAvg.y;
         const img = magState.frame.querySelector("img");
         const iw = img.clientWidth, ih = img.clientHeight;
-magState.cx = Math.max(0, Math.min(iw,  magState.cx + dx * stepX));
-magState.cy = Math.max(0, Math.min(ih,  magState.cy + dy * stepY));
-enforceCenterWithinImage();
-renderMagnifier();
+        magState.cx = Math.max(0, Math.min(iw,  magState.cx - dx / magState.scale));
+        magState.cy = Math.max(0, Math.min(ih,  magState.cy - dy / magState.scale));
+        enforceCenterWithinImage();
+        renderMagnifier();
       }
       lastAvg = curr;
     }
@@ -471,7 +452,7 @@ renderMagnifier();
       lastAvg = avg(activePointers);
     }
 
-    // 8方向ボタン：1クリックで1/8移動
+    // 8方向ボタン：1クリックで1/8移動（8回で端）
     const dirMap = { n:[0,-1], s:[0,1], w:[-1,0], e:[1,0], nw:[-1,-1], ne:[1,-1], sw:[-1,1], se:[1,1] };
     document.querySelectorAll('.mag-btn').forEach(btn=>{
       const dir = Array.from(btn.classList).find(c=>dirMap[c]);
@@ -483,11 +464,12 @@ renderMagnifier();
         const stepX = iw / 8, stepY = ih / 8;
         magState.cx = Math.max(0, Math.min(iw,  magState.cx + dx * stepX));
         magState.cy = Math.max(0, Math.min(ih,  magState.cy + dy * stepY));
+        enforceCenterWithinImage();
         renderMagnifier();
       });
     });
 
-    // 虫眼鏡ボタン（色は setUiStates で制御）
+    // 虫眼鏡トグル
     btnMag.onclick = () => {
       const frame = sections[currentIndex].querySelector("figure");
       if (magState.on) exitMagnifier(); else enterMagnifier(frame);
@@ -500,7 +482,7 @@ renderMagnifier();
     // 初期アクティブ
     setActive(0,false);
 
-    // 虫眼鏡ボタンのON/OFF色更新
+    // UI状態（虫眼鏡ボタンの色）
     function setUiStates() {
       const on = magState?.on === true;
       btnMag.classList.toggle('btn-on', on);
