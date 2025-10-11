@@ -49,6 +49,8 @@
     }
     html, body { overscroll-behavior-y: contain; }  /* 上下ビヨーン抑制 */
     #zoom-area, #zoom-area * { user-select: none; } /* 画像やテキストを選択不可に */
+    /* これを必ず入れてください（本文ズームは常に自前） */
+    #zoom-area { touch-action: none; }
   </style>
 </head>
 
@@ -195,11 +197,14 @@
     /* === ここから：本文全体ピンチズーム（カルーセル除外） === */
     // 本文全体（#zoom-area）に対するピンチズーム＆パンを初期化
 // 仕様: 最小1 / 最大2、拡大中はスクロール抑止、ホイールはパンに割当て
+
+    // 本文全体（#zoom-area）のピンチズーム＆パンを初期化
+// 仕様: 最小1 / 最大2、scale==1は1本指でページスクロール、scale>1はパン
     function initGlobalZoom() {
   const area = document.getElementById('zoom-area');
   if (!area) return;
 
-  // 状態
+  // --- 状態 ---
   let scale = 1, tx = 0, ty = 0;
   let startScale = 1, startTx = 0, startTy = 0;
   let startDist = 0, startMid = { x: 0, y: 0 };
@@ -208,23 +213,18 @@
   const MIN_SCALE = 1;
   const MAX_SCALE = 2;
 
-  // ユーティリティ
+  // --- ユーティリティ ---
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const mid  = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) });
-  const apply = () => {
-    area.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-  };
-  const lockBodyScroll = (on) => { document.body.style.overflow = on ? 'hidden' : ''; };
-  const updateTouchAction = () => {
-    const busy = (pts.size >= 2 || scale > 1);
-    area.style.touchAction = busy ? 'none' : 'pan-y';
-    lockBodyScroll(busy);
-  };
+  const apply = () => { area.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; };
 
-  // iOS のネイティブジェスチャを完全無効化（自前ズームのみ）
-  ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(type => {
-    area.addEventListener(type, e => e.preventDefault(), { passive: false });
+  // iOS のネイティブジェスチャ無効化（自前のみ）
+  ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(t => {
+    area.addEventListener(t, e => e.preventDefault(), { passive: false });
   });
+
+  // CSS 側で #zoom-area { touch-action:none } にしておくこと
+  // （ブラウザのスクロール/ピンチを完全に止め、ここで制御）
 
   // --- ポインタ操作 ---
   function onPointerDown(e) {
@@ -232,14 +232,13 @@
     pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pts.size === 2) {
       const [p1, p2] = [...pts.values()];
-      startDist = dist(p1, p2) || 1;
-      startMid  = mid(p1, p2);
+      startDist  = dist(p1, p2) || 1;
+      startMid   = mid(p1, p2);
       startScale = scale;
       startTx = tx; startTy = ty;
     } else if (pts.size === 1) {
       startMid = { x: e.clientX, y: e.clientY };
     }
-    updateTouchAction();
   }
 
   function onPointerMove(e) {
@@ -247,14 +246,12 @@
     pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     if (pts.size === 2) {
-      // ピンチ
+      // 2本指ピンチ（中心固定）
       const [p1, p2] = [...pts.values()];
       const curDist = dist(p1, p2) || 1;
       let nextScale = startScale * (curDist / (startDist || 1));
-      // 上限/下限
       nextScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, nextScale));
 
-      // ピンチ中心を固定して拡大
       const rect = area.getBoundingClientRect();
       const midP = mid(p1, p2);
       const mx = midP.x - rect.left;
@@ -267,14 +264,21 @@
 
       scale = nextScale;
       apply();
-    } else if (pts.size === 1 && scale > 1) {
-      // パン（1本指）
+    } else if (pts.size === 1) {
       const p = [...pts.values()][0];
       const dx = p.x - startMid.x;
       const dy = p.y - startMid.y;
       startMid = { x: p.x, y: p.y };
-      tx += dx; ty += dy;
-      apply();
+
+      if (scale > 1) {
+        // 拡大中はパン
+        tx += dx; ty += dy;
+        apply();
+      } else {
+        // 等倍時はページをスクロール（ブラウザスクロールの代替）
+        // dy > 0（指下）で下へスクロールしたいので -dy
+        window.scrollBy(0, -dy);
+      }
     }
   }
 
@@ -282,20 +286,19 @@
     pts.delete(e.pointerId);
     if (pts.size === 1) startMid = [...pts.values()][0];
     if (pts.size === 0) startMid = { x: 0, y: 0 };
-    updateTouchAction();
   }
 
-  area.addEventListener('pointerdown',  onPointerDown);
-  area.addEventListener('pointermove',  onPointerMove);
-  area.addEventListener('pointerup',    onPointerEnd);
-  area.addEventListener('pointercancel',onPointerEnd);
-  area.addEventListener('pointerleave', onPointerEnd);
+  area.addEventListener('pointerdown',   onPointerDown);
+  area.addEventListener('pointermove',   onPointerMove);
+  area.addEventListener('pointerup',     onPointerEnd);
+  area.addEventListener('pointercancel', onPointerEnd);
+  area.addEventListener('pointerleave',  onPointerEnd);
 
-  // --- ホイール/トラックパッド：拡大中はページスクロールさせずパンに割当て ---
+  // --- ホイール/トラックパッド ---
+  // 拡大中はページスクロールを止め、パンに割り当て。等倍は既定動作を許可。
   area.addEventListener('wheel', (e) => {
     if (scale > 1) {
       e.preventDefault();
-      // deltaX/Y の符号は環境依存だが、一般的なパン方向に合わせる
       tx -= e.deltaX;
       ty -= e.deltaY;
       apply();
@@ -305,18 +308,16 @@
   // 初期適用
   apply();
 
-  // オプション：クリーンアップ関数を返す（必要なら使用）
+  // 必要ならクリーンアップを返す
   return () => {
-    lockBodyScroll(false);
-    area.style.touchAction = 'pan-y';
-    area.removeEventListener('pointerdown',  onPointerDown);
-    area.removeEventListener('pointermove',  onPointerMove);
-    area.removeEventListener('pointerup',    onPointerEnd);
-    area.removeEventListener('pointercancel',onPointerEnd);
-    area.removeEventListener('pointerleave', onPointerEnd);
+    area.removeEventListener('pointerdown',   onPointerDown);
+    area.removeEventListener('pointermove',   onPointerMove);
+    area.removeEventListener('pointerup',     onPointerEnd);
+    area.removeEventListener('pointercancel', onPointerEnd);
+    area.removeEventListener('pointerleave',  onPointerEnd);
   };
 }
-    
+
     setActive(0,false);
   </script>
 </body>
