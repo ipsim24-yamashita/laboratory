@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <!-- ピンチ許可（ユーザースケール可） -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
   <title>GENESIS 解答ビューア</title>
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,69 +22,60 @@
   </script>
 
   <style>
+    /* カルーセル固定 */
     .toc-dock { transform: translateZ(0); -webkit-transform: translateZ(0); will-change: transform; }
     .toc { overflow: hidden; -webkit-overflow-scrolling: auto; position: relative; height: 44px; }
     .toc-list { padding-left: 8px; padding-right: 8px; }
 
-    /* 画像フレーム：初期はスクロール可（pan-y）。拡大中のみ JS で touch-action: none に切替 */
-    .frame {
-      position: relative;
-      overflow: hidden;
-      width: 100vw;
-      max-width: 100vw;
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      background: #fff;
-      touch-action: pan-y;
+    /* 拡大対象エリア */
+    #zoom-area {
+      transform-origin: 0 0;
+      will-change: transform;
+      touch-action: none; /* ピンチ・パンはJSで処理 */
     }
-    .frame img {
+
+    /* ページ画像 */
+    .page-img {
       display: block;
       width: 100%;
       height: auto;
       user-select: none;
       -webkit-user-drag: none;
-      pointer-events: none; /* ジェスチャはframeで受ける */
-      transform-origin: 0 0;
-      will-change: transform; /* 描画を安定させる */
+      pointer-events: none;
     }
   </style>
 </head>
 
 <body class="bg-white text-neutral-900 select-none">
 
-  <!-- ===== 固定カルーセル ===== -->
+  <!-- 固定カルーセル -->
   <div id="toc-dock" class="toc-dock fixed top-0 left-0 right-0 z-[2000] bg-white border-b border-neutral-200 pt-2 pb-2">
     <div class="max-w-full mx-auto px-3">
-      <div class="flex items-center gap-2 w-full box-border">
-        <!-- ≪ / ≫ -->
+      <div class="flex items-center gap-2 w-full">
         <button id="car-prev" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">≪</button>
         <button id="car-next" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">≫</button>
-
-        <!-- ページリスト（完全固定） -->
         <div class="flex-1 min-w-0">
           <nav id="toc" class="toc flex items-center">
             <ul id="toc-list" class="toc-list flex gap-2 items-center"></ul>
           </nav>
         </div>
-
-        <!-- 右側ツール -->
-        <div class="flex items-center gap-2 shrink-0">
-          <button id="pg-prev" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">←</button>
-          <button id="pg-next" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">→</button>
-          <a id="btn-open" href="#" target="_blank" rel="noopener"
-             class="h-9 px-3 rounded-full bg-neutral-100 text-neutral-900 border border-neutral-300 inline-flex items-center justify-center">Tab</a>
-        </div>
+        <button id="pg-prev" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">←</button>
+        <button id="pg-next" class="h-9 px-3 rounded-full bg-carYellow text-black border border-yellow-300">→</button>
+        <a id="btn-open" href="#" target="_blank"
+           class="h-9 px-3 rounded-full bg-neutral-100 text-neutral-900 border border-neutral-300 flex items-center justify-center">Tab</a>
       </div>
     </div>
   </div>
 
-  <!-- ===== 本文 ===== -->
-  <main id="content" class="max-w-full mx-auto px-3"></main>
+  <!-- 本文（ズーム対象） -->
+  <main id="content" class="max-w-full mx-auto px-3">
+    <div id="zoom-area">
+      <!-- ページがJSで挿入される -->
+    </div>
+  </main>
 
   <script>
-    /* ========= 画像リスト ========= */
+    /* ===== 画像リスト ===== */
     const BASE = "docs/";
     const groups = [
       { prefix: "1-", start: 1, end: 15 },
@@ -96,64 +87,52 @@
       Array.from({ length: g.end - g.start + 1 }, (_, i) => `${g.prefix}${pad3(g.start + i)}.jpeg`)
     );
 
-    /* ========= 要素 ========= */
+    /* ===== 要素 ===== */
     const tocDock = document.getElementById("toc-dock");
-    const tocEl   = document.getElementById("toc");
+    const tocEl = document.getElementById("toc");
     const tocList = document.getElementById("toc-list");
-    const content = document.getElementById("content");
+    const zoomArea = document.getElementById("zoom-area");
     const btnOpen = document.getElementById("btn-open");
-    const pgPrev  = document.getElementById("pg-prev");
-    const pgNext  = document.getElementById("pg-next");
+    const pgPrev = document.getElementById("pg-prev");
+    const pgNext = document.getElementById("pg-next");
     const carPrev = document.getElementById("car-prev");
     const carNext = document.getElementById("car-next");
 
-    /* ========= DOM生成 ========= */
+    /* ===== DOM生成 ===== */
     files.forEach((name, idx) => {
-      // TOC chip
       const li = document.createElement("li");
       const a = document.createElement("a");
       a.href = `#p-${name.replace(/\.[^.]+$/, "")}`;
       a.dataset.index = idx;
       a.textContent = name.replace(".jpeg", "");
       a.className = "inline-block px-3 py-1.5 border rounded-full select-none whitespace-nowrap border-neutral-300 bg-blue-50 text-blue-600";
-      if (idx === 0) a.classList.add("bg-linegreen","text-white","border-green-600");
+      if (idx === 0) a.classList.add("bg-linegreen", "text-white", "border-green-600");
       li.appendChild(a);
       tocList.appendChild(li);
 
-      // Section + Frame
       const sec = document.createElement("section");
-      sec.dataset.index = idx;
       sec.id = `p-${name.replace(/\.[^.]+$/, "")}`;
       sec.className = "py-4 border-b border-neutral-100";
       sec.innerHTML = `
-        <figure class="frame">
-          <img src="${BASE}${encodeURIComponent(name)}" alt="" draggable="false">
+        <figure class="relative border border-neutral-200 rounded-xl bg-white overflow-hidden">
+          <img src="${BASE}${encodeURIComponent(name)}" alt="" class="page-img">
         </figure>`;
-      content.appendChild(sec);
+      zoomArea.appendChild(sec);
     });
 
-    /* ========= 固定バー高さを本文に反映 ========= */
-    function applyDockPadding() {
-      const h = tocDock?.offsetHeight || 60;
-      content.style.paddingTop = (h + 12) + "px";
-    }
-    new ResizeObserver(applyDockPadding).observe(tocDock);
-    window.addEventListener("resize", applyDockPadding);
-    applyDockPadding();
-
-    /* ========= 現在地検出 & Tabリンク更新 ========= */
+    /* ===== 現在ページ検出 ===== */
     const sections = Array.from(document.querySelectorAll("main section"));
     const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
     let currentIndex = 0;
 
-    function setActive(i, ensureVisible=false) {
+    function setActive(i, ensureVisible = false) {
       currentIndex = i;
       tocLinks.forEach((el, idx) => {
         el.classList.toggle("bg-linegreen", idx === i);
-        el.classList.toggle("text-white",   idx === i);
+        el.classList.toggle("text-white", idx === i);
         el.classList.toggle("border-green-600", idx === i);
-        el.classList.toggle("bg-blue-50",   idx !== i);
-        el.classList.toggle("text-blue-600",idx !== i);
+        el.classList.toggle("bg-blue-50", idx !== i);
+        el.classList.toggle("text-blue-600", idx !== i);
         el.classList.toggle("border-neutral-300", idx !== i);
       });
       const img = sections[i]?.querySelector("img");
@@ -163,10 +142,11 @@
         const link = tocLinks[i];
         const lr = link.getBoundingClientRect();
         const tr = tocEl.getBoundingClientRect();
-        if (lr.left < tr.left)        tocEl.scrollLeft += (lr.left - tr.left);
+        if (lr.left < tr.left) tocEl.scrollLeft += (lr.left - tr.left);
         else if (lr.right > tr.right) tocEl.scrollLeft += (lr.right - tr.right);
       }
     }
+
     function detectCurrentPage() {
       const baseline = tocDock.getBoundingClientRect().bottom;
       let idx = 0;
@@ -184,163 +164,114 @@
     window.addEventListener("resize", detectCurrentPage);
     window.addEventListener("load", detectCurrentPage);
 
-    /* ========= カルーセルは完全固定（手スクロール禁止） ========= */
-    tocEl.addEventListener('wheel', (e) => { e.preventDefault(); }, { passive:false });
-    let touching = false;
-    tocEl.addEventListener('touchstart', () => { touching = true; }, { passive:true });
-    tocEl.addEventListener('touchmove', (e)=>{ if (touching) e.preventDefault(); }, { passive:false });
-    tocEl.addEventListener('touchend',  () => { touching=false; });
+    /* ===== ページ送り ===== */
+    pgPrev.onclick = () => {
+      const next = Math.max(0, currentIndex - 1);
+      window.scrollTo({ top: sections[next].offsetTop, behavior: "auto" });
+      requestAnimationFrame(() => setActive(next, true));
+    };
+    pgNext.onclick = () => {
+      const next = Math.min(sections.length - 1, currentIndex + 1);
+      window.scrollTo({ top: sections[next].offsetTop, behavior: "auto" });
+      requestAnimationFrame(() => setActive(next, true));
+    };
 
-    /* ========= ページ移動 ========= */
-    function scrollToSection(i, ensureVisible=false) {
-      const s = sections[i]; if (!s) return;
-      window.scrollTo({ top: s.offsetTop, behavior: "auto" });
-      requestAnimationFrame(() => { detectCurrentPage(); if (ensureVisible) setActive(i, true); });
+    /* ===== カルーセル長押し ===== */
+    function pageSize() {
+      const tr = tocEl.getBoundingClientRect();
+      return Math.max(200, tr.width * 0.8);
     }
-    pgPrev.onclick = () => { const next = Math.max(0, currentIndex - 1); scrollToSection(next, true); };
-    pgNext.onclick = () => { const next = Math.min(sections.length - 1, currentIndex + 1); scrollToSection(next, true); };
-
-    function pageSize() { const tr = tocEl.getBoundingClientRect(); return Math.max(200, tr.width * 0.8); }
     let carTimer = null;
-    function startCarScroll(dir) { if (carTimer) return; const step = Math.round(pageSize()*0.25); const tick=()=>tocEl.scrollBy({left:dir*step,behavior:'auto'}); tick(); carTimer=setInterval(tick,60); }
-    function stopCarScroll(){ if (carTimer){ clearInterval(carTimer); carTimer=null; } }
-    ['pointerup','pointercancel','pointerleave','touchend'].forEach(ev => {
+    function startCarScroll(dir) {
+      if (carTimer) return;
+      const step = Math.round(pageSize() * 0.25);
+      const tick = () => tocEl.scrollBy({ left: dir * step, behavior: "auto" });
+      tick();
+      carTimer = setInterval(tick, 60);
+    }
+    function stopCarScroll() { if (carTimer) { clearInterval(carTimer); carTimer = null; } }
+    ["pointerup", "pointercancel", "pointerleave", "touchend"].forEach(ev => {
       carPrev.addEventListener(ev, stopCarScroll);
       carNext.addEventListener(ev, stopCarScroll);
     });
-    carPrev.addEventListener('pointerdown', (e)=>{ e.preventDefault(); startCarScroll(-1); });
-    carNext.addEventListener('pointerdown', (e)=>{ e.preventDefault(); startCarScroll(+1); });
+    carPrev.addEventListener("pointerdown", e => { e.preventDefault(); startCarScroll(-1); });
+    carNext.addEventListener("pointerdown", e => { e.preventDefault(); startCarScroll(+1); });
 
-    tocLinks.forEach(a => a.onclick = (e)=>{ e.preventDefault(); scrollToSection(Number(a.dataset.index), true); });
+    tocLinks.forEach(a => a.onclick = (e) => {
+      e.preventDefault();
+      const i = Number(a.dataset.index);
+      window.scrollTo({ top: sections[i].offsetTop, behavior: "auto" });
+      setActive(i, true);
+    });
 
-    /* ========= ピンチアウト & パン（各フレームごと） ========= */
-    document.querySelectorAll('.frame').forEach(initZoomableFrame);
+    /* ===== ページ全体ピンチズーム（カルーセル除外） ===== */
+    (function initGlobalZoom() {
+      const area = zoomArea;
+      let scale = 1, tx = 0, ty = 0;
+      let startScale = 1, startTx = 0, startTy = 0;
+      let startDist = 0, startMid = { x: 0, y: 0 };
+      const pts = new Map();
 
-    function initZoomableFrame(frame){
-      const img = frame.querySelector('img');
+      function dist(a, b) { const dx = a.x - b.x, dy = a.y - b.y; return Math.hypot(dx, dy); }
+      function mid(a, b) { return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; }
 
-      let scale = 1;             // 表示基準（最小倍率）
-      let tx = 0, ty = 0;        // 画像の平行移動
-      let startScale = 1;
-      let startTx = 0, startTy = 0;
-      let startDist = 0;
-      let startMid = {x:0,y:0};
-      const pts = new Map();     // pointerId -> {x,y}
-
-      function setTouchAction(){
-        // 拡大中はページスクロールを止める（描画安定＆誤作動防止）
-        frame.style.touchAction = (scale > 1 || pts.size >= 2) ? 'none' : 'pan-y';
+      function apply() {
+        area.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
       }
 
-      function applyTransform(){
-        // 画像の端が常にレンズ（=frame）内に残るようクランプ
-        const fw = frame.clientWidth, fh = frame.clientHeight;
-        const iw = img.clientWidth, ih = img.clientHeight; // 基準サイズ（scale=1時）
-        const vw = iw * scale, vh = ih * scale;
-
-        // 画像がフレームより小さい場合は中央寄せ（余白OK）。大きい場合ははみ出しを許容しつつクランプ。
-        const minX = Math.min(0, fw - vw), maxX = Math.max(0, 0);
-        const minY = Math.min(0, fh - vh), maxY = Math.max(0, 0);
-        tx = Math.min(Math.max(tx, minX), maxX);
-        ty = Math.min(Math.max(ty, minY), maxY);
-
-        img.style.transform = `translate(${Math.round(tx)}px, ${Math.round(ty)}px) scale(${scale})`;
-      }
-
-      function midPoint(a,b){ return { x:(a.x+b.x)/2, y:(a.y+b.y)/2 }; }
-      function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
-
-      frame.addEventListener('pointerdown', (e)=>{
-        frame.setPointerCapture(e.pointerId);
-        pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
-        if (pts.size === 2){
-          const [p1,p2] = [...pts.values()];
-          startDist = dist(p1,p2);
-          startMid  = midPoint(p1,p2);
+      area.addEventListener("pointerdown", e => {
+        area.setPointerCapture(e.pointerId);
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pts.size === 2) {
+          const [p1, p2] = [...pts.values()];
+          startDist = dist(p1, p2);
+          startMid = mid(p1, p2);
           startScale = scale;
           startTx = tx; startTy = ty;
         }
-        setTouchAction();
       });
 
-      frame.addEventListener('pointermove', (e)=>{
+      area.addEventListener("pointermove", e => {
         if (!pts.has(e.pointerId)) return;
-        pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-        if (pts.size === 2){
-          // ピンチ
-          const [p1,p2] = [...pts.values()];
-          const curDist = dist(p1,p2) || 1;
-          let nextScale = startScale * (curDist / (startDist || 1));
+        if (pts.size === 2) {
+          const [p1, p2] = [...pts.values()];
+          const curDist = dist(p1, p2);
+          let newScale = startScale * (curDist / startDist);
+          newScale = Math.max(1, Math.min(6, newScale));
 
-          // 下限は1（元の表示サイズより小さくしない）
-          nextScale = Math.max(1, Math.min(6, nextScale));
+          const rect = area.getBoundingClientRect();
+          const midP = mid(p1, p2);
+          const mx = midP.x - rect.left;
+          const my = midP.y - rect.top;
 
-          // ピンチ中心を保ったまま拡大：tx,ty を再計算
-          const fw = frame.clientWidth, fh = frame.clientHeight;
-          const iw = img.clientWidth, ih = img.clientHeight;
-          const mid = midPoint(p1,p2);
-          const mx = mid.x - frame.getBoundingClientRect().left;
-          const my = mid.y - frame.getBoundingClientRect().top;
-
-          // 逆算：拡大中心が画面上の同じ位置に留まるよう移動量を調整
           const preX = (mx - startTx) / startScale;
           const preY = (my - startTy) / startScale;
-          tx = mx - preX * nextScale;
-          ty = my - preY * nextScale;
-
-          scale = nextScale;
-          applyTransform();
-        } else if (pts.size === 1 && scale > 1){
-          // パン（1本指）
+          tx = mx - preX * newScale;
+          ty = my - preY * newScale;
+          scale = newScale;
+          apply();
+        } else if (pts.size === 1 && scale > 1) {
           const p = [...pts.values()][0];
-          const dx = p.x - (startMid.x || p.x);
-          const dy = p.y - (startMid.y || p.y);
-          startMid = {x:p.x, y:p.y};
+          const dx = p.x - startMid.x;
+          const dy = p.y - startMid.y;
+          startMid = { x: p.x, y: p.y };
           tx += dx; ty += dy;
-          applyTransform();
+          apply();
         }
       });
 
-      function endPointer(e){
-        pts.delete(e.pointerId);
-        if (pts.size === 1){
-          // パン継続用に基準を更新
-          startMid = [...pts.values()][0];
-        }
-        if (pts.size === 0){
-          // 指が全部離れた時に余計な状態をクリア
-          startMid = {x:0,y:0};
-        }
-        setTouchAction();
-      }
-      frame.addEventListener('pointerup', endPointer);
-      frame.addEventListener('pointercancel', endPointer);
-      frame.addEventListener('pointerleave', endPointer);
-
-      // ダブルタップで 1⇄2 のトグル（任意）。不要ならコメントアウト
-      frame.addEventListener('dblclick', (e)=>{
-        e.preventDefault();
-        const rect = frame.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        const my = e.clientY - rect.top;
-        if (scale === 1){
-          // 中心をタップ位置に合わせて拡大
-          const iw = img.clientWidth, ih = img.clientHeight;
-          const preX = (mx - tx) / scale, preY = (my - ty) / scale;
-          scale = 2;
-          tx = mx - preX * scale;
-          ty = my - preY * scale;
-        } else {
-          scale = 1; tx = 0; ty = 0;
-        }
-        applyTransform();
-        setTouchAction();
+      ["pointerup", "pointercancel", "pointerleave"].forEach(ev => {
+        area.addEventListener(ev, e => {
+          pts.delete(e.pointerId);
+          if (pts.size === 1) startMid = [...pts.values()][0];
+          if (pts.size === 0) startMid = { x: 0, y: 0 };
+        });
       });
-    }
+    })();
 
-    /* ========= 初期アクティブ ========= */
-    setActive(0,false);
+    setActive(0, false);
   </script>
 </body>
 </html>
