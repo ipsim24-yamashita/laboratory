@@ -198,118 +198,184 @@
     /* ========= 本文ピンチズーム（最大2× / 安定描画） ========= */
     initGlobalZoom(); // ←呼び出し
 
-    function initGlobalZoom(){
+    // 本文(#zoom-area)のピンチズーム: 最小1 / 最大2
+// ・開始距離のデッドゾーン（誤検出防止）
+// ・2本指→1本指の切替で基準を再確立（暴走防止）
+// ・指が全て離れたら 1±ε は 1.0 にスナップして位置も原点へ
+// ・拡大中はパン、等倍は縦スクロールのみ
+    function initGlobalZoom() {
       const area = document.getElementById('zoom-area');
-      if(!area) return;
+      if (!area) return;
 
-      let scale=1, tx=0, ty=0;
-      let startScale=1, startTx=0, startTy=0;
-      let startDist=0, startMid={x:0,y:0};
-      const pts=new Map();
-      const MIN_SCALE=1, MAX_SCALE=2;
+      // ---------- 状態 ----------
+      let scale = 1, tx = 0, ty = 0;            // 表示状態
+      let mode = 'idle';                        // 'idle' | 'pinch' | 'pan' | 'scroll'
+      let startScale = 1, startTx = 0, startTy = 0;
+      let startDist = 0, hadDeadzone = false;   // デッドゾーン突破フラグ
+      let startMid = { x: 0, y: 0 };
+      const pts = new Map();                    // pointerId -> {x,y}
 
-      const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
-      const mid =(a,b)=>({x:(a.x+b.x)/2, y:(a.y+b.y)/2});
-      const apply=()=>{ area.style.transform=`translate(${tx}px, ${ty}px) scale(${scale})`; };
+      const MIN_SCALE = 1;
+      const MAX_SCALE = 2;
+      const DEADZONE = 8;       // ピンチ開始距離の最小値(px)
+      const SNAP_EPS = 0.02;    // 指離し後 1.0 へ吸着する閾値
 
-      // ブラウザのジェスチャ無効化（自前のみ）
-      ['gesturestart','gesturechange','gestureend'].forEach(t=>{
-        area.addEventListener(t, e=>e.preventDefault(), {passive:false});
-      });
-      // 全体でダブル/トリプルクリック禁止
-      let lastClick=0, clickCount=0;
-      window.addEventListener('click', (e)=>{
-        const now=Date.now();
-        if(now-lastClick<400) clickCount++; else clickCount=1;
-        lastClick=now;
-        if(clickCount>=2){ e.preventDefault(); e.stopPropagation(); }
-      }, true);
+      const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+      const mid  = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) });
+      const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+      const apply = () => {
+        // 変な値が入らないよう最終防衛
+        if (!Number.isFinite(scale)) scale = 1;
+        if (!Number.isFinite(tx)) tx = 0;
+        if (!Number.isFinite(ty)) ty = 0;
+        area.style.transform = `translate(${Math.round(tx)}px, ${Math.round(ty)}px) scale(${scale})`;
+      };
 
-      // ズーム対象は常に自前処理（水平スクロール禁止）
-      area.style.touchAction='pan-y';
-
-      area.addEventListener('pointerdown', e=>{
-        area.setPointerCapture(e.pointerId);
-        pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
-        if(pts.size===2){
-          const [p1,p2]=[...pts.values()];
-          startDist=dist(p1,p2)||1;
-          startMid =mid(p1,p2);
-          startScale=scale;
-          startTx=tx; startTy=ty;
-          // ピンチ開始時は縦スクロールも止める
-          area.style.touchAction='none';
-          document.body.style.overflow='hidden';
-        }else if(pts.size===1){
-          startMid={x:e.clientX,y:e.clientY};
-        }
+      // iOS ネイティブジェスチャ無効化（自前のみ）
+      ['gesturestart','gesturechange','gestureend','dblclick','doubletap'].forEach(t => {
+        area.addEventListener(t, e => e.preventDefault(), { passive:false });
       });
 
-      area.addEventListener('pointermove', e=>{
-        if(!pts.has(e.pointerId)) return;
-        pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      // 初期は縦スクロール可（ブラウザに任せず自前で送る）
+      area.style.touchAction = 'pan-y';
 
-        if(pts.size===2){
-          // ピンチ（中心固定）
-          const [p1,p2]=[...pts.values()];
-          const curDist=dist(p1,p2)||1;
-          let nextScale=startScale*(curDist/(startDist||1));
-          nextScale=Math.max(MIN_SCALE, Math.min(MAX_SCALE, nextScale));
+      function enterPinch() {
+        const [p1, p2] = [...pts.values()];
+        startDist = dist(p1, p2);
+        hadDeadzone = (startDist > DEADZONE);
+        startMid = mid(p1, p2);
+        startScale = scale;
+        startTx = tx; startTy = ty;
+        mode = 'pinch';
+        // ピンチ中はページスクロール止める
+        area.style.touchAction = 'none';
+        document.body.style.overflow = 'hidden';
+      }
 
-          const rect=area.getBoundingClientRect();
-          const md=mid(p1,p2);
-          const mx=md.x-rect.left, my=md.y-rect.top;
+      function enterPanFrom(point) {
+        startMid = { x: point.x, y: point.y };
+        startTx = tx; startTy = ty;
+        mode = (scale > 1) ? 'pan' : 'scroll';
+        // pan/scroll 中は縦のユーザ操作を許す
+        area.style.touchAction = (scale > 1) ? 'none' : 'pan-y';
+        if (scale > 1) document.body.style.overflow = 'hidden';
+      }
 
-          const preX=(mx-startTx)/startScale;
-          const preY=(my-startTy)/startScale;
-          tx = mx - preX*nextScale;
-          ty = my - preY*nextScale;
-
-          scale=nextScale;
+      function maybeSnapBack() {
+        // 指がすべて離れたとき 1±EPS は 1 に吸着し、位置も原点へ戻す
+        if (Math.abs(scale - 1) <= SNAP_EPS) {
+          scale = 1; tx = 0; ty = 0;
+          mode = 'idle';
+          area.style.touchAction = 'pan-y';
+          document.body.style.overflow = '';
           apply();
-        }else if(pts.size===1){
-          const p=[...pts.values()][0];
-          const dx=p.x-startMid.x;
-          const dy=p.y-startMid.y;
-          startMid={x:p.x,y:p.y};
+        } else {
+          // 拡大維持時は pan モードへ
+          mode = (scale > 1) ? 'pan' : 'idle';
+          area.style.touchAction = (scale > 1) ? 'none' : 'pan-y';
+          if (scale > 1) document.body.style.overflow = 'hidden';
+          else document.body.style.overflow = '';
+        }
+      }
 
-          if(scale>1){
-            // 拡大中はパン（横方向もOKだが“スクロール”ではない）
-            tx+=dx; ty+=dy; apply();
-          }else{
-            // 等倍時は縦スクロールのみ
-            window.scrollBy(0,-dy);
+      // ---------- ポインタイベント ----------
+      area.addEventListener('pointerdown', (e) => {
+        area.setPointerCapture(e.pointerId);
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pts.size === 2) enterPinch();
+        else if (pts.size === 1) enterPanFrom({ x: e.clientX, y: e.clientY });
+      });
+
+      area.addEventListener('pointermove', (e) => {
+        if (!pts.has(e.pointerId)) return;
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (mode === 'pinch' && pts.size === 2) {
+          const [p1, p2] = [...pts.values()];
+          const curDist = dist(p1, p2);
+
+          // デッドゾーンを超えるまで拡大率を更新しない（暴走防止）
+          if (!hadDeadzone) {
+            if (curDist - startDist >= DEADZONE) hadDeadzone = true;
+            else return; // まだ更新しない
+          }
+
+          let nextScale = startScale * (curDist / Math.max(1, startDist));
+          nextScale = clamp(nextScale, MIN_SCALE, MAX_SCALE);
+
+          // ピンチ中心固定
+          const rect = area.getBoundingClientRect();
+          const m = mid(p1, p2);
+          const mx = m.x - rect.left, my = m.y - rect.top;
+
+          const preX = (mx - startTx) / startScale;
+          const preY = (my - startTy) / startScale;
+          tx = mx - preX * nextScale;
+          ty = my - preY * nextScale;
+
+          scale = nextScale;
+          apply();
+          return;
+        }
+
+        // 1本指
+        if (pts.size === 1) {
+          const p = [...pts.values()][0];
+          const dx = p.x - startMid.x;
+          const dy = p.y - startMid.y;
+
+          if (mode === 'pan' && scale > 1) {
+            // 拡大中のパン
+            tx = startTx + dx;
+            ty = startTy + dy;
+            apply();
+          } else if (mode === 'scroll' && scale === 1) {
+            // 等倍時の縦スクロールのみ（横はさせない）
+            window.scrollBy(0, -dy);
+            // 次回の差分基準を更新
+            startMid = { x: p.x, y: p.y };
+            startTx = tx; startTy = ty;
           }
         }
       });
 
-      const endPointer=(e)=>{
+      function onPointerEnd(e) {
         pts.delete(e.pointerId);
-        if(pts.size===1) startMid=[...pts.values()][0];
-        if(pts.size===0){
-          area.style.touchAction='pan-y';
-          document.body.style.overflow=''; // スクロール解放
-        }
-      };
-      ['pointerup','pointercancel','pointerleave'].forEach(ev=>{
-        area.addEventListener(ev,endPointer);
-      });
 
-      // ホイール/トラックパッド：拡大中のみパンに割り当て
-      area.addEventListener('wheel', (e)=>{
-        if(scale>1){
+        if (pts.size === 2) {
+          // 2本残ったら新しいピンチ基準へ切り替え
+          enterPinch();
+          return;
+        }
+        if (pts.size === 1) {
+          // 1本に戻ったら pan/scroll へ基準を張り直す
+          enterPanFrom([...pts.values()][0]);
+          return;
+        }
+        // 0本：終了処理（スナップバック含む）
+        document.body.style.overflow = '';
+        maybeSnapBack();
+      }
+      area.addEventListener('pointerup', onPointerEnd);
+      area.addEventListener('pointercancel', onPointerEnd);
+      area.addEventListener('pointerleave', onPointerEnd);
+
+      // ---------- ホイール/トラックパッド ----------
+      // 拡大中のみパンに割り当て（既定スクロールは止める）
+      area.addEventListener('wheel', (e) => {
+        if (scale > 1) {
           e.preventDefault();
           tx -= e.deltaX;
           ty -= e.deltaY;
           apply();
         }
-      }, {passive:false});
+      }, { passive:false });
 
+      // 初期適用
       apply();
     }
-
-    /* 初期アクティブ */
-    setActive(0,false);
+        /* 初期アクティブ */
+        setActive(0,false);
   </script>
 </body>
 </html>
