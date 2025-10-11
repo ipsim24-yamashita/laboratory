@@ -47,6 +47,8 @@
       -webkit-user-drag: none;
       pointer-events: none; /* イベントは親で受ける */
     }
+    html, body { overscroll-behavior-y: contain; }  /* 上下ビヨーン抑制 */
+    #zoom-area, #zoom-area * { user-select: none; } /* 画像やテキストを選択不可に */
   </style>
 </head>
 
@@ -191,90 +193,130 @@
     tocLinks.forEach(a => a.onclick = (e)=>{ e.preventDefault(); const i=Number(a.dataset.index); window.scrollTo({top:sections[i].offsetTop, behavior:"auto"}); setActive(i, true); });
 
     /* === ここから：本文全体ピンチズーム（カルーセル除外） === */
-    (function initGlobalZoom(){
-      const area = zoomArea;
-      let scale = 1, tx = 0, ty = 0;
-      let startScale = 1, startTx = 0, startTy = 0;
-      let startDist = 0, startMid = {x:0,y:0};
-      const pts = new Map();
+    // 本文全体（#zoom-area）に対するピンチズーム＆パンを初期化
+// 仕様: 最小1 / 最大2、拡大中はスクロール抑止、ホイールはパンに割当て
+    function initGlobalZoom() {
+  const area = document.getElementById('zoom-area');
+  if (!area) return;
 
-      function apply(){
-        area.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-      }
-      function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
-      function mid(a,b){ return {x:(a.x+b.x)/2, y:(a.y+b.y)/2}; }
+  // 状態
+  let scale = 1, tx = 0, ty = 0;
+  let startScale = 1, startTx = 0, startTy = 0;
+  let startDist = 0, startMid = { x: 0, y: 0 };
+  const pts = new Map();
 
-      // iOSのネイティブピンチを完全に無効化（ズームは自前のみ）
-      ['gesturestart','gesturechange','gestureend','dblclick'].forEach(type=>{
-        area.addEventListener(type, e => e.preventDefault(), { passive:false });
-      });
+  const MIN_SCALE = 1;
+  const MAX_SCALE = 2;
 
-      function updateTouchAction(){
-        // ピンチ中 or scale>1 の時だけスクロールを止める
-        area.style.touchAction = (pts.size>=2 || scale>1) ? 'none' : 'pan-y';
-      }
+  // ユーティリティ
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const mid  = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) });
+  const apply = () => {
+    area.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  };
+  const lockBodyScroll = (on) => { document.body.style.overflow = on ? 'hidden' : ''; };
+  const updateTouchAction = () => {
+    const busy = (pts.size >= 2 || scale > 1);
+    area.style.touchAction = busy ? 'none' : 'pan-y';
+    lockBodyScroll(busy);
+  };
 
-      area.addEventListener('pointerdown', e=>{
-        area.setPointerCapture(e.pointerId);
-        pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
-        if(pts.size===2){
-          const [p1,p2]=[...pts.values()];
-          startDist = dist(p1,p2);
-          startMid  = mid(p1,p2);
-          startScale= scale;
-          startTx = tx; startTy = ty;
-        }else if(pts.size===1){
-          startMid = {x:e.clientX, y:e.clientY};
-        }
-        updateTouchAction();
-      });
+  // iOS のネイティブジェスチャを完全無効化（自前ズームのみ）
+  ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(type => {
+    area.addEventListener(type, e => e.preventDefault(), { passive: false });
+  });
 
-      area.addEventListener('pointermove', e=>{
-        if(!pts.has(e.pointerId)) return;
-        pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  // --- ポインタ操作 ---
+  function onPointerDown(e) {
+    area.setPointerCapture(e.pointerId);
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 2) {
+      const [p1, p2] = [...pts.values()];
+      startDist = dist(p1, p2) || 1;
+      startMid  = mid(p1, p2);
+      startScale = scale;
+      startTx = tx; startTy = ty;
+    } else if (pts.size === 1) {
+      startMid = { x: e.clientX, y: e.clientY };
+    }
+    updateTouchAction();
+  }
 
-        if(pts.size===2){
-          const [p1,p2]=[...pts.values()];
-          const curDist = dist(p1,p2) || 1;
-          let newScale = startScale * (curDist / (startDist || 1));
-          newScale = Math.max(1, Math.min(6, newScale)); // 最小1
+  function onPointerMove(e) {
+    if (!pts.has(e.pointerId)) return;
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-          const rect = area.getBoundingClientRect();
-          const midP = mid(p1,p2);
-          const mx = midP.x - rect.left;
-          const my = midP.y - rect.top;
+    if (pts.size === 2) {
+      // ピンチ
+      const [p1, p2] = [...pts.values()];
+      const curDist = dist(p1, p2) || 1;
+      let nextScale = startScale * (curDist / (startDist || 1));
+      // 上限/下限
+      nextScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, nextScale));
 
-          const preX = (mx - startTx) / startScale;
-          const preY = (my - startTy) / startScale;
-          tx = mx - preX * newScale;
-          ty = my - preY * newScale;
+      // ピンチ中心を固定して拡大
+      const rect = area.getBoundingClientRect();
+      const midP = mid(p1, p2);
+      const mx = midP.x - rect.left;
+      const my = midP.y - rect.top;
 
-          scale = newScale;
-          apply();
-        }else if(pts.size===1 && scale>1){
-          const p = [...pts.values()][0];
-          const dx = p.x - startMid.x;
-          const dy = p.y - startMid.y;
-          startMid = {x:p.x, y:p.y};
-          tx += dx; ty += dy;
-          apply();
-        }
-      });
+      const preX = (mx - startTx) / startScale;
+      const preY = (my - startTy) / startScale;
+      tx = mx - preX * nextScale;
+      ty = my - preY * nextScale;
 
-      function endPointer(e){
-        pts.delete(e.pointerId);
-        if(pts.size===1){ startMid = [...pts.values()][0]; }
-        if(pts.size===0){ startMid = {x:0,y:0}; }
-        updateTouchAction();
-      }
-      ['pointerup','pointercancel','pointerleave'].forEach(ev=>{
-        area.addEventListener(ev, endPointer);
-      });
-
-      // 初期適用
+      scale = nextScale;
       apply();
-    })();
+    } else if (pts.size === 1 && scale > 1) {
+      // パン（1本指）
+      const p = [...pts.values()][0];
+      const dx = p.x - startMid.x;
+      const dy = p.y - startMid.y;
+      startMid = { x: p.x, y: p.y };
+      tx += dx; ty += dy;
+      apply();
+    }
+  }
 
+  function onPointerEnd(e) {
+    pts.delete(e.pointerId);
+    if (pts.size === 1) startMid = [...pts.values()][0];
+    if (pts.size === 0) startMid = { x: 0, y: 0 };
+    updateTouchAction();
+  }
+
+  area.addEventListener('pointerdown',  onPointerDown);
+  area.addEventListener('pointermove',  onPointerMove);
+  area.addEventListener('pointerup',    onPointerEnd);
+  area.addEventListener('pointercancel',onPointerEnd);
+  area.addEventListener('pointerleave', onPointerEnd);
+
+  // --- ホイール/トラックパッド：拡大中はページスクロールさせずパンに割当て ---
+  area.addEventListener('wheel', (e) => {
+    if (scale > 1) {
+      e.preventDefault();
+      // deltaX/Y の符号は環境依存だが、一般的なパン方向に合わせる
+      tx -= e.deltaX;
+      ty -= e.deltaY;
+      apply();
+    }
+  }, { passive: false });
+
+  // 初期適用
+  apply();
+
+  // オプション：クリーンアップ関数を返す（必要なら使用）
+  return () => {
+    lockBodyScroll(false);
+    area.style.touchAction = 'pan-y';
+    area.removeEventListener('pointerdown',  onPointerDown);
+    area.removeEventListener('pointermove',  onPointerMove);
+    area.removeEventListener('pointerup',    onPointerEnd);
+    area.removeEventListener('pointercancel',onPointerEnd);
+    area.removeEventListener('pointerleave', onPointerEnd);
+  };
+}
+    
     setActive(0,false);
   </script>
 </body>
