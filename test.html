@@ -1,9 +1,1137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="川西市・猪名川町の個別進学塾 ipsim。東谷中・猪名川中エリアを中心に小中高の個別指導。定期テスト・実力テスト・高校入試に対応。山下教室・猪名川パークプラザ教室の営業時間・料金・アクセスをご案内。"
+    />
+    <link rel="canonical" href="https://ipsim17.jp/" />
+    <meta name="robots" content="index,follow" />
+
+    <!-- OGP / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta
+      property="og:title"
+      content="個別進学塾 ipsim | 川西市・猪名川町の個別指導"
+    />
+    <meta
+      property="og:description"
+      content="新しいかたちの個別進学塾。定期テスト・実力テスト・高校入試対策。山下教室・猪名川パークプラザ教室。山下教室は川西市立東谷中学校エリア専門の個別指導教室。高校部併設。猪名川パークプラザ教室は猪名川町立猪名川中学校エリア専門の個別指導教室。"
+    />
+    <meta property="og:url" content="https://ipsim17.jp/" />
+    <meta property="og:site_name" content="個別進学塾 ipsim" />
+    <meta
+      property="og:image"
+      content="https://ipsim17.jp/pics/og-ipsim-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:alt" content="個別進学塾 ipsimのロゴと教室案内" />
+    <meta name="theme-color" content="#22c55e" />
+
+    <title>
+      個別進学塾 ipsim 山下教室・猪名川パークプラザ教室 |
+      川西市・猪名川町の個別指導
+    </title>
+
+    <!-- ヒーロー画像 読み込み高速化 -->
+    <script>
+      function startHero() {
+        const slides = document.querySelectorAll("#hero-slides .slide");
+        if (!slides.length) return;
+
+        let i = 0;
+        const NORMAL = 3500; // 通常の切替間隔
+        const FIRST_DELAY = 1200; // 初回だけ短め
+
+        function next() {
+          slides[i].classList.replace("opacity-100", "opacity-0");
+          i = (i + 1) % slides.length;
+          slides[i].classList.replace("opacity-0", "opacity-100");
+        }
+
+        // 初期描画が終わってから起動（ちらつき防止）
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            next();
+            setInterval(next, NORMAL);
+          }, FIRST_DELAY);
+        });
+      }
+    </script>
+
+    <!-- ヒーロー画像 読み込み高速化 -->
+    <link
+      rel="preload"
+      as="image"
+      href="pics/room01.jpg"
+      fetchpriority="high"
+    />
+
+    <!-- スタイル -->
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* 柔らかい背景グラデーション */
+      .bg-soft {
+        background: radial-gradient(
+          circle at 50% 20%,
+          rgba(34, 197, 94, 0.1),
+          transparent 70%
+        );
+      }
+      /* 白い縁取りを追加するクラス */
+      .text-outline-white {
+        text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+          1px 1px 0 #fff;
+      }
+      /* 緑の縁取りを追加するクラス */
+      .text-outline-lime {
+        text-shadow: -1.5px -1.5px 0 #16a34a, 1.5px -1.5px 0 #16a34a,
+          -1.5px 1.5px 0 #16a34a, 1.5px 1.5px 0 #16a34a;
+      }
+      /* 柔らかいlimeの影 */
+      .text-shadow-lime {
+        text-shadow: 2px 2px 4px rgba(22, 163, 74, 0.6); /* lime-600の半透明影 */
+      }
+    </style>
+
+    <!-- TailwindCSS CDN読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 構造化データ：本部＋2教室 -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "個別進学塾 ipsim",
+        "url": "https://ipsim17.jp/",
+        "telephone": "+81-72-767-6537",
+        "sameAs": [
+          "https://lin.ee/sqkGCPT",
+          "https://lin.ee/22k8QXA",
+          "https://www.instagram.com/ipsim.17/"
+        ],
+        "hasPart": [
+          {
+            "@type": "EducationalOrganization",
+            "name": "ipsim 山下教室",
+            "url": "https://ipsim17.jp/class/yamashita",
+            "telephone": "+81-72-767-6537",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "JP",
+              "postalCode": "666-0105",
+              "addressRegion": "兵庫県",
+              "addressLocality": "川西市見野",
+              "streetAddress": "2-35-6 IBS 山下駅前ビル2F"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 34.8931642,
+              "longitude": 135.4109987
+            },
+            "hasMap": "https://maps.google.com/?q=34.8931642,135.4109987",
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "14:30",
+                "closes": "21:00"
+              },
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "14:00",
+                "closes": "19:00"
+              }
+            ]
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "ipsim 猪名川パークプラザ教室",
+            "url": "https://ipsim17.jp/class/inagawa",
+            "telephone": "+81-72-768-6410",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "JP",
+              "postalCode": "666-0251",
+              "addressRegion": "兵庫県",
+              "addressLocality": "川辺郡猪名川町若葉",
+              "streetAddress": "1-39-1 パークプラザB棟2号室"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 34.8969108,
+              "longitude": 135.3685999
+            },
+            "hasMap": "https://maps.google.com/?q=34.8969108,135.3685999",
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "14:30",
+                "closes": "21:00"
+              },
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "14:00",
+                "closes": "19:00"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
-  <body></body>
+  <body>
+    <!-- ヘッダー -->
+    <header></header>
+    <!-- メイン -->
+    <main>
+      <h1 class="sr-only">
+        個別進学塾 ipsim 山下教室 / 猪名川パークプラザ教室
+      </h1>
+      <!-- HEROセクション -->
+      <section
+        id="hero"
+        class="relative overflow-hidden bg-black text-white h-[52vh] md:h-[60vh]"
+      >
+        <header
+          class="absolute top-0 left-0 w-full flex items-center justify-between px-4 pt-4 z-20"
+        >
+          <img
+            src="pics/logo.png"
+            alt="個別進学塾ipsim ロゴ"
+            class="w-28 h-auto drop-shadow-lg"
+          />
+
+          <a
+            href="#cta2"
+            class="inline-block bg-[#06c755] text-sm text-white font-semibold px-3 py-2 rounded-full shadow-md hover:opacity-90 transition"
+            >無料体験を予約</a
+          >
+        </header>
+
+        <!-- スライド用コンテナ -->
+        <div class="absolute inset-0 z-0" id="hero-slides">
+          <img
+            src="pics/hero.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/room01.jpg"
+            alt=""
+            fetchpriority="high"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/room02.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/room03.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/room04.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/room05.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/room06.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/room07.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/booth.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/door.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+          <img
+            src="pics/entrance.jpg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+          />
+
+          <!-- 下層の黒グラデーション（文字を読みやすく） -->
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-black/40 to-black/10 pointer-events-none"
+          ></div>
+
+          <!-- 白い透かしレイヤー（画像を淡くする） -->
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70 backdrop-blur-[1px] md:backdrop-blur-[2px] pointer-events-none"
+          ></div>
+        </div>
+        <!-- テキストエリア -->
+        <div class="relative z-10 max-w-mobile mx-auto px-4 py-16 text-center">
+          <h1
+            class="text-[28px] font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+          >
+            <span>一人ひとりの“できる”<br />を大切にする<br /></span
+            ><span class="text-3xl text-white text-shadow-lime"
+              >個別進学塾 </span
+            ><span class="text-4xl text-white text-shadow-lime">ipsim</span>
+          </h1>
+
+          <!-- チップ化エリア -->
+          <div
+            class="inline-block mt-4 bg-lime-500/20 backdrop-blur-sm rounded-full px-4 py-1 text-white text-[17px] font-medium shadow-sm"
+          >
+            川西市・猪名川町エリア専門
+          </div>
+          <div
+            class="mt-4 inline-block text-white text-shadow-lime text-[17px] leading-relaxed"
+          >
+            学校の授業が分かる安心と<br />
+            自信をもってテストに挑める力を育てます
+          </div>
+        </div>
+      </section>
+
+      <script>
+        (() => {
+          // 動作制御：モーションを控える設定の人にはアニメ無効
+          const reduce = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
+          if (reduce) return;
+
+          const slides = Array.from(
+            document.querySelectorAll("#hero-slides .slide")
+          );
+          if (slides.length < 2) return;
+
+          function preload(img) {
+            return new Promise((resolve) => {
+              if (img.complete && img.naturalWidth > 0) return resolve();
+              img.addEventListener("load", resolve, { once: true });
+              img.addEventListener("error", resolve, { once: true });
+            });
+          }
+
+          let timer = null;
+          let idx = 0;
+
+          function showNext() {
+            const cur = slides[idx];
+            const next = slides[(idx + 1) % slides.length];
+
+            if (!(next.complete && next.naturalWidth > 0)) {
+              preload(next).then(() => fade(cur, next));
+            } else {
+              fade(cur, next);
+            }
+          }
+
+          function fade(cur, next) {
+            next.classList.replace("opacity-0", "opacity-100");
+            requestAnimationFrame(() => {
+              cur.classList.replace("opacity-100", "opacity-0");
+            });
+            idx = (idx + 1) % slides.length;
+          }
+
+          function start() {
+            if (timer) return;
+            timer = setInterval(showNext, 4000);
+          }
+
+          function stop() {
+            if (!timer) return;
+            clearInterval(timer);
+            timer = null;
+          }
+
+          Promise.all([preload(slides[0]), preload(slides[1])]).then(start);
+
+          const obs = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((e) => (e.isIntersecting ? start() : stop()));
+            },
+            { threshold: 0.1 }
+          );
+          obs.observe(document.getElementById("hero-slides"));
+        })();
+      </script>
+      <!-- 3分割ブロック -->
+      <div
+        class="mx-auto w-full max-w-mobile text-center border-b border-lime-600 border-t-[3px] border-t-lime-600 flex divide-x divide-lime-600"
+      >
+        <!-- 左ブロック -->
+        <div class="flex-1 py-4">
+          <a href="#fee" class="text-lime-600 font-bold">コース</a>
+        </div>
+
+        <!-- 中央ブロック -->
+        <div class="flex-1 py-4">
+          <a href="#yamashita" class="text-lime-600 font-bold">山下教室</a>
+        </div>
+
+        <!-- 右ブロック -->
+        <div class="flex-1 py-4">
+          <a href="#inagawa" class="text-lime-600 font-bold">猪名川教室</a>
+        </div>
+      </div>
+
+      <!-- CTA 1種類目 -->
+      <section id="cta1" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+        <div class="space-y-4">
+          <!-- 枠：グラデなしの lime-600 ボーダー -->
+          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+            <h2
+              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 2v20M2 12h20" />
+              </svg>
+              学習・進路のご相談
+            </h2>
+
+            <!-- ここだけ lime-300 で塗りつぶし -->
+            <p
+              class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            >
+              お子さまの学習や進路に関してご不安やお悩みはございませんか<br /><br />
+              私たちは保護者の方とともにお子さまの「できる」を増やすお手伝いをしています<br /><br />
+              勉強のやり方や家庭での声かけ 志望校選びなど
+              どんな小さなことでもお気軽にご相談ください<br /><br />
+              成績を伸ばすための具体的なアドバイスや
+              テストで成果を出すコツも丁寧にお伝えします<br /><br />
+              まずは
+              <span class="text-[#06c755] font-semibold"
+                >LINE公式アカウント</span
+              >
+              を友だち追加のうえ お気軽にご相談ください<br />
+            </p>
+
+            <div class="mt-8 flex flex-col items-center gap-4 text-[22px]">
+              <a
+                href="https://lin.ee/sqkGCPT"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-4 py-3 text-white text-[17px] font-semibold"
+                >山下教室</a
+              >
+              <a
+                href="https://lin.ee/22k8QXA"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-4 py-3 text-white text-[17px] font-semibold"
+                >猪名川パークプラザ教室</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 指導科目 -->
+      <!-- 枠の外：lime-100 -->
+      <section id="cta1" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+        <div class="space-y-4">
+          <!-- 枠線：lime-600, 枠内：白 -->
+          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+            <!-- タイトル -->
+            <h2
+              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 2v20M2 12h20" />
+              </svg>
+              指導科目
+            </h2>
+
+            <!-- 本文枠線なし, 本文枠内：lime-300, 本文：text-gray-900 -->
+            <ul
+              class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            >
+              <li class="text-[19px]">中学生：数学・英語・理科・社会・国語</li>
+              <li class="text-[17px]">小学生：算数・国語・英語・理科</li>
+              <li class="text-[15px]">
+                高校生：英語・数学IA・数学IIB・数学IIIC・物理・化学・生物・日本史・世界史・地理・現代文・古文・漢文
+                ほか
+              </li>
+            </ul>
+            <!-- タイトル -->
+            <h2
+              class="mt-8 flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 2v20M2 12h20" />
+              </svg>
+              対象
+            </h2>
+
+            <!-- 本文枠線なし, 本文枠内：lime-300, 本文：text-gray-900 -->
+            <li
+              class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            >
+              定期テスト / 実力テスト / 公立高校入試 / 私立高校入試
+            </li>
+          </div>
+        </div>
+      </section>
+
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- デザイン テンプレート -->
+      <!-- 枠の外：lime-100 -->
+      <section id="cta1" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+        <div class="space-y-4">
+          <!-- 枠線：lime-600, 枠内：白 -->
+          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+            <!-- タイトル -->
+            <h2
+              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 2v20M2 12h20" />
+              </svg>
+              タイトル
+            </h2>
+
+            <!-- 本文枠線なし, 本文枠内：lime-300, 本文：text-gray-900 -->
+            <p
+              class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            >
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書く
+              <span class="text-[#06c755] font-semibold">ここは強調表示</span>
+              ここへ本文を書くここへ本文を書く<br />
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <!-- コース・料金 -->
+      <section id="fee" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+        <div class="space-y-4">
+          <!-- 枠線：lime-600, 枠内：白 -->
+          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+            <!-- タイトル -->
+            <h2
+              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 2v20M2 12h20" />
+              </svg>
+              コース・料金
+            </h2>
+            <div
+              class="mt-2 text-gray-900 text-[15px] leading-relaxed max-w-read bg-white rounded-lg px-3 py-3"
+            >
+              授業料は税込・教材費等別（月額）<br />
+              学年・通塾回数・時期により変動します<br />
+              目安としてご確認ください
+            </div>
+
+            <!-- 中学タイトル -->
+            <h3
+              class="mt-4 flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <!-- 上段 -->
+                <path d="M12 4l8 4-8 4-8-4 8-4z" />
+                <!-- 中段 -->
+                <path d="M4 12l8 4 8-4" />
+                <!-- 下段（奥行き） -->
+                <path d="M4 16l8 4 8-4" />
+              </svg>
+              中学生コース
+            </h3>
+            <!-- 中学2段カラム -->
+            <div
+              class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            >
+              <!-- 中学事前説明 -->
+              <div>
+                5科目の基礎から応用まで
+                学校内容の定着から難関高校入試対策まで対応しています
+              </div>
+              <!-- 中学料金表 -->
+              <div>
+                <dl class="mt-2 grid grid-cols-2 gap-y-1">
+                  <dt class="text-blue-600 text-[22px] font-bold">
+                    週1回（数学）
+                  </dt>
+                  <dd class="text-right text-red-500 text-[22px] font-bold">
+                    ¥12,100〜
+                  </dd>
+                  <dt class="text-blue-600 text-[22px] font-bold">
+                    週2回（5科目）
+                  </dt>
+                  <dd class="text-right text-red-500 text-[22px] font-bold">
+                    ¥20,900〜
+                  </dd>
+                  <dt class="text-gray-900 text-[17px]">週4回（5科目）</dt>
+                  <dd class="text-right text-[13px]">お問い合わせください</dd>
+                </dl>
+              </div>
+            </div>
+            <!-- 中学注意書き -->
+            <div
+              class="mt-2 text-gray-900 text-[13px] leading-relaxed max-w-read bg-white rounded-lg px-3 py-3"
+            >
+              ※ 週2回以上の受講で週末テスト対策に参加できます
+            </div>
+
+            <!-- 小学タイトル -->
+            <h3
+              class="mt-8 flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <!-- 上段 -->
+                <path d="M12 4l8 4-8 4-8-4 8-4z" />
+                <!-- 中段 -->
+                <path d="M4 12l8 4 8-4" />
+                <!-- 下段（奥行き） -->
+                <path d="M4 16l8 4 8-4" />
+              </svg>
+              小学生コース
+            </h3>
+            <!-- 小学2段カラム -->
+            <div
+              class="mt-2 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            >
+              <!-- 小学事前説明 -->
+              <div>
+                算数・英語・国語の基礎から応用まで
+                学校内容の定着から中学受験対策まで幅広く対応しています
+              </div>
+              <!-- 小学料金表 -->
+              <div>
+                <dl class="mt-2 text-[17px] grid grid-cols-2 gap-y-1">
+                  <dt class="text-gray-900 underline">
+                    中学<span class="text-gray-900 text-[17px] font-bold"
+                      >入学準備</span
+                    >講座
+                  </dt>
+                  <dd></dd>
+                  <dt class="text-blue-600 font-bold">週1回（算数）</dt>
+                  <dd class="text-right text-red-500 font-bold">¥6,600〜</dd>
+                  <dt class="text-blue-600 font-bold">週2回（算/英）</dt>
+                  <dd class="text-right text-red-500 font-bold">¥12,100〜</dd>
+                  <dt class="text-gray-900">週2回（算/国）</dt>
+                  <dd class="text-right">¥12,100〜</dd>
+
+                  <dt class="mt-2 text-gray-900 underline">
+                    <span class="text-gray-900 text-[17px] font-bold"
+                      >中学受験</span
+                    >特別講座
+                  </dt>
+                  <dd></dd>
+                  <dt class="text-gray-900">週2回（算数）</dt>
+                  <dd class="text-right">¥20,900〜</dd>
+                  <dt class="text-gray-900">週2回（理科）</dt>
+                  <dd class="text-right">¥20,900〜</dd>
+                  <dt class="text-gray-900">週4回（算/理）</dt>
+                  <dd class="text-right">¥27,500〜</dd>
+                </dl>
+              </div>
+            </div>
+
+            <!-- 全体注意書き -->
+            <div class="mt-2 max-w-read bg-white rounded-lg px-3 py-3">
+              <ul
+                class="mt-3 text-[13px] text-gray-900 list-disc pl-5 space-y-1"
+              >
+                <li>入会金・教材費・模試代が別途かかります</li>
+                <li>季節講習（春・夏・冬）は別途ご案内します</li>
+                <li>兄弟姉妹割引があります（詳細はお問い合わせください）</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <!-- アクセス 山下 -->
+      <section
+        id="yamashita"
+        class="bg-lime-100 mx-auto w-full max-w-mobile px-4 py-6"
+      >
+        <div class="space-y-4">
+          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+            <!-- タイトル -->
+            <h2
+              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <!-- ピン外枠 -->
+                <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
+                <!-- ピン中央の丸 -->
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+              山下教室
+            </h2>
+            <!-- 住所 -->
+            <p class="text-gray-900 text-[17px] mt-1">
+              〒666-0105<br />
+              兵庫県川西市見野2-35-6 IBS 山下駅前ビル2F<br />
+              能勢電鉄 山下駅 徒歩2分
+            </p>
+            <!-- googleマップ リンク -->
+            <div>
+              <a
+                class="text-blue-500 text-[17px] underline"
+                href="https://maps.google.com/?q=34.8931642,135.4109987"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Googleマップで見る</a
+              >
+            </div>
+            <!-- googleマップ iframe -->
+            <div class="mt-3 rounded-xl overflow-hidden border">
+              <iframe
+                title="ipsim 山下教室の地図"
+                class="w-full aspect-[4/3]"
+                style="border: 0"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q=34.8931642,135.4109987&hl=ja&z=15&output=embed"
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- アクセス 猪名川 -->
+      <section
+        id="inagawa"
+        class="bg-lime-100 mx-auto w-full max-w-mobile px-4 py-6"
+      >
+        <div class="space-y-4">
+          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+            <!-- タイトル -->
+            <h2
+              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <!-- ピン外枠 -->
+                <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
+                <!-- ピン中央の丸 -->
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+              猪名川パークプラザ教室
+            </h2>
+            <!-- 住所 -->
+            <p class="text-gray-900 text-[17px] mt-1">
+              〒666-0251<br />
+              兵庫県川辺郡猪名川町若葉1-39-1 パークプラザB棟2号室<br />
+              猪名川パークプラザ内 / 駐車場あり
+            </p>
+            <!-- googleマップ リンク -->
+            <div>
+              <a
+                class="text-blue-500 text-[17px] underline"
+                href="https://maps.google.com/?q=34.8969108,135.3685999"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Googleマップで見る</a
+              >
+            </div>
+            <!-- googleマップ iframe -->
+            <div class="mt-3 rounded-xl overflow-hidden border">
+              <iframe
+                title="ipsim 猪名川パークプラザ教室の地図"
+                class="w-full aspect-[4/3]"
+                style="border: 0"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q=34.8969108,135.3685999&hl=ja&z=15&output=embed"
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA 2 -->
+      <section id="cta2" class="bg-soft mx-auto w-full max-w-mobile px-4 py-6">
+        <div class="rounded-xl border p-4">
+          <!-- タイトル -->
+          <h2
+            class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 2v20M2 12h20" />
+            </svg>
+            LINEで無料体験予約・三者面談
+          </h2>
+          <!-- 内容1 -->
+          <p class="mt-3 text-gray-900 text-[17px] leading-relaxed">
+            友だち追加でスムーズにご相談いただけます<br />
+            無料体験授業や三者面談のご予約もLINEで受け付けています
+          </p>
+          <!-- 内容2 -->
+          <ol
+            class="mt-3 text-gray-900 text-[17px] leading-relaxed list-decimal pl-5 space-y-1"
+          >
+            <li>LINE公式アカウントを友だち追加</li>
+            <li>ご希望の 科目・体験希望日 を送信</li>
+            <li>三者面談で最適なコースをご提案</li>
+          </ol>
+          <!-- CTA ボタン -->
+          <div class="mt-6 flex flex-col items-center gap-3">
+            <a
+              href="https://lin.ee/sqkGCPT"
+              class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-4 py-3 text-white text-[17px] font-semibold"
+              >山下教室</a
+            >
+            <a
+              href="https://lin.ee/22k8QXA"
+              class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-4 py-3 text-white text-[17px] font-semibold"
+              >猪名川パークプラザ教室</a
+            >
+          </div>
+          <!-- 補足 -->
+          <p class="mt-3 text-[15px] text-gray-500">
+            ※
+            お電話でのお問い合わせには対応しておりません。LINEまたはメールをご利用ください。
+          </p>
+        </div>
+      </section>
+    </main>
+    <!-- フッター -->
+    <footer id="footer" class="bg-cyan-950 text-white py-8 px-8">
+      <p class="text-white text-[17px]">岡村ゼミナールグループ</p>
+      <p class="text-white text-[22px] font-bold mb-4 tracking-[4px]">
+        <span>個別進学塾 ipsim </span
+        ><span class="text-[15px]">(イプシム)</span>
+      </p>
+      <ul class="text-white text-[19px] leading-relaxed space-y-4 text-left">
+        <li>
+          <strong class="flex items-center gap-2 text-white">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="w-5 h-5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <!-- 屋根 -->
+              <path d="M3 11l9-6 9 6" />
+              <!-- 外枠 -->
+              <rect x="5" y="11" width="14" height="9" rx="1" ry="1" />
+              <!-- ドア -->
+              <rect x="11" y="15" width="2" height="5" />
+            </svg>
+            山下教室
+          </strong>
+          <div class="text-[17px] px-4">
+            〒666-0105<br />
+            兵庫県川西市見野2-35-6 IBS 山下駅前ビル2F<br />
+            ※ TEL <a class="text-blue-500" href="tel:0727676537">072-767-6537</a
+            ><br />
+            MAIL
+            <a
+              class="text-blue-500"
+              href="mailto:kawanishi@oksemi.co.jp"
+              aria-label="ipsim 山下教室 メールアドレス"
+              >kawanishi@oksemi.co.jp</a
+            >
+          </div>
+          <div class="text-[17px] px-4 flex items-center gap-1">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="w-4 h-4 text-lime-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <!-- ピン外枠 -->
+              <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
+              <!-- ピン中央 -->
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <a
+              class="text-lime-400 underline hover:text-lime-300 transition"
+              href="https://maps.google.com/?q=34.8931642,135.4109987"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Googleマップで見る
+            </a>
+          </div>
+        </li>
+        <li>
+          <strong class="flex items-center gap-2 text-white">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="w-5 h-5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <!-- 屋根 -->
+              <path d="M3 11l9-6 9 6" />
+              <!-- 外枠 -->
+              <rect x="5" y="11" width="14" height="9" rx="1" ry="1" />
+              <!-- ドア -->
+              <rect x="11" y="15" width="2" height="5" />
+            </svg>
+            猪名川パークプラザ教室
+          </strong>
+          <div class="text-[17px] px-4">
+            〒666-0251<br />
+            兵庫県川辺郡猪名川町若葉1-39-1 パークプラザB棟2号室<br />
+            ※ TEL <a class="text-blue-500" href="tel:0727686410">072-768-6410</a
+            ><br />
+            MAIL
+            <a
+              class="text-blue-500"
+              href="mailto:inagawa@oksemi.co.jp"
+              aria-label="ipsim 猪名川パークプラザ教室 メールアドレス"
+              >inagawa@oksemi.co.jp</a
+            >
+          </div>
+
+          <div class="text-[17px] px-4 flex items-center gap-1">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="w-4 h-4 text-lime-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <!-- ピン外枠 -->
+              <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
+              <!-- ピン中央 -->
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <a
+              class="text-lime-400 underline hover:text-lime-300 transition"
+              href="https://maps.google.com/?q=34.8969108,135.3685999"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Googleマップで見る
+            </a>
+          </div>
+        </li>
+        <li class="px-4">
+          岡村ゼミナール株式会社
+          <div class="text-[17px] px-4">
+            〒670-0877<br />
+            兵庫県姫路市北八代1-7-2<br />
+            TEL <a class="text-blue-500" href="tel:0792840253">079-284-0253</a
+            ><br />
+            <a
+              class="text-blue-500"
+              href="https://oksemi.co.jp"
+              target="_blank"
+              rel="noopener noreferrer"
+              >https://oksemi.co.jp</a
+            >
+          </div>
+        </li>
+        <li>
+          <div class="text-[15px] mt-8 px-4">
+            ※<br />
+            誠に申し訳ございませんが
+            お電話でのお問い合わせには対応しておりません<br />
+            LINE公式アカウントまたはメールにて お問い合わせください
+          </div>
+        </li>
+      </ul>
+    </footer>
+
+    <!-- ヒーロー画像 読み込み高速化 -->
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        startHero();
+      });
+    </script>
+
+    <!-- ヒーロー画像 読み込み高速化 -->
+    <script>
+      // startHero()を呼ぶ前にチェック
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+          return;
+        startHero();
+      });
+    </script>
+  </body>
 </html>
