@@ -3,37 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>こんなお悩みありませんか？（lime-500版）</title>
+  <title>こんなお悩みありませんか？（手書き風SVG＋lime-500）</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 吹き出し（縦書き用） */
-    .bubble {
-      position: relative;
-      background: #fff;
-      border: 4px solid #111827; /* gray-900 */
-      border-radius: 36px;
-      padding: 1.75rem 1.25rem;
-    }
-    .bubble:after {
-      content: "";
-      position: absolute;
-      bottom: -16px;
-      left: 18%;
-      width: 26px;
-      height: 26px;
-      background: #fff;
-      border: 4px solid #111827;
-      border-top: none;
-      border-left: none;
-      transform: rotate(45deg);
-      border-bottom-right-radius: 8px;
-    }
-    /* タイトルのマーカー風ハイライト */
-    .marker {
-      background: linear-gradient(transparent 65%, #84cc16 65%);
-      display: inline-block;
-      padding: 0 .2em;
-    }
+    .bubble{position:relative;background:#fff;border:4px solid #111827;border-radius:36px;padding:1.75rem 1.25rem}
+    .bubble:after{content:"";position:absolute;bottom:-16px;left:18%;width:26px;height:26px;background:#fff;border:4px solid #111827;border-top:none;border-left:none;transform:rotate(45deg);border-bottom-right-radius:8px}
+    .marker{background:linear-gradient(transparent 65%, #84cc16 65%);display:inline-block;padding:0 .2em}
+    /* スマホ縦書きの行間を少し詰めすぎない調整 */
+    .v-rl{writing-mode:vertical-rl;line-height:1.8}
   </style>
 </head>
 <body class="bg-lime-50 text-gray-900">
@@ -43,50 +20,99 @@
       <p class="text-xl tracking-wide">こんな <span class="marker font-bold">お悩み</span> ありませんか？</p>
     </header>
 
-    <!-- 1段目 -->
+    <!-- 1段目：女の子・悩む（塾の授業…） -->
     <div class="grid grid-cols-[92px_1fr] items-start gap-4">
-      <!-- 人物の代替アイコン（シンプルSVG） -->
       <div class="flex items-center justify-center w-[92px] h-[92px] rounded-full bg-white border-4 border-gray-900">
-        <svg viewBox="0 0 64 64" class="w-12 h-12" aria-hidden="true">
-          <circle cx="32" cy="22" r="12" fill="none" stroke="#111827" stroke-width="4"/>
-          <path d="M10 56c3-12 16-16 22-16s19 4 22 16" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+        <!-- handdrawn-girl-think -->
+        <svg viewBox="0 0 96 96" class="w-[72px] h-[72px]" aria-label="悩む女の子（手書き風）" role="img">
+          <defs>
+            <clipPath id="c1"><circle cx="48" cy="48" r="44"/></clipPath>
+          </defs>
+          <g clip-path="url(#c1)">
+            <rect x="0" y="0" width="96" height="96" fill="#fff"/>
+            <circle cx="48" cy="48" r="44" fill="none" stroke="#111827" stroke-width="4"/>
+            <!-- 髪 -->
+            <path d="M24 42c0-14 10-22 24-22s24 8 24 22" fill="#fde68a" stroke="#111827" stroke-width="4" stroke-linejoin="round"/>
+            <!-- 顔 -->
+            <circle cx="48" cy="48" r="16" fill="#fff" stroke="#111827" stroke-width="4"/>
+            <circle cx="43" cy="46" r="2.2" fill="#111827"/>
+            <circle cx="53" cy="46" r="2.2" fill="#111827"/>
+            <path d="M43 54c3 2 7 2 10 0" stroke="#111827" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- 眼鏡 -->
+            <circle cx="43" cy="46" r="6" fill="none" stroke="#111827" stroke-width="3"/>
+            <circle cx="53" cy="46" r="6" fill="none" stroke="#111827" stroke-width="3"/>
+            <path d="M49 46h-2" stroke="#111827" stroke-width="3" stroke-linecap="round"/>
+            <!-- 服ボーダー -->
+            <path d="M20 74h56" stroke="#84cc16" stroke-width="8" stroke-linecap="round"/>
+            <path d="M16 82h64" stroke="#84cc16" stroke-width="8" stroke-linecap="round" opacity=".7"/>
+            <!-- 手（顎に当てる） -->
+            <path d="M38 66c6-6 10-6 14-2" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="49" cy="64" r="3" fill="#fff" stroke="#111827" stroke-width="3"/>
+          </g>
         </svg>
       </div>
-      <!-- 吹き出し（縦書き） -->
       <div class="bubble">
-        <div class="[writing-mode:vertical-rl] leading-relaxed text-xl">
+        <div class="v-rl text-xl">
           <span class="mr-2">塾の授業に</span>
           <span class="text-red-600 font-bold">ついていけない</span>
         </div>
       </div>
     </div>
 
-    <!-- 2段目 -->
+    <!-- 2段目：男の子・考える（志望校対策が不安） -->
     <div class="grid grid-cols-[92px_1fr] items-start gap-4">
       <div class="flex items-center justify-center w-[92px] h-[92px] rounded-full bg-white border-4 border-gray-900">
-        <svg viewBox="0 0 64 64" class="w-12 h-12" aria-hidden="true">
-          <circle cx="32" cy="22" r="12" fill="none" stroke="#111827" stroke-width="4"/>
-          <path d="M10 56c3-12 16-16 22-16s19 4 22 16" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+        <!-- handdrawn-boy-think -->
+        <svg viewBox="0 0 96 96" class="w-[72px] h-[72px]" aria-label="考える男の子（手書き風）" role="img">
+          <circle cx="48" cy="48" r="44" fill="none" stroke="#111827" stroke-width="4"/>
+          <!-- 髪（青み） -->
+          <path d="M26 40c2-12 12-18 22-18s20 6 22 18" fill="#93c5fd" stroke="#111827" stroke-width="4"/>
+          <!-- 顔 -->
+          <circle cx="48" cy="50" r="16" fill="#fff" stroke="#111827" stroke-width="4"/>
+          <circle cx="43" cy="50" r="2.2" fill="#111827"/>
+          <circle cx="53" cy="50" r="2.2" fill="#111827"/>
+          <path d="M42 56c4 2 8 2 12 0" stroke="#111827" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- 眼鏡 -->
+          <circle cx="43" cy="50" r="6" fill="none" stroke="#111827" stroke-width="3"/>
+          <circle cx="53" cy="50" r="6" fill="none" stroke="#111827" stroke-width="3"/>
+          <path d="M49 50h-2" stroke="#111827" stroke-width="3" stroke-linecap="round"/>
+          <!-- 腕を組む -->
+          <path d="M28 78c8-10 20-10 40 0" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+          <path d="M40 70c4 3 8 3 12 0" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="bubble">
-        <div class="[writing-mode:vertical-rl] leading-relaxed text-xl">
+        <div class="v-rl text-xl">
           <span class="mr-2">今の家庭教師では志望校対策が</span>
           <span class="text-red-600 font-bold">不安</span>
         </div>
       </div>
     </div>
 
-    <!-- 3段目 -->
+    <!-- 3段目：女の子・不安（的を絞った指導…） -->
     <div class="grid grid-cols-[92px_1fr] items-start gap-4">
       <div class="flex items-center justify-center w-[92px] h-[92px] rounded-full bg-white border-4 border-gray-900">
-        <svg viewBox="0 0 64 64" class="w-12 h-12" aria-hidden="true">
-          <circle cx="32" cy="22" r="12" fill="none" stroke="#111827" stroke-width="4"/>
-          <path d="M10 56c3-12 16-16 22-16s19 4 22 16" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+        <!-- handdrawn-girl-worried -->
+        <svg viewBox="0 0 96 96" class="w-[72px] h-[72px]" aria-label="不安な女の子（手書き風）" role="img">
+          <circle cx="48" cy="48" r="44" fill="none" stroke="#111827" stroke-width="4"/>
+          <!-- 髪（明るめ） -->
+          <path d="M22 44c0-13 11-22 26-22s26 9 26 22" fill="#fde68a" stroke="#111827" stroke-width="4"/>
+          <!-- 顔 -->
+          <circle cx="48" cy="52" r="16" fill="#fff" stroke="#111827" stroke-width="4"/>
+          <circle cx="43" cy="52" r="2.2" fill="#111827"/>
+          <circle cx="53" cy="52" r="2.2" fill="#111827"/>
+          <path d="M42 58c4-3 8-3 12 0" stroke="#111827" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- ほっぺ -->
+          <circle cx="38" cy="56" r="3" fill="#fecaca" opacity=".8"/>
+          <circle cx="58" cy="56" r="3" fill="#fecaca" opacity=".8"/>
+          <!-- 服：limeワンポイント -->
+          <path d="M20 80h56" stroke="#84cc16" stroke-width="10" stroke-linecap="round"/>
+          <!-- 片手を胸前へ -->
+          <path d="M50 68c-6 2-10 0-12-5" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="bubble">
-        <div class="[writing-mode:vertical-rl] leading-relaxed text-xl">
+        <div class="v-rl text-xl">
           <span class="text-red-600 font-bold mr-2">苦手な分野に的を絞った</span>
           <span>指導が受けたい</span>
         </div>
