@@ -1,684 +1,109 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <!-- ブラウザ標準ズームは無効（自前ピンチのみ） -->
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-    />
-    <title>GENESIS 解答ビューア</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>こんなお悩みありませんか？（lime-500版）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 吹き出し（縦書き用） */
+    .bubble {
+      position: relative;
+      background: #fff;
+      border: 4px solid #111827; /* gray-900 */
+      border-radius: 36px;
+      padding: 1.75rem 1.25rem;
+    }
+    .bubble:after {
+      content: "";
+      position: absolute;
+      bottom: -16px;
+      left: 18%;
+      width: 26px;
+      height: 26px;
+      background: #fff;
+      border: 4px solid #111827;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+      border-bottom-right-radius: 8px;
+    }
+    /* タイトルのマーカー風ハイライト */
+    .marker {
+      background: linear-gradient(transparent 65%, #84cc16 65%);
+      display: inline-block;
+      padding: 0 .2em;
+    }
+  </style>
+</head>
+<body class="bg-lime-50 text-gray-900">
+  <section class="max-w-screen-sm mx-auto min-h-screen flex flex-col gap-8 px-5 py-6">
+    <!-- 見出し -->
+    <header class="pt-1">
+      <p class="text-xl tracking-wide">こんな <span class="marker font-bold">お悩み</span> ありませんか？</p>
+    </header>
 
-    <!-- Tailwind CSS CDN（色は以前と同じ） -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              linegreen: "#22c55e",
-              carYellow: "#fde047",
-            },
-          },
-        },
-      };
-    </script>
-
-    <style>
-      /* 画面全体の“ビヨーン”抑止 & 横スクロール禁止 */
-      html,
-      body {
-        overscroll-behavior-y: contain;
-        overflow-x: hidden;
-      }
-      body {
-        -webkit-user-select: none;
-        user-select: none;
-      }
-
-      /* ── 固定カルーセル ─────────────────────────── */
-      .toc-dock {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 2000;
-        background: #fff;
-        border-bottom: 1px solid #e5e7eb;
-        padding: 8px 0;
-      }
-      /* カルーセル自身はピンチ禁止、横スクロールだけ許可 */
-      .toc {
-        height: 44px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        touch-action: pan-x;
-        -webkit-overflow-scrolling: touch;
-      }
-      .toc::-webkit-scrollbar {
-        height: 6px;
-      }
-
-      /* ページチップの見切れ対策 */
-      .toc-list {
-        display: flex;
-        gap: 8px;
-        padding: 0 8px;
-        align-items: center;
-      }
-
-      /* ── 本文（ピンチ対象） ───────────────────────── */
-      #content {
-        max-width: 100%;
-        margin: 0 auto;
-        padding: 0 12px;
-      }
-      /* ズーム対象ラッパ */
-      #zoom-area {
-        transform-origin: 0 0;
-        will-change: transform;
-        touch-action: pan-y;
-      }
-      /* 横スクロールは常に禁止（縦だけ） */
-      #zoom-area {
-        overflow-x: hidden;
-      }
-      /* ページ画像 */
-      .page-frame {
-        position: relative;
-        overflow: hidden;
-        width: 100vw;
-        max-width: 100vw;
-        margin-left: calc(50% - 50vw);
-        margin-right: calc(50% - 50vw);
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        background: #fff;
-      }
-      .page-img {
-        display: block;
-        width: 100%;
-        height: auto;
-        pointer-events: none;
-        -webkit-user-drag: none;
-      }
-
-      /* ボタン色など */
-      .btn-yellow {
-        height: 36px;
-        padding: 0 12px;
-        border: 1px solid #facc15;
-        background: #fde047;
-        color: #111;
-        border-radius: 9999px;
-      }
-    </style>
-  </head>
-  <body class="bg-white text-neutral-900">
-    <!-- ── 固定カルーセル（ピンチ禁止 / 横スクロール可） ── -->
-    <div id="toc-dock" class="toc-dock">
-      <div class="max-w-full mx-auto px-3">
-        <div class="flex items-center gap-2">
-          <button id="car-prev" class="btn-yellow">≪</button>
-          <button id="car-next" class="btn-yellow">≫</button>
-
-          <nav id="toc" class="toc flex-1 min-w-0">
-            <ul id="toc-list" class="toc-list"></ul>
-          </nav>
-
-          <button id="pg-prev" class="btn-yellow">←</button>
-          <button id="pg-next" class="btn-yellow">→</button>
-          <a
-            id="btn-open"
-            href="#"
-            target="_blank"
-            rel="noopener"
-            class="h-9 px-3 rounded-full bg-neutral-100 text-neutral-900 border border-neutral-300 inline-flex items-center justify-center"
-            >Tab</a
-          >
+    <!-- 1段目 -->
+    <div class="grid grid-cols-[92px_1fr] items-start gap-4">
+      <!-- 人物の代替アイコン（シンプルSVG） -->
+      <div class="flex items-center justify-center w-[92px] h-[92px] rounded-full bg-white border-4 border-gray-900">
+        <svg viewBox="0 0 64 64" class="w-12 h-12" aria-hidden="true">
+          <circle cx="32" cy="22" r="12" fill="none" stroke="#111827" stroke-width="4"/>
+          <path d="M10 56c3-12 16-16 22-16s19 4 22 16" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <!-- 吹き出し（縦書き） -->
+      <div class="bubble">
+        <div class="[writing-mode:vertical-rl] leading-relaxed text-xl">
+          <span class="mr-2">塾の授業に</span>
+          <span class="text-red-600 font-bold">ついていけない</span>
         </div>
       </div>
     </div>
 
-    <!-- ── 本文（ピンチ対象） ── -->
-    <main id="content">
-      <div id="zoom-area"></div>
-    </main>
-
-    <script>
-      /* ========= データ ========= */
-      const BASE = "docs/";
-      const groups = [
-        { prefix: "1-", start: 1, end: 15 },
-        { prefix: "2-", start: 1, end: 12 },
-        { prefix: "3-", start: 1, end: 11 },
-      ];
-      const pad3 = (n) => String(n).padStart(3, "0");
-      const files = groups.flatMap((g) =>
-        Array.from(
-          { length: g.end - g.start + 1 },
-          (_, i) => `${g.prefix}${pad3(g.start + i)}.jpeg`
-        )
-      );
-
-      /* ========= 要素 ========= */
-      const tocDock = document.getElementById("toc-dock");
-      const tocEl = document.getElementById("toc");
-      const tocList = document.getElementById("toc-list");
-      const zoomArea = document.getElementById("zoom-area");
-      const content = document.getElementById("content");
-      const btnOpen = document.getElementById("btn-open");
-      const pgPrev = document.getElementById("pg-prev");
-      const pgNext = document.getElementById("pg-next");
-      const carPrev = document.getElementById("car-prev");
-      const carNext = document.getElementById("car-next");
-
-      /* ========= DOM生成 ========= */
-      files.forEach((name, idx) => {
-        // chip
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = `#p-${name.replace(/\.[^.]+$/, "")}`;
-        a.dataset.index = idx;
-        a.textContent = name.replace(".jpeg", "");
-        a.className =
-          "inline-block px-3 py-1.5 border rounded-full select-none whitespace-nowrap border-neutral-300 bg-blue-50 text-blue-600";
-        if (idx === 0)
-          a.classList.add("bg-linegreen", "text-white", "border-green-600");
-        li.appendChild(a);
-        tocList.appendChild(li);
-
-        // section
-        const sec = document.createElement("section");
-        sec.id = `p-${name.replace(/\.[^.]+$/, "")}`;
-        sec.className = "py-4 border-b border-neutral-100";
-        sec.innerHTML = `
-        <figure class="page-frame">
-          <img class="page-img" src="${BASE}${encodeURIComponent(name)}" alt="">
-        </figure>`;
-        zoomArea.appendChild(sec);
-      });
-
-      /* ========= 固定バー高さを本文に反映 ========= */
-      function applyDockPad() {
-        const h = tocDock.offsetHeight || 60;
-        content.style.paddingTop = h + 12 + "px";
-      }
-      new ResizeObserver(applyDockPad).observe(tocDock);
-      window.addEventListener("resize", applyDockPad);
-      applyDockPad();
-
-      /* ========= 現在ページ検出 ========= */
-      const sections = Array.from(document.querySelectorAll("main section"));
-      const tocLinks = Array.from(document.querySelectorAll("#toc-list a"));
-      let currentIndex = 0;
-
-      function setActive(i, ensureVisible = false) {
-        currentIndex = i;
-        tocLinks.forEach((el, idx) => {
-          el.classList.toggle("bg-linegreen", idx === i);
-          el.classList.toggle("text-white", idx === i);
-          el.classList.toggle("border-green-600", idx === i);
-          el.classList.toggle("bg-blue-50", idx !== i);
-          el.classList.toggle("text-blue-600", idx !== i);
-          el.classList.toggle("border-neutral-300", idx !== i);
-        });
-        const img = sections[i]?.querySelector("img");
-        if (img) btnOpen.href = img.currentSrc || img.src;
-
-        if (ensureVisible) {
-          const link = tocLinks[i],
-            lr = link.getBoundingClientRect(),
-            tr = tocEl.getBoundingClientRect();
-          if (lr.left < tr.left) tocEl.scrollLeft += lr.left - tr.left;
-          else if (lr.right > tr.right) tocEl.scrollLeft += lr.right - tr.right;
-        }
-      }
-      function detectCurrentPage() {
-        const baseline = tocDock.getBoundingClientRect().bottom;
-        let idx = 0;
-        for (let i = 0; i < sections.length; i++) {
-          const r = sections[i].getBoundingClientRect();
-          const th = r.top + r.height * 0.6;
-          if (baseline >= th) idx = i + 1;
-        }
-        const last = sections[sections.length - 1].getBoundingClientRect();
-        if (last.bottom <= window.innerHeight) idx = sections.length - 1;
-        if (idx >= sections.length) idx = sections.length - 1;
-        if (idx !== currentIndex) setActive(idx, false);
-      }
-      window.addEventListener("scroll", detectCurrentPage, { passive: true });
-      window.addEventListener("resize", detectCurrentPage);
-      window.addEventListener("load", detectCurrentPage);
-
-      /* ========= ページ送り ========= */
-      function scrollToSection(i, ensureVisible = false) {
-        const s = sections[i];
-        if (!s) return;
-        window.scrollTo({ top: s.offsetTop, behavior: "auto" });
-        requestAnimationFrame(() => {
-          detectCurrentPage();
-          if (ensureVisible) setActive(i, true);
-        });
-      }
-      pgPrev.onclick = () => {
-        const next = Math.max(0, currentIndex - 1);
-        scrollToSection(next, true);
-      };
-      pgNext.onclick = () => {
-        const next = Math.min(sections.length - 1, currentIndex + 1);
-        scrollToSection(next, true);
-      };
-
-      /* ========= カルーセル左右（横スクロール可） ========= */
-      function pageSize() {
-        const tr = tocEl.getBoundingClientRect();
-        return Math.max(200, tr.width * 0.8);
-      }
-      let carTimer = null;
-      function startCarScroll(dir) {
-        if (carTimer) return;
-        const step = Math.round(pageSize() * 0.25);
-        const tick = () =>
-          tocEl.scrollBy({ left: dir * step, behavior: "auto" });
-        tick();
-        carTimer = setInterval(tick, 60);
-      }
-      function stopCarScroll() {
-        if (carTimer) {
-          clearInterval(carTimer);
-          carTimer = null;
-        }
-      }
-      ["pointerup", "pointercancel", "pointerleave", "touchend"].forEach(
-        (ev) => {
-          carPrev.addEventListener(ev, stopCarScroll);
-          carNext.addEventListener(ev, stopCarScroll);
-        }
-      );
-      carPrev.addEventListener("pointerdown", (e) => {
-        e.preventDefault();
-        startCarScroll(-1);
-      });
-      carNext.addEventListener("pointerdown", (e) => {
-        e.preventDefault();
-        startCarScroll(+1);
-      });
-      tocLinks.forEach(
-        (a) =>
-          (a.onclick = (e) => {
-            e.preventDefault();
-            scrollToSection(Number(a.dataset.index), true);
-          })
-      );
-
-      /* ========= 本文ピンチズーム（最大2× / 安定描画） ========= */
-      initGlobalZoom(); // ←呼び出し
-
-      // 本文(#zoom-area)のピンチズーム: 最小1 / 最大2
-      // ・開始距離のデッドゾーン（誤検出防止）
-      // ・2本指→1本指の切替で基準を再確立（暴走防止）
-      // ・指が全て離れたら 1±ε は 1.0 にスナップして位置も原点へ
-      // ・拡大中はパン、等倍は縦スクロールのみ
-      function initGlobalZoom() {
-        const area = document.getElementById("zoom-area");
-        if (!area) return;
-
-        // ---------- 状態 ----------
-        let scale = 1,
-          tx = 0,
-          ty = 0; // 表示状態
-        let mode = "idle"; // 'idle' | 'pinch' | 'pan' | 'scroll'
-        let startScale = 1,
-          startTx = 0,
-          startTy = 0;
-        let startDist = 0,
-          hadDeadzone = false; // デッドゾーン突破フラグ
-        let startMid = { x: 0, y: 0 };
-        const pts = new Map(); // pointerId -> {x,y}
-
-        const MIN_SCALE = 1;
-        const MAX_SCALE = 2;
-        const DEADZONE = 8; // ピンチ開始距離の最小値(px)
-        const SNAP_EPS = 0.02; // 指離し後 1.0 へ吸着する閾値
-
-        const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-        const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: a.y + b.y });
-        const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-        const apply = () => {
-          // 変な値が入らないよう最終防衛
-          if (!Number.isFinite(scale)) scale = 1;
-          if (!Number.isFinite(tx)) tx = 0;
-          if (!Number.isFinite(ty)) ty = 0;
-          area.style.transform = `translate(${Math.round(tx)}px, ${Math.round(
-            ty
-          )}px) scale(${scale})`;
-        };
-
-        // iOS ネイティブジェスチャ無効化（自前のみ）
-        [
-          "gesturestart",
-          "gesturechange",
-          "gestureend",
-          "dblclick",
-          "doubletap",
-        ].forEach((t) => {
-          area.addEventListener(t, (e) => e.preventDefault(), {
-            passive: false,
-          });
-        });
-
-        // 初期は縦スクロール可（ブラウザに任せず自前で送る）
-        area.style.touchAction = "pan-y";
-
-        function enterPinch() {
-          const [p1, p2] = [...pts.values()];
-          startDist = dist(p1, p2);
-          hadDeadzone = startDist > DEADZONE;
-          startMid = mid(p1, p2);
-          startScale = scale;
-          startTx = tx;
-          startTy = ty;
-          mode = "pinch";
-          // ピンチ中はページスクロール止める
-          area.style.touchAction = "none";
-          document.body.style.overflow = "hidden";
-        }
-
-        function enterPanFrom(point) {
-          startMid = { x: point.x, y: point.y };
-          startTx = tx;
-          startTy = ty;
-          mode = scale > 1 ? "pan" : "scroll";
-          // pan/scroll 中は縦のユーザ操作を許す
-          area.style.touchAction = scale > 1 ? "none" : "pan-y";
-          if (scale > 1) document.body.style.overflow = "hidden";
-        }
-
-        function maybeSnapBack() {
-          // 指がすべて離れたとき 1±EPS は 1 に吸着し、位置も原点へ戻す
-          if (Math.abs(scale - 1) <= SNAP_EPS) {
-            scale = 1;
-            tx = 0;
-            ty = 0;
-            mode = "idle";
-            area.style.touchAction = "pan-y";
-            document.body.style.overflow = "";
-            apply();
-          } else {
-            // 拡大維持時は pan モードへ
-            mode = scale > 1 ? "pan" : "idle";
-            area.style.touchAction = scale > 1 ? "none" : "pan-y";
-            if (scale > 1) document.body.style.overflow = "hidden";
-            else document.body.style.overflow = "";
-          }
-        }
-
-        // ---------- ポインタイベント ----------
-        area.addEventListener("pointerdown", (e) => {
-          area.setPointerCapture(e.pointerId);
-          pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-          if (pts.size === 2) enterPinch();
-          else if (pts.size === 1) enterPanFrom({ x: e.clientX, y: e.clientY });
-        });
-
-        area.addEventListener("pointermove", (e) => {
-          if (!pts.has(e.pointerId)) return;
-          pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
-          if (mode === "pinch" && pts.size === 2) {
-            const [p1, p2] = [...pts.values()];
-            const curDist = dist(p1, p2);
-
-            // デッドゾーンを超えるまで拡大率を更新しない（暴走防止）
-            if (!hadDeadzone) {
-              if (curDist - startDist >= DEADZONE) hadDeadzone = true;
-              else return; // まだ更新しない
-            }
-
-            let nextScale = startScale * (curDist / Math.max(1, startDist));
-            nextScale = clamp(nextScale, MIN_SCALE, MAX_SCALE);
-
-            // ピンチ中心固定
-            const rect = area.getBoundingClientRect();
-            const m = mid(p1, p2);
-            const mx = m.x - rect.left,
-              my = m.y - rect.top;
-
-            const preX = (mx - startTx) / startScale;
-            const preY = (my - startTy) / startScale;
-            tx = mx - preX * nextScale;
-            ty = my - preY * nextScale;
-
-            scale = nextScale;
-            apply();
-            return;
-          }
-
-          // 1本指
-          if (pts.size === 1) {
-            const p = [...pts.values()][0];
-            const dx = p.x - startMid.x;
-            const dy = p.y - startMid.y;
-
-            if (mode === "pan" && scale > 1) {
-              // 拡大中のパン
-              tx = startTx + dx;
-              ty = startTy + dy;
-              apply();
-            } else if (mode === "scroll" && scale === 1) {
-              // 等倍時の縦スクロールのみ（横はさせない）
-              window.scrollBy(0, -dy);
-              // 次回の差分基準を更新
-              startMid = { x: p.x, y: p.y };
-              startTx = tx;
-              startTy = ty;
-            }
-          }
-        });
-
-        function onPointerEnd(e) {
-          pts.delete(e.pointerId);
-
-          if (pts.size === 2) {
-            // 2本残ったら新しいピンチ基準へ切り替え
-            enterPinch();
-            return;
-          }
-          if (pts.size === 1) {
-            // 1本に戻ったら pan/scroll へ基準を張り直す
-            enterPanFrom([...pts.values()][0]);
-            return;
-          }
-          // 0本：終了処理（スナップバック含む）
-          document.body.style.overflow = "";
-          maybeSnapBack();
-        }
-        area.addEventListener("pointerup", onPointerEnd);
-        area.addEventListener("pointercancel", onPointerEnd);
-        area.addEventListener("pointerleave", onPointerEnd);
-
-        // ---------- ホイール/トラックパッド ----------
-        // 拡大中のみパンに割り当て（既定スクロールは止める）
-        area.addEventListener(
-          "wheel",
-          (e) => {
-            if (scale > 1) {
-              e.preventDefault();
-              tx -= e.deltaX;
-              ty -= e.deltaY;
-              apply();
-            }
-          },
-          { passive: false }
-        );
-
-        // 初期適用
-        apply();
-      }
-      /* 初期アクティブ */
-      setActive(0, false);
-    </script>
-  </body>
-</html>
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
-    <title>個別進学塾 ipsim 山下教室 / 猪名川パークプラザ教室</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="font-sans text-gray-900">
-    <!-- 共通グラデーション定義をstyleタグで上書き -->
-    <style>
-      /* クレヨン下線のベース */
-      .underline-crayon {
-        background: linear-gradient(180deg, transparent 70%, #d9f99d 0%);
-        border-radius: 4px;
-        padding: 0 2px;
-      }
-
-      /* CTA ボタン */
-      .button-line {
-        display: inline-block;
-        background-color: #f97316; /* bg-orange-500 */
-        color: #fff;
-        font-size: 1.875rem; /* text-3xl */
-        font-weight: 700; /* font-bold */
-        padding: 0.75rem 1.5rem; /* py-3 px-6 */
-        border-radius: 0.5rem;
-        transition: background-color 0.3s, transform 0.05s;
-        white-space: nowrap;
-        text-decoration: none;
-      }
-      .button-line:hover {
-        background-color: var(--line-green); /* ✅ LINEグリーンを使用 */
-      }
-      .button-line:focus-visible {
-        outline: 3px solid var(--line-green); /* ✅ フォーカス枠も同色 */
-        outline-offset: 3px;
-      }
-      .button-line:active {
-        transform: translateY(1px);
-      }
-
-      /* LINEロゴと同じ緑色を使う */
-      :root {
-        --line-green: #06c755;
-      }
-      .text-line {
-        color: var(--line-green);
-      }
-      .bg-line {
-        background-color: var(--line-green);
-      }
-
-      /* スマホでは下線を消す */
-      @media (max-width: 767px) {
-        .underline-crayon {
-          background: none;
-        }
-      }
-    </style>
-
-    <!-- ===== CTA LINE公式アカウント ===== -->
-    <!-- ===== CTA LINE公式アカウント ===== -->
-    <!-- ===== CTA LINE公式アカウント ===== -->
-    <section
-      class="bg-soft text-gray-900 py-20 px-8 flex flex-col items-center text-center"
-    >
-      <h2 class="text-line text-4xl font-bold mb-10">LINE友だち 追加する</h2>
-
-      <!-- ✅ 左：テキスト 右：LINEロゴ -->
-      <div
-        class="flex flex-col md:flex-row items-center justify-center gap-8 mb-12"
-      >
-        <!-- 左側：これからの流れ -->
-        <div class="text-xl leading-relaxed space-y-2 text-left md:text-right">
-          <!-- 1 -->
-          <p
-            class="relative pl-8 md:pl-0 md:flex md:items-center md:justify-end md:gap-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5 text-yellow-400 absolute left-0 top-1/2 -translate-y-1/2 md:static md:translate-y-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 2a7 7 0 00-4 12.75V17a1 1 0 001 1h6a1 1 0 001-1v-2.25A7 7 0 0012 2zM9 21h6"
-              />
-            </svg>
-            友だち 追加する
-          </p>
-          <!-- 2 -->
-          <p
-            class="relative pl-8 md:pl-0 md:flex md:items-center md:justify-end md:gap-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5 text-yellow-400 absolute left-0 top-1/2 -translate-y-1/2 md:static md:translate-y-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 2a7 7 0 00-4 12.75V17a1 1 0 001 1h6a1 1 0 001-1v-2.25A7 7 0 0012 2zM9 21h6"
-              />
-            </svg>
-            無料体験を 予約する
-          </p>
-          <!-- 3 -->
-          <p
-            class="relative pl-8 md:pl-0 md:flex md:items-center md:justify-end md:gap-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5 text-yellow-400 absolute left-0 top-1/2 -translate-y-1/2 md:static md:translate-y-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 2a7 7 0 00-4 12.75V17a1 1 0 001 1h6a1 1 0 001-1v-2.25A7 7 0 0012 2zM9 21h6"
-              />
-            </svg>
-            三者面談を 通して
-          </p>
-          <!-- アイコンなし行も同じだけ字下げ（スマホ時） -->
-          <p class="pl-8 md:pl-0">お子さまに 最適な</p>
-          <p class="pl-8 md:pl-0">コースを 選択する</p>
+    <!-- 2段目 -->
+    <div class="grid grid-cols-[92px_1fr] items-start gap-4">
+      <div class="flex items-center justify-center w-[92px] h-[92px] rounded-full bg-white border-4 border-gray-900">
+        <svg viewBox="0 0 64 64" class="w-12 h-12" aria-hidden="true">
+          <circle cx="32" cy="22" r="12" fill="none" stroke="#111827" stroke-width="4"/>
+          <path d="M10 56c3-12 16-16 22-16s19 4 22 16" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="bubble">
+        <div class="[writing-mode:vertical-rl] leading-relaxed text-xl">
+          <span class="mr-2">今の家庭教師では志望校対策が</span>
+          <span class="text-red-600 font-bold">不安</span>
         </div>
-
-        <!-- 右側：大きめのロゴ -->
-        <img
-          src="pics/LINE_Brand_icon.png"
-          alt="LINE_Brand_icon"
-          class="w-32 h-32 md:w-44 md:h-44"
-        />
       </div>
+    </div>
 
-      <!-- ボタンエリア -->
-      <div class="flex flex-col md:flex-row gap-6 justify-center">
-        <a href="https://lin.ee/sqkGCPT" class="button-line">山下教室</a>
-        <a href="https://lin.ee/22k8QXA" class="button-line"
-          >猪名川パークプラザ教室</a
-        >
+    <!-- 3段目 -->
+    <div class="grid grid-cols-[92px_1fr] items-start gap-4">
+      <div class="flex items-center justify-center w-[92px] h-[92px] rounded-full bg-white border-4 border-gray-900">
+        <svg viewBox="0 0 64 64" class="w-12 h-12" aria-hidden="true">
+          <circle cx="32" cy="22" r="12" fill="none" stroke="#111827" stroke-width="4"/>
+          <path d="M10 56c3-12 16-16 22-16s19 4 22 16" fill="none" stroke="#111827" stroke-width="4" stroke-linecap="round"/>
+        </svg>
       </div>
-    </section>
-  </body>
+      <div class="bubble">
+        <div class="[writing-mode:vertical-rl] leading-relaxed text-xl">
+          <span class="text-red-600 font-bold mr-2">苦手な分野に的を絞った</span>
+          <span>指導が受けたい</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-auto grid grid-cols-2 gap-3 pb-1">
+      <a href="#" class="text-center font-bold py-3 rounded-lg border-2 border-lime-500 text-lime-700 bg-white active:translate-y-[1px]">資料請求</a>
+      <a href="#" class="text-center font-bold py-3 rounded-lg bg-lime-500 text-white border-2 border-lime-500 active:translate-y-[1px]">無料体験授業</a>
+    </div>
+
+    <!-- 電話帯（任意） -->
+    <div class="text-sm text-gray-700 flex items-center gap-2 justify-center">
+      <span class="inline-block w-2 h-2 rounded-full bg-lime-500"></span>
+      <span>AM7:30〜PM8:00（日・祝休み）</span>
+    </div>
+  </section>
+</body>
 </html>
