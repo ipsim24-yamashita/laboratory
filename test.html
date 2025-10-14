@@ -436,6 +436,26 @@
       <!-- #endregion script hero IIFE slider -->
 
       <!-- #region section interlink-->
+      <section
+        id="interlink"
+        class="mx-auto w-full max-w-mobile text-center border-b border-lime-600 border-t-[3px] border-t-lime-600 flex divide-x divide-lime-600"
+      >
+        <!-- 左ブロック -->
+        <div class="flex-1 py-4">
+          <a href="#fee" class="text-lime-600 font-bold">コース</a>
+        </div>
+
+        <!-- 中央ブロック -->
+        <div class="flex-1 py-4">
+          <a href="#yamashita" class="text-lime-600 font-bold">山下教室</a>
+        </div>
+
+        <!-- 右ブロック -->
+        <div class="flex-1 py-4">
+          <a href="#inagawa" class="text-lime-600 font-bold">猪名川教室</a>
+        </div>
+      </section>
+      <!-- #endregion section interlink-->
 
       <!-- #region section CTA 1 -->
       <section id="cta1" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
@@ -1119,7 +1139,7 @@
     </footer>
     <!-- #endregion footer -->
 
-    <!-- #region script Google Map iframe 近づいたらロード開始 -->
+    <!-- #region script Google Map 近づいたらロード開始 -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // 対象となるすべての地図iframeを取得
@@ -1150,7 +1170,7 @@
                   }
                 });
               },
-              { root: null, rootMargin: "1000px", threshold: 0.01 }
+              { root: null, rootMargin: "400px", threshold: 0.01 }
             );
             io.observe(iframe);
           } else {
