@@ -235,12 +235,12 @@
         class="relative overflow-hidden bg-black text-white h-[52vh] md:h-[60vh]"
       >
         <header
-          class="absolute top-0 left-0 w-full flex items-center justify-between px-4 pt-4 z-20"
+          class="absolute top-0 left-0 z-20 flex items-center justify-between w-full px-4 pt-4"
         >
           <img
             src="pics/logo.png"
             alt="個別進学塾ipsim ロゴ"
-            class="w-28 h-auto drop-shadow-lg"
+            class="h-auto w-28 drop-shadow-lg"
           />
 
           <a
@@ -332,7 +332,7 @@
 
           <!-- 下層の黒グラデーション（文字を読みやすく） -->
           <div
-            class="absolute inset-0 bg-gradient-to-b from-black/40 to-black/10 pointer-events-none"
+            class="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/40 to-black/10"
           ></div>
 
           <!-- 白い透かしレイヤー（画像を淡くする） -->
@@ -341,7 +341,7 @@
           ></div>
         </div>
         <!-- テキストエリア -->
-        <div class="relative z-10 max-w-mobile mx-auto px-4 py-14 text-center">
+        <div class="relative z-10 px-4 mx-auto text-center max-w-mobile py-14">
           <h1
             class="text-[24px] font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
           >
@@ -442,26 +442,68 @@
       >
         <!-- 左ブロック -->
         <div class="flex-1 py-4">
-          <a href="#fee" class="text-lime-600 font-bold">コース</a>
+          <a href="#fee" class="font-bold text-lime-600">コース</a>
         </div>
 
         <!-- 中央ブロック -->
         <div class="flex-1 py-4">
-          <a href="#yamashita" class="text-lime-600 font-bold">山下教室</a>
+          <a href="#yamashita" class="font-bold text-lime-600">山下教室</a>
         </div>
 
         <!-- 右ブロック -->
         <div class="flex-1 py-4">
-          <a href="#inagawa" class="text-lime-600 font-bold">猪名川教室</a>
+          <a href="#inagawa" class="font-bold text-lime-600">猪名川教室</a>
         </div>
       </section>
       <!-- #endregion section interlink-->
 
+      <!-- #region section デザインテンプレート -->
+      <section id="template" class="w-full px-4 py-6 bg-lime-100 max-w-mobile">
+        <div class="space-y-4">
+          <!-- 枠線：lime-600, 枠内：白 -->
+          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
+            <!-- タイトル -->
+            <h2
+              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 2v20M2 12h20" />
+              </svg>
+              タイトル
+            </h2>
+
+            <!-- 本文枠線なし, 本文枠内：lime-300, 本文：text-gray-900 -->
+            <p
+              class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            >
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書くここへ本文を書く<br /><br />
+              ここへ本文を書く
+              <span class="text-[#06c755] font-semibold">ここは強調表示</span>
+              ここへ本文を書くここへ本文を書く<br />
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- #endregion section デザインテンプレート -->
+
+      <!-- #region style script スライド表示-->
+
+      <!-- #endregion style script スライド表示-->
+
       <!-- #region section CTA 1 -->
-      <section id="cta1" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+      <section id="cta1" class="w-full px-4 py-6 bg-lime-100 max-w-mobile">
         <div class="space-y-4">
           <!-- 枠：グラデなしの lime-600 ボーダー -->
-          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
             <h2
               class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
             >
@@ -512,10 +554,10 @@
       <!-- #endregion section CTA 1 -->
 
       <!-- #region section 指導科目 -->
-      <section id="kamoku" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+      <section id="kamoku" class="w-full px-4 py-6 bg-lime-100 max-w-mobile">
         <div class="space-y-4">
           <!-- 枠線：lime-600, 枠内：白 -->
-          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
             <!-- タイトル -->
             <h2
               class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
@@ -559,7 +601,7 @@
             </h2>
 
             <!-- 本文枠線なし, 本文枠内：lime-300, 本文：text-gray-900 -->
-            <div class="mt-4 max-w-read bg-lime-50 rounded-lg px-3 py-3">
+            <div class="px-3 py-3 mt-4 rounded-lg max-w-read bg-lime-50">
               <div
                 class="text-gray-900 text-[19px] leading-relaxed font-semibold"
               >
@@ -589,9 +631,9 @@
       <!-- #endregion section 指導科目 -->
 
       <!-- #region section コース・料金 -->
-      <section id="fee" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+      <section id="fee" class="w-full px-4 py-6 bg-lime-100 max-w-mobile">
         <!-- 枠線：lime-600, 枠内：白 -->
-        <div class="p-4 bg-white rounded-xl border-2 border-lime-600">
+        <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
           <!-- タイトル -->
           <h2
             class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
@@ -655,7 +697,7 @@
 
             <!-- #region 中学料金表 -->
             <div>
-              <dl class="mt-2 grid grid-cols-2 gap-y-1">
+              <dl class="grid grid-cols-2 mt-2 gap-y-1">
                 <dt class="text-blue-600 text-[22px] font-bold">週1回</dt>
                 <dd></dd>
                 <dt class="px-2 text-gray-900 text-[22px] font-bold">数学</dt>
@@ -735,10 +777,10 @@
                   >講座
                 </dt>
                 <dd></dd>
-                <dt class="text-blue-600 font-bold">週1回（算数）</dt>
-                <dd class="text-right text-red-500 font-bold">¥6,600〜</dd>
-                <dt class="text-blue-600 font-bold">週2回（算/英）</dt>
-                <dd class="text-right text-red-500 font-bold">¥12,100〜</dd>
+                <dt class="font-bold text-blue-600">週1回（算数）</dt>
+                <dd class="font-bold text-right text-red-500">¥6,600〜</dd>
+                <dt class="font-bold text-blue-600">週2回（算/英）</dt>
+                <dd class="font-bold text-right text-red-500">¥12,100〜</dd>
                 <dt class="text-gray-900">週2回（算/国）</dt>
                 <dd class="text-right">¥12,100〜</dd>
 
@@ -760,7 +802,7 @@
           <!-- #endregion 小学生コース -->
 
           <!-- #region 全体注意書き -->
-          <div class="mt-2 max-w-read bg-white rounded-lg px-3 py-3">
+          <div class="px-3 py-3 mt-2 bg-white rounded-lg max-w-read">
             <ul class="mt-3 text-[13px] text-gray-900 list-disc pl-5 space-y-1">
               <li>入会金・教材費・模試代が別途かかります</li>
               <li>季節講習（春・夏・冬）は別途ご案内します</li>
@@ -772,13 +814,321 @@
       </section>
       <!-- #endregion section コース・料金 -->
 
+      <!-- #region section 実績-->
+    <section>
+      <div class="m-4 p-4 border rounded-lg bg-gray-200">
+        <!-- 説明 -->
+        <div class="text-cyan-600 font-semibold text-lg">
+          <span class="px-4">
+            <!-- 説明 -->
+            地域 No.1の 問題演習量 と”できる”ための徹底解説</span
+          ><br />
+          <span class="px-4 py-2">個別進学塾 ipsim の点数アップ実例</span>
+        </div>
+        <!-- 水平線 -->
+        <div class="m-2 py-2 border-t border-gray-400"></div>
+        <!-- 実例 -->
+        <div class="overflow-x-auto max-w-[390px] mx-auto">
+          <table class="w-full text-center">
+            <thead class="bg-lime-100"></thead>
+            <tbody class="font-bold">
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              <!-- 事例 -->
+              <tr class="hover:bg-lime-50">
+              <td class="px-3 py-2 border-r border-gray-200">
+                <div class="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-blue-500"
+                  >
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <span>中2女子</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-2 border-r border-gray-200">5教科</td>
+              <td class="px-4 py-2">95点アップ</td>
+              </tr>
+              </tr>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- 注意書き -->
+        <div class="m-2 px-4 text-gray-400 text-sm">
+          <span>※入塾直前と入塾直後で比較</span>
+        </div>
+      </div>
+    </section>
+    <!-- #endregion section 実績-->
+
       <!-- #region section アクセス 山下 -->
       <section
         id="yamashita"
-        class="bg-lime-100 mx-auto w-full max-w-mobile px-4 py-6"
+        class="w-full px-4 py-6 mx-auto bg-lime-100 max-w-mobile"
       >
         <div class="space-y-4">
-          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
             <!-- タイトル -->
             <h2
               class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
@@ -818,7 +1168,7 @@
               >
             </div>
             <!-- googleマップ iframe -->
-            <div class="mt-3 rounded-xl overflow-hidden border">
+            <div class="mt-3 overflow-hidden border rounded-xl">
               <iframe
                 title="ipsim 山下教室の地図"
                 class="w-full aspect-[4/3]"
@@ -838,10 +1188,10 @@
       <!-- #region section アクセス 猪名川 -->
       <section
         id="inagawa"
-        class="bg-lime-100 mx-auto w-full max-w-mobile px-4 py-6"
+        class="w-full px-4 py-6 mx-auto bg-lime-100 max-w-mobile"
       >
         <div class="space-y-4">
-          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
             <!-- タイトル -->
             <h2
               class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
@@ -881,7 +1231,7 @@
               >
             </div>
             <!-- googleマップ iframe -->
-            <div class="mt-3 rounded-xl overflow-hidden border">
+            <div class="mt-3 overflow-hidden border rounded-xl">
               <iframe
                 title="ipsim 猪名川パークプラザ教室の地図"
                 class="w-full aspect-[4/3]"
@@ -899,10 +1249,10 @@
       <!-- #endregion section アクセス 猪名川 -->
 
       <!-- #region section CTA 2 -->
-      <section id="cta2" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+      <section id="cta2" class="w-full px-4 py-6 bg-lime-100 max-w-mobile">
         <div class="space-y-4">
           <!-- 枠：グラデなしの lime-600 ボーダー -->
-          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
             <!-- タイトル -->
             <h2
               class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
@@ -939,7 +1289,7 @@
               </ol>
             </div>
             <!-- CTA ボタン -->
-            <div class="mt-6 flex flex-col items-center gap-3">
+            <div class="flex flex-col items-center gap-3 mt-6">
               <a
                 href="https://lin.ee/sqkGCPT"
                 class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-4 py-3 text-white text-[17px] font-semibold"
@@ -957,10 +1307,10 @@
       <!-- #endregion section CTA 2 -->
 
       <!-- #region section デザインテンプレート -->
-      <section id="template" class="bg-lime-100 w-full max-w-mobile px-4 py-6">
+      <section id="template" class="w-full px-4 py-6 bg-lime-100 max-w-mobile">
         <div class="space-y-4">
           <!-- 枠線：lime-600, 枠内：白 -->
-          <div class="rounded-xl border-2 border-lime-600 bg-white p-4">
+          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
             <!-- タイトル -->
             <h2
               class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
@@ -997,7 +1347,7 @@
     <!-- #endregion main -->
 
     <!-- #region footer -->
-    <footer id="footer" class="bg-cyan-950 text-white py-8 px-8">
+    <footer id="footer" class="px-8 py-8 text-white bg-cyan-950">
       <p class="text-white text-[17px]">岡村ゼミナールグループ</p>
       <p class="text-white text-[22px] font-bold mb-4 tracking-[4px]">
         <span>個別進学塾 ipsim </span
@@ -1010,7 +1360,7 @@
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="w-5 h-5 flex-shrink-0"
+              class="flex-shrink-0 w-5 h-5"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
@@ -1028,7 +1378,8 @@
           </strong>
           <div class="text-[17px] px-4">
             〒666-0105<br />
-            兵庫県川西市見野2-35-6 IBS 山下駅前ビル2F<br />
+            兵庫県川西市見野2-35-6 IBS 山下駅前ビル2F<br />能勢電鉄 山下駅
+            徒歩2分<br />
             ※ TEL <a class="text-blue-500" href="tel:0727676537">072-767-6537</a
             ><br />
             MAIL
@@ -1044,7 +1395,7 @@
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="w-4 h-4 text-lime-400 flex-shrink-0"
+              class="flex-shrink-0 w-4 h-4 text-lime-400"
               fill="none"
               stroke="currentColor"
               stroke-width="1.8"
@@ -1057,7 +1408,7 @@
               <circle cx="12" cy="10" r="2.5" />
             </svg>
             <a
-              class="text-lime-400 underline hover:text-lime-300 transition"
+              class="underline transition text-lime-400 hover:text-lime-300"
               href="https://maps.google.com/?q=34.8931642,135.4109987"
               target="_blank"
               rel="noopener noreferrer"
@@ -1072,7 +1423,7 @@
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="w-5 h-5 flex-shrink-0"
+              class="flex-shrink-0 w-5 h-5"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
@@ -1107,7 +1458,7 @@
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="w-4 h-4 text-lime-400 flex-shrink-0"
+              class="flex-shrink-0 w-4 h-4 text-lime-400"
               fill="none"
               stroke="currentColor"
               stroke-width="1.8"
@@ -1120,7 +1471,7 @@
               <circle cx="12" cy="10" r="2.5" />
             </svg>
             <a
-              class="text-lime-400 underline hover:text-lime-300 transition"
+              class="underline transition text-lime-400 hover:text-lime-300"
               href="https://maps.google.com/?q=34.8969108,135.3685999"
               target="_blank"
               rel="noopener noreferrer"
