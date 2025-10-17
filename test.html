@@ -58,6 +58,24 @@
       .text-shadow-lime {
         text-shadow: 2px 2px 4px rgba(22, 163, 74, 0.6); /* lime-600の半透明影 */
       }
+      /* クレヨン風の黄色い下線 text-blue-500 font-semibold と併用推奨*/
+      .underline-crayon-yellow {
+        background-image: linear-gradient(
+            to bottom,
+            rgba(255, 235, 59, 0.7) 60%,
+            rgba(255, 235, 59, 0.7) 100%
+          ),
+          repeating-linear-gradient(
+            -45deg,
+            rgba(255, 255, 0, 0.15) 0 2px,
+            transparent 2px 4px
+          );
+        background-size: 100% 0.4em;
+        background-repeat: no-repeat;
+        background-position: 0 95%;
+        border-radius: 4px;
+        padding: 0 2px;
+      }
     </style>
     <!-- #endregion head style TailwindCSS custom -->
 
@@ -555,7 +573,6 @@
 
       <!-- #region section 体験までのながれ-->
       <section class="flow">
-        <!-- 飾り画像（例：王冠アイコン） -->
         <img
           class="m-4 h-16"
           src="pics/flow.jpeg"
@@ -575,9 +592,12 @@
           <!-- 内容 -->
           <div class="m-2 px-4 text-gray-900 text-lg">
             <span
-              ><a href="#cta2" class="text-blue-500 font-semibold">こちら</a
-              >の<span class="text-[#06c755] font-semibold"
-                >LINE公式アカウント</span
+              ><a
+                href="#cta2"
+                class="text-blue-500 font-semibold underline-crayon-yellow"
+                >こちら</a
+              >の<a href="#cta2" class="text-[#06c755] font-semibold"
+                >LINE公式アカウント</a
               >から、無料体験のご希望日時をご相談ください。
             </span>
           </div>
@@ -595,8 +615,13 @@
           <!-- 内容 -->
           <div class="m-2 px-4 text-gray-900 text-lg">
             <span>
-              指導経験豊かなプロ講師が、"つまずくポイント" を "新しい視点"
-              で解説します。
+              指導経験豊かな<span
+                class="text-blue-500 font-semibold underline-crayon-yellow"
+                >プロ講師</span
+              >が、"つまずくポイント"を<span
+                class="text-blue-500 font-semibold underline-crayon-yellow"
+                >"新しい視点"</span
+              >で解説します。
             </span>
           </div>
           <!-- タイトル -->
@@ -613,8 +638,10 @@
           <!-- 内容 -->
           <div class="m-2 px-4 text-gray-900 text-lg">
             <span
-              >現在のお子さまの状況をじっくりお聞かせください。"ぴったりのコース"
-              をご提案いたします。
+              >現在のお子さまの状況をじっくりお聞かせください。<span
+                class="text-blue-500 font-semibold underline-crayon-yellow"
+                >"ぴったりのコース"</span
+              >をご提案いたします。
             </span>
           </div>
         </div>
