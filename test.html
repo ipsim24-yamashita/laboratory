@@ -518,12 +518,12 @@
     widthDisplay.textContent = width;
 
     let bp = "";
-    if (width < 640) bp = "＜ sm（スマホ縦）";
-    else if (width < 768) bp = "sm（スマホ横）";
-    else if (width < 1024) bp = "md（iPad縦〜）";
-    else if (width < 1280) bp = "lg（iPad横〜ノートPC）";
-    else if (width < 1536) bp = "xl（デスクトップ）";
-    else bp = "2xl（ワイドスクリーン）";
+    if (width < 640) bp = "＜ sm（〜640 iPhone 縦）";
+    else if (width < 768) bp = "sm（640〜）";
+    else if (width < 1024) bp = "md（768〜 iPad mini 縦）";
+    else if (width < 1280) bp = "lg（1024〜 iPhone 横、iPad mini 横）";
+    else if (width < 1536) bp = "xl（1280〜）";
+    else bp = "2xl（1536〜 mac15）";
 
     bpDisplay.textContent = bp;
   }
