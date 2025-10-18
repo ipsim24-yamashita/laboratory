@@ -76,6 +76,105 @@
         border-radius: 4px;
         padding: 0 2px;
       }
+      /* ── スマホ横向き最適化 ────────────────────────── */
+      @media (orientation: landscape) and (max-width: 920px) {
+        /* ヒーロー高さ・余白を再調整（縦が低くなるためコンパクト化） */
+        #hero {
+          height: 68svh; /* 60→68 に微増。機種差も svh で吸収 */
+        }
+        #hero .hero-copy {
+          max-width: min(92vw, 780px); /* 行幅を詰めて読みやすく */
+          margin-left: auto;
+          margin-right: auto;
+          padding: 10px 14px; /* テキスト周りのパディングを確保 */
+          border-radius: 14px;
+          background: rgba(0, 0, 0, 0.55); /* 文字の下に半透明の黒い板を敷く */
+          -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+        /* 見出しと本文をclampで読みやすいサイズに */
+        #hero .hero-title {
+          font-size: clamp(20px, 3.6vw, 28px);
+          line-height: 1.25;
+        }
+        #hero .hero-title .brand-1 {
+          font-size: clamp(22px, 4.2vw, 30px);
+        }
+        #hero .hero-title .brand-2 {
+          font-size: clamp(26px, 5vw, 34px);
+        }
+        #hero .hero-sub {
+          font-size: clamp(14px, 2.2vw, 16.5px);
+          line-height: 1.55;
+          margin-top: 6px;
+        }
+        /* 改行制御：縦で入れていた <br> を横では抑える */
+        br.br-only-portrait {
+          display: none;
+        }
+        /* チップのサイズと内側余白も少しだけ詰める */
+        #hero .hero-chip {
+          font-size: clamp(13px, 2.1vw, 15px);
+          padding: 6px 10px;
+        }
+        /* ロゴ・CTAが文字と被る場合の回避（必要に応じて有効化） */
+        /* #hero header a { transform: scale(.9); transform-origin: top right; } */
+      } /* ── 横画面（スマホ想定）のみ2カラム配置 ─────────────── */
+      @media (orientation: landscape) and (max-width: 920px) {
+        /* 左右2カラムで中央に寄せる。雰囲気維持のため背景は増やさない */
+        #hero .hero-copy {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          justify-items: center;
+          gap: clamp(8px, 3vw, 24px);
+          max-width: min(96vw, 920px);
+          margin-inline: auto;
+          padding-block: clamp(16px, 4vh, 36px);
+          text-align: center; /* 既存の雰囲気をキープ */
+        }
+        #hero .hero-left,
+        #hero .hero-right {
+          display: flex;
+          flex-direction: column;
+          align-items: center; /* タイトルも本文も中央揃えのまま */
+        }
+
+        /* 縦だけ使っていた <br> を横では消して行を詰める */
+        br.br-only-portrait {
+          display: none;
+        }
+
+        /* タイトル・サブのサイズは“控えめに安全”な範囲で */
+        #hero .hero-title {
+          font-size: clamp(20px, 3.6vw, 28px);
+          line-height: 1.25;
+        }
+        #hero .brand-1 {
+          font-size: clamp(22px, 4.2vw, 30px);
+        }
+        #hero .brand-2 {
+          font-size: clamp(26px, 5vw, 34px);
+        }
+
+        #hero .hero-chip {
+          font-size: clamp(13px, 2.1vw, 15px);
+          padding: 6px 10px;
+          margin-top: 6px;
+        }
+        #hero .hero-sub {
+          font-size: clamp(14px, 2.2vw, 16.5px);
+          line-height: 1.55;
+          margin-top: 6px;
+        }
+
+        /* 背景写真が明るいカットでも読めるよう、黒グラデを少しだけ強めたい場合：
+     #hero-slides 直下の黒グラデ要素にクラスがなければ、not必須  */
+        /* #hero #hero-slides > div:first-of-type { 
+       background: linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.15));
+     } */
+      }
     </style>
     <!-- #endregion head style TailwindCSS custom -->
 
@@ -131,51 +230,6 @@
         color: #374151;
         opacity: 0.9;
         text-align: center;
-      }
-      /* ── スマホ横向き最適化 ────────────────────────── */
-      @media (orientation: landscape) and (max-width: 920px) {
-        /* ヒーロー高さ・余白を再調整（縦が低くなるためコンパクト化） */
-        #hero {
-          height: 68svh; /* 60→68 に微増。機種差も svh で吸収 */
-        }
-        #hero .hero-copy {
-          max-width: min(92vw, 780px); /* 行幅を詰めて読みやすく */
-          margin-left: auto;
-          margin-right: auto;
-          padding: 10px 14px; /* テキスト周りのパディングを確保 */
-          border-radius: 14px;
-          background: rgba(0, 0, 0, 0.55); /* 文字の下に半透明の黒い板を敷く */
-          -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-        }
-        /* 見出しと本文をclampで読みやすいサイズに */
-        #hero .hero-title {
-          font-size: clamp(20px, 3.6vw, 28px);
-          line-height: 1.25;
-        }
-        #hero .hero-title .brand-1 {
-          font-size: clamp(22px, 4.2vw, 30px);
-        }
-        #hero .hero-title .brand-2 {
-          font-size: clamp(26px, 5vw, 34px);
-        }
-        #hero .hero-sub {
-          font-size: clamp(14px, 2.2vw, 16.5px);
-          line-height: 1.55;
-          margin-top: 6px;
-        }
-        /* 改行制御：縦で入れていた <br> を横では抑える */
-        br.br-only-portrait {
-          display: none;
-        }
-        /* チップのサイズと内側余白も少しだけ詰める */
-        #hero .hero-chip {
-          font-size: clamp(13px, 2.1vw, 15px);
-          padding: 6px 10px;
-        }
-        /* ロゴ・CTAが文字と被る場合の回避（必要に応じて有効化） */
-        /* #hero header a { transform: scale(.9); transform-origin: top right; } */
       }
     </style>
     <!-- #endregion head style Google Map iframe -->
@@ -407,32 +461,38 @@
         <div
           class="relative z-10 px-4 mx-auto text-center max-w-mobile py-14 hero-copy"
         >
-          <h1
-            class="hero-title font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
-          >
-            <span
-              >一人ひとりの<br class="br-only-portrait" />“できる喜び”<br
-                class="br-only-portrait" />を大切にする<br
-                class="br-only-portrait"
-            /></span>
-            <span class="brand-1 text-white text-shadow-lime">個別進学塾 </span>
-            <span class="brand-2 text-white text-shadow-lime">ipsim</span>
-          </h1>
-
-          <!-- チップ化エリア -->
-          <div
-            class="hero-chip inline-block mt-2 bg-lime-500/20 backdrop-blur-sm rounded-full px-4 text-white font-medium shadow-sm"
-          >
-            川西市・猪名川町エリア専門
+          <div class="hero-left">
+            <h1
+              class="hero-title font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+            >
+              <span
+                >一人ひとりの<br class="br-only-portrait" />“できる喜び”<br
+                  class="br-only-portrait" />を大切にする<br
+                  class="br-only-portrait"
+              /></span>
+              <span class="brand-1 text-white text-shadow-lime"
+                >個別進学塾
+              </span>
+              <span class="brand-2 text-white text-shadow-lime">ipsim</span>
+            </h1>
           </div>
 
-          <div
-            class="hero-sub mt-2 inline-block text-white text-shadow-lime leading-relaxed"
-          >
-            無理なく、でも確かに伸びる。<br class="br-only-portrait" />
-            学校の授業が「わかる」安心と<br class="br-only-portrait" />
-            「できる喜び」を重ねながら<br class="br-only-portrait" />
-            明るく穏やかな空間で成長を支えます。
+          <div class="hero-right">
+            <!-- チップ化エリア -->
+            <div
+              class="hero-chip inline-block mt-2 bg-lime-500/20 backdrop-blur-sm rounded-full px-4 text-white font-medium shadow-sm"
+            >
+              川西市・猪名川町エリア専門
+            </div>
+
+            <div
+              class="hero-sub mt-2 inline-block text-white text-shadow-lime leading-relaxed"
+            >
+              無理なく、でも確かに伸びる。<br class="br-only-portrait" />
+              学校の授業が「わかる」安心と<br class="br-only-portrait" />
+              「できる喜び」を重ねながら<br class="br-only-portrait" />
+              明るく穏やかな空間で成長を支えます。
+            </div>
           </div>
         </div>
       </section>
