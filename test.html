@@ -493,47 +493,44 @@
       </section>
       <!-- #endregion section interlink-->
 
+      <!-- #region section 画面サイズ判定 -->
+      <section
+        id="screen-check"
+        class="w-full max-w-[800px] mx-auto my-8 p-4 bg-gray-100 rounded-lg shadow-md text-center font-semibold text-gray-700"
+      >
+        <p class="text-lg">
+          現在の画面幅：
+          <span id="screen-width" class="text-blue-600">--</span> px
+        </p>
+        <p class="mt-2">
+          Tailwindブレークポイント：
+          <span id="screen-breakpoint" class="text-lime-600">--</span>
+        </p>
+      </section>
 
-<!-- #region section 画面サイズ判定 -->
-<section
-  id="screen-check"
-  class="w-full max-w-[800px] mx-auto my-8 p-4 bg-gray-100 rounded-lg shadow-md text-center font-semibold text-gray-700"
->
-  <p class="text-lg">
-    現在の画面幅：
-    <span id="screen-width" class="text-blue-600">--</span> px
-  </p>
-  <p class="mt-2">
-    Tailwindブレークポイント：
-    <span id="screen-breakpoint" class="text-lime-600">--</span>
-  </p>
-</section>
+      <script>
+        function updateScreenInfo() {
+          const width = window.innerWidth;
+          const widthDisplay = document.getElementById("screen-width");
+          const bpDisplay = document.getElementById("screen-breakpoint");
 
-<script>
-  function updateScreenInfo() {
-    const width = window.innerWidth;
-    const widthDisplay = document.getElementById("screen-width");
-    const bpDisplay = document.getElementById("screen-breakpoint");
+          widthDisplay.textContent = width;
 
-    widthDisplay.textContent = width;
+          let bp = "";
+          if (width < 640) bp = "＜ sm（〜640 iPhone 縦）";
+          else if (width < 768) bp = "sm（640〜）";
+          else if (width < 1024) bp = "md（768〜 iPhone 横）";
+          else if (width < 1280) bp = "lg（1024〜 iPad mini 縦）";
+          else if (width < 1536) bp = "xl（1280〜 iPad mini 横）";
+          else bp = "2xl（1536〜 mac15）";
 
-    let bp = "";
-    if (width < 640) bp = "＜ sm（〜640 iPhone 縦）";
-    else if (width < 768) bp = "sm（640〜）";
-    else if (width < 1024) bp = "md（768〜 iPhone 横）";
-    else if (width < 1280) bp = "lg（1024〜 iPad mini 縦）";
-    else if (width < 1536) bp = "xl（1280〜 iPad mini 横）";
-    else bp = "2xl（1536〜 mac15）";
+          bpDisplay.textContent = bp;
+        }
 
-    bpDisplay.textContent = bp;
-  }
-
-  window.addEventListener("resize", updateScreenInfo);
-  updateScreenInfo(); // 初回実行
-</script>
-<!-- #endregion -->
-
-
+        window.addEventListener("resize", updateScreenInfo);
+        updateScreenInfo(); // 初回実行
+      </script>
+      <!-- #endregion -->
 
       <!-- #region section サイズ判定-->
       <section class="w-full flex justify-center bg-white mb-12">
