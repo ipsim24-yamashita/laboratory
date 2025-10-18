@@ -558,7 +558,7 @@
           <h2 class="sr-only">ipsim の理念</h2>
 
           <div
-            class="text-gray-900 text-lg sm:text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed max-w-[72ch]"
+            class="text-gray-900 text-lg md:text-xl leading-relaxed max-w-[72ch]"
           >
             <p>
               これまで多くの集団塾や個別塾では、どうしても
@@ -700,7 +700,7 @@
           <!-- 枠：グラデなしの lime-600 ボーダー -->
           <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
             <h2
-              class="flex items-center gap-2 text-lime-600 text-[22px] font-bold"
+              class="flex items-center gap-2 text-lime-600 text-xl md:text-2xl font-bold"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -716,7 +716,7 @@
 
             <!-- ここだけ lime-300 で塗りつぶし -->
             <p
-              class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+              class="mt-4 text-gray-900 text-lg md:text-xl leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
             >
               お子さまの学習や進路に関してご不安やお悩みはございませんか<br /><br />
               私たちは保護者の方とともにお子さまの「できる」を増やすお手伝いをしています<br /><br />
@@ -770,7 +770,7 @@
           <!-- 水平線 -->
           <div class="m-2 py-2 border-t border-gray-400"></div>
           <!-- 内容 -->
-          <div class="m-2 px-4 text-gray-900 text-lg">
+          <div class="m-2 px-4 text-gray-900 text-lg md:text-xl">
             <span
               ><a
                 href="#cta2"
@@ -793,7 +793,7 @@
           <!-- 水平線 -->
           <div class="m-2 py-2 border-t border-gray-400"></div>
           <!-- 内容 -->
-          <div class="m-2 px-4 text-gray-900 text-lg">
+          <div class="m-2 px-4 text-gray-900 text-lg md:text-xl">
             <span>
               指導経験豊かな<span
                 class="text-blue-500 font-semibold underline-crayon-yellow"
@@ -816,7 +816,7 @@
           <!-- 水平線 -->
           <div class="m-2 py-2 border-t border-gray-400"></div>
           <!-- 内容 -->
-          <div class="m-2 px-4 text-gray-900 text-lg">
+          <div class="m-2 px-4 text-gray-900 text-lg md:text-xl">
             <span
               >体験授業でわかったお子さまの現状の学力や、苦手な部分、今後の課題についてご説明させていただきます。<br />また親御さんとお子さんのご希望をじっくりお聞きして、<span
                 class="text-blue-500 font-semibold underline-crayon-yellow"
@@ -932,7 +932,7 @@
             コース・料金
           </h2>
           <div
-            class="mt-2 text-gray-900 text-[15px] leading-relaxed max-w-read bg-white rounded-lg px-3 py-3"
+            class="mt-2 text-gray-900 text-base md:text-lg leading-relaxed max-w-read bg-white rounded-lg px-3 py-3"
           >
             授業料は税込・教材費等別（月額）<br />
             学年・通塾回数・時期により変動します<br />
@@ -968,7 +968,7 @@
 
           <!-- #region 緑フレーム -->
           <div
-            class="mt-4 text-gray-900 text-[17px] leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
+            class="mt-4 text-gray-900 text-lg md:text-xl leading-relaxed max-w-read bg-lime-50 rounded-lg px-3 py-3"
           >
             <!-- #region 中学事前説明 -->
             <div>
@@ -979,15 +979,17 @@
 
             <!-- #region 中学料金表 -->
             <div>
+                <div class="border border-gray-500 text-blue-600 inline-block text-center text-[22px] font-bold">週1回</div>
+                  <div>
+                    <dl class="grid grid-cols-2 mt-2 gap-y-1">
+                    <dt class="px-2 text-gray-900 text-[22px] font-bold">数学</dt>
+                    <dd class="text-right text-red-500 text-[22px] font-bold">
+                      ¥12,100〜
+                    </dd>
+                  </div>
+              </div>
+                <div class="text-blue-600 text-[22px] font-bold">週2回</div>
               <dl class="grid grid-cols-2 mt-2 gap-y-1">
-                <dt class="text-blue-600 text-[22px] font-bold">週1回</dt>
-                <dd></dd>
-                <dt class="px-2 text-gray-900 text-[22px] font-bold">数学</dt>
-                <dd class="text-right text-red-500 text-[22px] font-bold">
-                  ¥12,100〜
-                </dd>
-                <dt class="text-blue-600 text-[22px] font-bold">週2回</dt>
-                <dd></dd>
                 <dt class="px-2 text-gray-900 text-[22px] font-bold">5科目</dt>
                 <dd class="text-right text-red-500 text-[22px] font-bold">
                   ¥20,900〜
@@ -1082,6 +1084,60 @@
             </div>
           </div>
           <!-- #endregion 小学生コース -->
+
+
+    <!-- #region section 料金グラフ-->
+
+    <section class="w-full max-w-[800px] mx-auto px-4 py-6">
+      <!-- 上：回数チップ -->
+      <div class="flex justify-center gap-11 mb-6">
+        <span
+          class="inline-block border-2 border-lime-500 text-lime-600 font-bold rounded-full px-5 py-1"
+          >週1回</span
+        >
+        <span
+          class="inline-block border-2 border-lime-500 text-lime-600 font-bold rounded-full px-5 py-1"
+          >週2回</span
+        >
+        <span
+          class="inline-block border-2 border-lime-500 text-lime-600 font-bold rounded-full px-5 py-1"
+          >週4回</span
+        >
+      </div>
+
+      <!-- 下：料金と棒グラフ風 -->
+      <div class="grid grid-cols-3 gap-8 text-center items-end">
+        <!-- 週1回 -->
+        <div class="flex flex-col items-center">
+          <div class="text-red-500 font-bold text-xl mb-2">¥12,100〜</div>
+          <div class="w-24 md:w-28 h-24 bg-lime-500/30"></div>
+          <!-- 棒（低） -->
+          <div class="w-28 h-[2px] bg-gray-700 my-2"></div>
+          <!-- ベースライン -->
+          <div class="text-gray-900 font-semibold">数学</div>
+        </div>
+
+        <!-- 週2回 -->
+        <div class="flex flex-col items-center">
+          <div class="text-red-500 font-bold text-xl mb-2">¥20,900〜</div>
+          <div class="w-24 md:w-28 h-40 bg-lime-500/30"></div>
+          <!-- 棒（中） -->
+          <div class="w-28 h-[2px] bg-gray-700 my-2"></div>
+          <div class="text-blue-500 font-bold">5教科</div>
+        </div>
+
+        <!-- 週4回 -->
+        <div class="flex flex-col items-center">
+          <div class="text-gray-900 font-bold text-lg mb-2">¥27,500〜</div>
+          <div class="w-24 md:w-28 h-56 bg-lime-500/30"></div>
+          <!-- 棒（高） -->
+          <div class="w-28 h-[2px] bg-gray-700 my-2"></div>
+          <div class="text-blue-500 font-bold">5教科</div>
+        </div>
+      </div>
+    </section>
+    <!-- #endregion section 料金グラフ-->
+
 
           <!-- #region 全体注意書き -->
           <div class="px-3 py-3 mt-2 bg-white rounded-lg max-w-read">
