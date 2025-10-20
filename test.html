@@ -541,7 +541,7 @@
       <!-- #region section 7つの理由 -->
       <section
         id="7つの理由"
-        class="mt-32 md:mt-40 relative w-full max-w-[1000px] mx-auto  p-8"
+        class="mt-32 md:mt-40 relative w-full max-w-[1000px] mx-auto p-8"
       >
         <!-- 飾り文字 -->
         <div class="relative max-w-[700px] mx-auto">
@@ -554,6 +554,15 @@
             decoding="async"
           />
         </div>
+        <!-- タイトル -->
+        <div>
+          <h2
+            class="mt-4 text-gray-900 font-bold text-xl md:text-3xl max-w-[700px] mx-auto mb-4"
+          >
+            成果を生む7つの理由
+          </h2>
+        </div>
+
         <!-- ====== 1 ====== -->
         <article class="acc-item border bg-white overflow-hidden">
           <button
@@ -569,14 +578,25 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
-          <div id="panel-01" class="panel px-4 pb-4">
-            <div class="max-w-[700px] mx-auto px-4">
-              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">効率的でムラのない指導</h2>
-              <p class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed">
-                <p>最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。</p>
-                <p>講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。</p>
+          <div
+            id="panel-01"
+            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
+          >
+            <div class="max-w-[700px] mx-auto">
+              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">
+                効率的でムラのない指導
+              </h2>
+              <div
+                class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed space-y-2"
+              >
+                <p>
+                  最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
+                </p>
+                <p>
+                  講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
+                </p>
                 <p>「わかるまで」丁寧にサポートします。</p>
-              </p>
+              </div>
             </div>
           </div>
         </article>
@@ -590,22 +610,46 @@
           >
             <img
               src="pics/toku02.jpeg"
-              alt="理由2のイメージ"
+              alt="toku02"
               loading="lazy"
               decoding="async"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
-          <div id="panel-02" class="panel px-4 pb-4">
-            <h2 class="mt-4 text-lime-600 font-bold text-lg">
-              理由2：個別最適のカリキュラム
-            </h2>
-            <p class="mt-2 text-gray-900 leading-relaxed">
-              学年・得意不得意に合わせて進度と問題レベルを最適化します。
-            </p>
+          <div
+            id="panel-02"
+            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
+          >
+            <div class="max-w-[700px] mx-auto">
+              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">
+                効率的でムラのない指導
+              </h2>
+              <div
+                class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed space-y-2"
+              >
+                <p>
+                  最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
+                </p>
+                <p>
+                  講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
+                </p>
+                <p>「わかるまで」丁寧にサポートします。</p>
+              </div>
+            </div>
           </div>
         </article>
 
+        <script>
+          document.querySelectorAll(".acc-trigger").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const panel = btn.nextElementSibling;
+              const expanded = btn.getAttribute("aria-expanded") === "true";
+              btn.setAttribute("aria-expanded", !expanded);
+              panel.classList.toggle("max-h-0");
+              panel.classList.toggle("max-h-[1000px]"); // 開いたときの最大高さを十分に大きく
+            });
+          });
+        </script>
         <!-- ====== 3 ====== -->
         <article class="acc-item border bg-white overflow-hidden">
           <button
@@ -615,19 +659,32 @@
           >
             <img
               src="pics/toku03.jpeg"
-              alt="理由3のイメージ"
+              alt="toku03"
               loading="lazy"
               decoding="async"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
-          <div id="panel-03" class="panel px-4 pb-4">
-            <h2 class="mt-4 text-lime-600 font-bold text-lg">
-              理由3：週間2回の学習習慣
-            </h2>
-            <p class="mt-2 text-gray-900 leading-relaxed">
-              習慣化が成果の近道。来塾日を固定し、ペースを崩しません。
-            </p>
+          <div
+            id="panel-03"
+            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
+          >
+            <div class="max-w-[700px] mx-auto">
+              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">
+                効率的でムラのない指導
+              </h2>
+              <div
+                class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed space-y-2"
+              >
+                <p>
+                  最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
+                </p>
+                <p>
+                  講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
+                </p>
+                <p>「わかるまで」丁寧にサポートします。</p>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -640,19 +697,32 @@
           >
             <img
               src="pics/toku04.jpeg"
-              alt="理由4のイメージ"
+              alt="toku04"
               loading="lazy"
               decoding="async"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
-          <div id="panel-04" class="panel px-4 pb-4">
-            <h2 class="mt-4 text-lime-600 font-bold text-lg">
-              理由4：座席は毎日最適配置
-            </h2>
-            <p class="mt-2 text-gray-900 leading-relaxed">
-              集中できる距離感・動線を重視。日ごとに最善の座席を設計します。
-            </p>
+          <div
+            id="panel-04"
+            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
+          >
+            <div class="max-w-[700px] mx-auto">
+              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">
+                効率的でムラのない指導
+              </h2>
+              <div
+                class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed space-y-2"
+              >
+                <p>
+                  最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
+                </p>
+                <p>
+                  講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
+                </p>
+                <p>「わかるまで」丁寧にサポートします。</p>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -665,19 +735,32 @@
           >
             <img
               src="pics/toku05.jpeg"
-              alt="理由5のイメージ"
+              alt="toku05"
               loading="lazy"
               decoding="async"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
-          <div id="panel-05" class="panel px-4 pb-4">
-            <h2 class="mt-4 text-lime-600 font-bold text-lg">
-              理由5：数学・英語に特化
-            </h2>
-            <p class="mt-2 text-gray-900 leading-relaxed">
-              主要2教科を深く。受験・定期テストで伸びを実感できます。
-            </p>
+          <div
+            id="panel-05"
+            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
+          >
+            <div class="max-w-[700px] mx-auto">
+              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">
+                効率的でムラのない指導
+              </h2>
+              <div
+                class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed space-y-2"
+              >
+                <p>
+                  最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
+                </p>
+                <p>
+                  講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
+                </p>
+                <p>「わかるまで」丁寧にサポートします。</p>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -690,19 +773,32 @@
           >
             <img
               src="pics/toku06.jpeg"
-              alt="理由6のイメージ"
+              alt="toku06"
               loading="lazy"
               decoding="async"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
-          <div id="panel-06" class="panel px-4 pb-4">
-            <h2 class="mt-4 text-lime-600 font-bold text-lg">
-              理由6：2時間25分の集中設計
-            </h2>
-            <p class="mt-2 text-gray-900 leading-relaxed">
-              始業は15:50から30分刻み、最終18:50開始。無理なく高密度の学習時間を確保。
-            </p>
+          <div
+            id="panel-06"
+            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
+          >
+            <div class="max-w-[700px] mx-auto">
+              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">
+                効率的でムラのない指導
+              </h2>
+              <div
+                class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed space-y-2"
+              >
+                <p>
+                  最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
+                </p>
+                <p>
+                  講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
+                </p>
+                <p>「わかるまで」丁寧にサポートします。</p>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -715,19 +811,32 @@
           >
             <img
               src="pics/toku07.jpeg"
-              alt="理由7のイメージ"
+              alt="toku07"
               loading="lazy"
               decoding="async"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
-          <div id="panel-07" class="panel px-4 pb-4">
-            <h2 class="mt-4 text-lime-600 font-bold text-lg">
-              理由7：データで可視化・改善
-            </h2>
-            <p class="mt-2 text-gray-900 leading-relaxed">
-              スプレッドシート＋Pythonで成績推移を分析。次の一手が明確になります。
-            </p>
+          <div
+            id="panel-07"
+            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
+          >
+            <div class="max-w-[700px] mx-auto">
+              <h2 class="mt-4 text-gray-900 font-semibold text-xl md:text-3xl">
+                効率的でムラのない指導
+              </h2>
+              <div
+                class="mt-2 text-gray-900 text-lg md:text-2xl leading-relaxed space-y-2"
+              >
+                <p>
+                  最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
+                </p>
+                <p>
+                  講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
+                </p>
+                <p>「わかるまで」丁寧にサポートします。</p>
+              </div>
+            </div>
           </div>
         </article>
       </section>
@@ -2176,6 +2285,16 @@
           });
         });
       })();
+
+      document.querySelectorAll(".acc-trigger").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const panel = btn.nextElementSibling;
+          const expanded = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", !expanded);
+          panel.classList.toggle("max-h-0");
+          panel.classList.toggle("max-h-[1000px]"); // 開いたときの最大高さを十分に大きく
+        });
+      });
     </script>
     <!-- #endregion script 7つの理由 -->
   </body>
