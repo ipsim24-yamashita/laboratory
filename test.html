@@ -269,83 +269,13 @@
         </header>
 
         <!-- スライド用コンテナ -->
-        <div class="absolute inset-0 z-0" id="hero-slides">
+        <div class="absolute inset-0 z-0" id="hero">
           <img
-            src="pics/hero.jpg"
+            src="pics/main.jpg"
             alt=""
             fetchpriority="high"
             decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/room01.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/room02.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/room03.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/room04.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/room05.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/room06.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/room07.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/booth.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/door.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
-          />
-          <img
-            src="pics/entrance.jpg"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            class="slide absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
+            class="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-[1000ms] will-change-[opacity] pointer-events-none"
           />
 
           <!-- 下層の黒グラデーション（文字を読みやすく） -->
@@ -358,8 +288,9 @@
             class="absolute inset-0 bg-gradient-to-b from-white/70 via-white/20 to-white/70 backdrop-blur-[1px] md:backdrop-blur-[2px] pointer-events-none"
           ></div>
         </div>
+
         <!-- テキストエリア -->
-        <div class="relative z-10 px-4 mx-auto text-center py-14">
+        <div class="relative z-10 px-20 mx-auto text-left py-14">
           <h1 class="font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
             <span
               class="text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-3xl text-white"
@@ -383,74 +314,6 @@
         </div>
       </section>
       <!-- #endregion section hero -->
-
-      <!-- #region script hero IIFE slider -->
-      <script>
-        (() => {
-          // 動作制御：モーションを控える設定の人にはアニメ無効
-          const reduce = window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-          ).matches;
-          if (reduce) return;
-
-          const slides = Array.from(
-            document.querySelectorAll("#hero-slides .slide")
-          );
-          if (slides.length < 2) return;
-
-          function preload(img) {
-            return new Promise((resolve) => {
-              if (img.complete && img.naturalWidth > 0) return resolve();
-              img.addEventListener("load", resolve, { once: true });
-              img.addEventListener("error", resolve, { once: true });
-            });
-          }
-
-          let timer = null;
-          let idx = 0;
-
-          function showNext() {
-            const cur = slides[idx];
-            const next = slides[(idx + 1) % slides.length];
-
-            if (!(next.complete && next.naturalWidth > 0)) {
-              preload(next).then(() => fade(cur, next));
-            } else {
-              fade(cur, next);
-            }
-          }
-
-          function fade(cur, next) {
-            next.classList.replace("opacity-0", "opacity-100");
-            requestAnimationFrame(() => {
-              cur.classList.replace("opacity-100", "opacity-0");
-            });
-            idx = (idx + 1) % slides.length;
-          }
-
-          function start() {
-            if (timer) return;
-            timer = setInterval(showNext, 4000);
-          }
-
-          function stop() {
-            if (!timer) return;
-            clearInterval(timer);
-            timer = null;
-          }
-
-          Promise.all([preload(slides[0]), preload(slides[1])]).then(start);
-
-          const obs = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((e) => (e.isIntersecting ? start() : stop()));
-            },
-            { threshold: 0.1 }
-          );
-          obs.observe(document.getElementById("hero-slides"));
-        })();
-      </script>
-      <!-- #endregion script hero IIFE slider -->
 
       <!-- #region section interlink-->
       <section
