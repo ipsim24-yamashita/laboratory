@@ -1384,6 +1384,201 @@
       </section>
       <!-- #endregion section 指導科目 -->
 
+      <!-- #region section コース・料金（カード＆グリッド版） -->
+      <section
+        id="course"
+        class="reveal fade-up w-full max-w-[800px] mx-auto px-4 mb-12 bg-white"
+      >
+        <!-- セクション枠 -->
+        <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
+          <!-- 見出し -->
+          <h2
+            class="flex items-center gap-2 text-lime-600 text-2xl md:text-3xl font-bold justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 2v20M2 12h20" />
+            </svg>
+            コース・料金
+          </h2>
+
+          <!-- 説明 -->
+          <p
+            class="mt-2 text-gray-900 text-sm md:text-lg leading-relaxed text-center"
+          >
+            授業料は税込・教材費等別（月額）／学年・通塾回数・時期により変動します。目安としてご確認ください。
+          </p>
+
+          <!-- コースカード：2枚横並び（md〜） -->
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 中学生コース -->
+            <article
+              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border border-lime-200"
+            >
+              <header
+                class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
+              >
+                <svg
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 4l8 4-8 4-8-4 8-4z" />
+                  <path d="M4 12l8 4 8-4" />
+                  <path d="M4 16l8 4 8-4" />
+                </svg>
+                <h3 class="text-xl md:text-2xl font-bold">中学生コース</h3>
+              </header>
+              <div class="px-4 pb-4">
+                <p
+                  class="text-gray-800 text-sm md:text-base leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3"
+                >
+                  5科目の基礎から応用まで。学校内容の定着から難関高校入試対策まで対応しています。
+                </p>
+                <!-- 料金 -->
+                <dl class="mt-3 text-gray-900">
+                  <div class="grid grid-cols-2 gap-y-1 items-end">
+                    <dt
+                      class="mt-3 px-1 text-blue-600 text-lg md:text-xl font-bold"
+                    >
+                      週1回（数学）
+                    </dt>
+                    <dd
+                      class="mt-3 text-right text-red-600 text-xl md:text-2xl font-bold"
+                    >
+                      ¥12,100〜
+                    </dd>
+
+                    <dt
+                      class="mt-3 px-1 text-blue-600 text-lg md:text-xl font-bold"
+                    >
+                      週2回（5科目）
+                    </dt>
+                    <dd
+                      class="mt-3 text-right text-red-600 text-xl md:text-2xl font-bold"
+                    >
+                      ¥20,900〜
+                    </dd>
+
+                    <dt class="mt-3 px-1 text-gray-900">週4回（5科目）</dt>
+                    <dd class="mt-3 text-right">¥27,500〜</dd>
+                  </div>
+                </dl>
+                <p
+                  class="mt-3 text-gray-700 text-xs md:text-sm leading-relaxed"
+                >
+                  ※ 週2回以上の受講で週末テスト対策に参加できます
+                </p>
+              </div>
+            </article>
+
+            <!-- 小学生コース -->
+            <article
+              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border border-lime-200"
+            >
+              <header
+                class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
+              >
+                <svg
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 4l8 4-8 4-8-4 8-4z" />
+                  <path d="M4 12l8 4 8-4" />
+                  <path d="M4 16l8 4 8-4" />
+                </svg>
+                <h3 class="text-xl md:text-2xl font-bold">小学生コース</h3>
+              </header>
+              <div class="px-4 pb-4">
+                <p
+                  class="text-gray-800 text-sm md:text-base leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3"
+                >
+                  算数・英語・国語の基礎から応用まで。学校内容の定着から中学受験対策まで幅広く対応しています。
+                </p>
+
+                <!-- 料金（2ブロック） -->
+                <div class="mt-3 space-y-4">
+                  <!-- 入学準備 -->
+                  <section>
+                    <h4
+                      class="text-gray-900 text-base md:text-lg font-semibold underline underline-offset-4"
+                    >
+                      中学
+                      <span class="font-bold text-lg md:text-xl">入学準備</span>
+                      講座
+                    </h4>
+                    <dl
+                      class="mt-2 grid grid-cols-2 gap-y-1 items-end text-gray-900"
+                    >
+                      <dt class="font-bold text-blue-600">週1回（算数）</dt>
+                      <dd class="font-bold text-right text-red-600">
+                        ¥6,600〜
+                      </dd>
+                      <dt class="font-bold text-blue-600">週2回（算/英）</dt>
+                      <dd class="font-bold text-right text-red-600">
+                        ¥12,100〜
+                      </dd>
+                      <dt class="">週2回（算/国）</dt>
+                      <dd class="text-right">¥12,100〜</dd>
+                    </dl>
+                  </section>
+
+                  <!-- 受験特別 -->
+                  <section>
+                    <h4
+                      class="text-gray-900 text-base md:text-lg font-semibold underline underline-offset-4"
+                    >
+                      <span class="font-bold text-lg md:text-xl">中学受験</span>
+                      特別講座
+                    </h4>
+                    <dl
+                      class="mt-2 grid grid-cols-2 gap-y-1 items-end text-gray-900"
+                    >
+                      <dt>週2回（算数）</dt>
+                      <dd class="text-right">¥20,900〜</dd>
+                      <dt>週2回（理科）</dt>
+                      <dd class="text-right">¥20,900〜</dd>
+                      <dt>週4回（算/理）</dt>
+                      <dd class="text-right">¥27,500〜</dd>
+                    </dl>
+                  </section>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- 注意書き（共通） -->
+          <div
+            class="px-4 py-3 mt-6 bg-white rounded-xl border border-gray-200"
+          >
+            <ul
+              class="text-xs md:text-sm text-gray-900 list-disc pl-5 space-y-1"
+            >
+              <li>入会金・教材費・模試代が別途かかります</li>
+              <li>季節講習（春・夏・冬）は別途ご案内します</li>
+              <li>兄弟姉妹割引があります（詳細はお問い合わせください）</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <!-- #endregion section コース・料金（カード＆グリッド版） -->
+
       <!-- #region section コース・料金 -->
       <section
         id="course"
@@ -1415,150 +1610,158 @@
           </div>
 
           <!-- #region 中学生コース -->
-          <!-- #region タイトル中学生-->
-          <h3
-            class="mt-8 flex items-center max-w-[600px] mx-auto gap-2 text-lime-600 text-2xl md:text-3xl font-bold"
-          >
-            <svg
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+          <div class="reveal fade-up">
+            <!-- #region タイトル中学生-->
+            <h3
+              class="mt-8 flex items-center max-w-[600px] mx-auto gap-2 text-lime-600 text-2xl md:text-3xl font-bold"
             >
-              <!-- 上段 -->
-              <path d="M12 4l8 4-8 4-8-4 8-4z" />
-              <!-- 中段 -->
-              <path d="M4 12l8 4 8-4" />
-              <!-- 下段（奥行き） -->
-              <path d="M4 16l8 4 8-4" />
-            </svg>
-            中学生コース
-          </h3>
-          <!-- #endregion タイトル中学生-->
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <!-- 上段 -->
+                <path d="M12 4l8 4-8 4-8-4 8-4z" />
+                <!-- 中段 -->
+                <path d="M4 12l8 4 8-4" />
+                <!-- 下段（奥行き） -->
+                <path d="M4 16l8 4 8-4" />
+              </svg>
+              中学生コース
+            </h3>
+            <!-- #endregion タイトル中学生-->
 
-          <!-- #region 緑フレーム -->
-          <div
-            class="mt-4 text-gray-900 text-sm md:text-lg leading-relaxed max-w-[600px] mx-auto bg-lime-400/10 rounded-lg px-3 py-3"
-          >
-            <!-- #region 中学事前説明 -->
-            <div>
-              5科目の基礎から応用まで
-              学校内容の定着から難関高校入試対策まで対応しています
-            </div>
-            <!-- #endregion 中学事前説明 -->
-
-            <!-- #region 中学料金表 -->
-            <div>
+            <!-- #region 緑フレーム -->
+            <div
+              class="mt-4 text-gray-900 text-sm md:text-lg leading-relaxed max-w-[600px] mx-auto bg-lime-400/10 rounded-lg px-3 py-3"
+            >
+              <!-- #region 中学事前説明 -->
               <div>
-                <dl class="grid grid-cols-2 mt-2 gap-y-1">
-                  <dt
-                    class="mt-4 px-2 text-blue-600 text-lg md:text-2xl font-bold"
-                  >
-                    週1回 (数学)
+                5科目の基礎から応用まで
+                学校内容の定着から難関高校入試対策まで対応しています
+              </div>
+              <!-- #endregion 中学事前説明 -->
+
+              <!-- #region 中学料金表 -->
+              <div>
+                <div>
+                  <dl class="grid grid-cols-2 mt-2 gap-y-1">
+                    <dt
+                      class="mt-4 px-2 text-blue-600 text-lg md:text-2xl font-bold"
+                    >
+                      週1回 (数学)
+                    </dt>
+                    <dd
+                      class="mt-4 text-right text-red-600 text-xl md:text-3xl font-bold"
+                    >
+                      ¥12,100〜
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <dl class="grid grid-cols-2 mt-2 gap-y-1">
+                <dt
+                  class="mt-4 px-2 text-blue-600 text-lg md:text-2xl font-bold"
+                >
+                  週2回 (5科目)
+                </dt>
+                <dd
+                  class="mt-4 text-right text-red-600 text-xl md:text-3xl font-bold"
+                >
+                  ¥20,900〜
+                </dd>
+                <dt class="mt-4 px-2 text-gray-900">週4回 (5科目)</dt>
+                <dd class="mt-4 text-right">¥27,500〜</dd>
+              </dl>
+              <p
+                class="mt-4 text-gray-900 text-xs md:text-base leading-relaxed"
+              >
+                ※ 週2回以上の受講で週末テスト対策に参加できます
+              </p>
+              <!-- #endregion 中学料金表 -->
+            </div>
+            <!-- #endregion 緑フレーム -->
+
+            <!-- #endregion 中学生コース -->
+          </div>
+
+          <!-- #region 小学生コース -->
+          <div class="reveal fade-up">
+            <!-- #region タイトル小学生 -->
+            <h3
+              class="mt-8 flex items-center max-w-[600px] mx-auto gap-2 text-lime-600 text-2xl md:text-3xl font-bold"
+            >
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <!-- 上段 -->
+                <path d="M12 4l8 4-8 4-8-4 8-4z" />
+                <!-- 中段 -->
+                <path d="M4 12l8 4 8-4" />
+                <!-- 下段（奥行き） -->
+                <path d="M4 16l8 4 8-4" />
+              </svg>
+              小学生コース
+            </h3>
+            <!-- #endregion タイトル小学生 -->
+
+            <!-- 小学2段カラム -->
+            <div
+              class="mt-2 text-gray-900 text-sm md:text-lg leading-relaxed max-w-[600px] mx-auto bg-lime-400/10 rounded-lg px-3 py-3"
+            >
+              <!-- 小学事前説明 -->
+              <div>
+                算数・英語・国語の基礎から応用まで
+                学校内容の定着から中学受験対策まで幅広く対応しています
+              </div>
+              <!-- 小学料金表 -->
+              <div>
+                <dl class="mt-2 text-base md:text-xl grid grid-cols-2 gap-y-1">
+                  <dt class="text-gray-900 underline">
+                    中学<span
+                      class="text-gray-900 text-lg md:text-2xl font-bold"
+                      >入学準備</span
+                    >講座
                   </dt>
-                  <dd
-                    class="mt-4 text-right text-red-600 text-xl md:text-3xl font-bold"
-                  >
-                    ¥12,100〜
-                  </dd>
+                  <dd></dd>
+                  <dt class="font-bold text-blue-600">週1回（算数）</dt>
+                  <dd class="font-bold text-right text-red-600">¥6,600〜</dd>
+                  <dt class="font-bold text-blue-600">週2回（算/英）</dt>
+                  <dd class="font-bold text-right text-red-600">¥12,100〜</dd>
+                  <dt class="text-gray-900">週2回（算/国）</dt>
+                  <dd class="text-right">¥12,100〜</dd>
+
+                  <dt class="mt-2 text-gray-900 underline">
+                    <span class="text-gray-900 text-lg md:text-2xl font-bold"
+                      >中学受験</span
+                    >特別講座
+                  </dt>
+                  <dd></dd>
+                  <dt class="text-gray-900">週2回（算数）</dt>
+                  <dd class="text-right">¥20,900〜</dd>
+                  <dt class="text-gray-900">週2回（理科）</dt>
+                  <dd class="text-right">¥20,900〜</dd>
+                  <dt class="text-gray-900">週4回（算/理）</dt>
+                  <dd class="text-right">¥27,500〜</dd>
                 </dl>
               </div>
             </div>
-            <dl class="grid grid-cols-2 mt-2 gap-y-1">
-              <dt class="mt-4 px-2 text-blue-600 text-lg md:text-2xl font-bold">
-                週2回 (5科目)
-              </dt>
-              <dd
-                class="mt-4 text-right text-red-600 text-xl md:text-3xl font-bold"
-              >
-                ¥20,900〜
-              </dd>
-              <dt class="mt-4 px-2 text-gray-900">週4回 (5科目)</dt>
-              <dd class="mt-4 text-right">¥27,500〜</dd>
-            </dl>
-            <p class="mt-4 text-gray-900 text-xs md:text-base leading-relaxed">
-              ※ 週2回以上の受講で週末テスト対策に参加できます
-            </p>
-            <!-- #endregion 中学料金表 -->
+            <!-- #endregion 小学生コース -->
           </div>
-          <!-- #endregion 緑フレーム -->
-
-          <!-- #endregion 中学生コース -->
-
-          <!-- #region 小学生コース -->
-
-          <!-- #region タイトル小学生 -->
-          <h3
-            class="mt-8 flex items-center max-w-[600px] mx-auto gap-2 text-lime-600 text-2xl md:text-3xl font-bold"
-          >
-            <svg
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <!-- 上段 -->
-              <path d="M12 4l8 4-8 4-8-4 8-4z" />
-              <!-- 中段 -->
-              <path d="M4 12l8 4 8-4" />
-              <!-- 下段（奥行き） -->
-              <path d="M4 16l8 4 8-4" />
-            </svg>
-            小学生コース
-          </h3>
-          <!-- #endregion タイトル小学生 -->
-
-          <!-- 小学2段カラム -->
-          <div
-            class="mt-2 text-gray-900 text-sm md:text-lg leading-relaxed max-w-[600px] mx-auto bg-lime-400/10 rounded-lg px-3 py-3"
-          >
-            <!-- 小学事前説明 -->
-            <div>
-              算数・英語・国語の基礎から応用まで
-              学校内容の定着から中学受験対策まで幅広く対応しています
-            </div>
-            <!-- 小学料金表 -->
-            <div>
-              <dl class="mt-2 text-base md:text-xl grid grid-cols-2 gap-y-1">
-                <dt class="text-gray-900 underline">
-                  中学<span class="text-gray-900 text-lg md:text-2xl font-bold"
-                    >入学準備</span
-                  >講座
-                </dt>
-                <dd></dd>
-                <dt class="font-bold text-blue-600">週1回（算数）</dt>
-                <dd class="font-bold text-right text-red-600">¥6,600〜</dd>
-                <dt class="font-bold text-blue-600">週2回（算/英）</dt>
-                <dd class="font-bold text-right text-red-600">¥12,100〜</dd>
-                <dt class="text-gray-900">週2回（算/国）</dt>
-                <dd class="text-right">¥12,100〜</dd>
-
-                <dt class="mt-2 text-gray-900 underline">
-                  <span class="text-gray-900 text-lg md:text-2xl font-bold"
-                    >中学受験</span
-                  >特別講座
-                </dt>
-                <dd></dd>
-                <dt class="text-gray-900">週2回（算数）</dt>
-                <dd class="text-right">¥20,900〜</dd>
-                <dt class="text-gray-900">週2回（理科）</dt>
-                <dd class="text-right">¥20,900〜</dd>
-                <dt class="text-gray-900">週4回（算/理）</dt>
-                <dd class="text-right">¥27,500〜</dd>
-              </dl>
-            </div>
-          </div>
-          <!-- #endregion 小学生コース -->
 
           <!-- #region 全体注意書き -->
           <div class="px-3 py-3 mt-2 bg-white rounded-lg max-w-[600px] mx-auto">
