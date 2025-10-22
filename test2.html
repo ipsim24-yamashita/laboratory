@@ -4,6 +4,64 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
   </head>
-  <body></body>
+  <body>
+    <!-- #region section hero -->
+<section
+  id="hero"
+  class="relative mx-auto max-w-[800px] overflow-hidden text-white"
+>
+  <!-- アスペクト比を画面サイズごとに指定 -->
+  <div class="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[21/9]">
+    <!-- 背景画像 -->
+    <img
+      src="pics/main.jpg"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+      class="absolute inset-0 w-full h-full object-cover"
+      width="1920"
+      height="1080"
+    />
+    <!-- 半透明レイヤー -->
+    <div class="absolute inset-0 bg-white/50"></div>
+
+    <!-- ロゴ -->
+    <header
+      class="absolute top-0 left-0 z-20 flex items-center justify-between w-full px-4 pt-4"
+    >
+      <img
+        src="pics/logo.png"
+        alt="個別進学塾ipsim ロゴ"
+        class="h-auto w-28 md:w-40 drop-shadow-lg"
+      />
+    </header>
+
+    <!-- テキストエリア -->
+    <div
+      class="absolute top-[10%] left-[6%] sm:top-[20%] sm:left-[10%] z-10"
+    >
+      <h1 class="font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+        <span
+          class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-lime-600 font-bold"
+        >
+          一人ひとりの<br class="sm:hidden" />“できる喜び” を大切にする<br />
+        </span>
+        <span
+          class="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white text-shadow-lime"
+          >個別進学塾 </span
+        ><span
+          class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white text-shadow-lime"
+          >ipsim</span
+        >
+      </h1>
+    </div>
+  </div>
+</section>
+<!-- #endregion section hero -->
+    
+    
+</body>
 </html>
