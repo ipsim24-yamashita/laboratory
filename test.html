@@ -275,19 +275,21 @@
 
         <!-- テキストエリア -->
         <div
-          class="absolute top-[72px] sm:top-[80px] md:top-[160px] xl:top-[240px] left-[80px] sm:left-1/5 md:left-[120px] xl:left-[80px] z-10"
+          class="absolute top-[72px] sm:top-[140px] md:top-[160px] lg:top-[200px] xl:top-[240px] left-[80px] sm:left-[80px] md:left-[120px] lg:left-[100px] xl:left-[80px] z-10"
         >
           <h1 class="font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
-            <span class="text-base sm:text-xl md:text-lg xl:text-xl text-white">
+            <span
+              class="text-base sm:text-sm md:text-base lg:text-lg xl:text-xl text-white"
+            >
               一人ひとりの<br class="sm:hidden" />“できる喜び”<br
                 class="sm:hidden"
               />を大切にする<br />
             </span>
             <span
-              class="text-2xl sm:text-3xl md:text-4xl xl:text-6xl text-white text-shadow-lime"
+              class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white text-shadow-lime"
               >個別進学塾 <br class="sm:hidden" /></span
             ><span
-              class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl text-white text-shadow-lime"
+              class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white text-shadow-lime"
               >ipsim</span
             >
           </h1>
@@ -372,7 +374,7 @@
             個別進学塾 ipsim (イプシム)
           </h2>
           <p class="mt-2 text-lime-600 text-base md:text-lg font-semibold">
-            川西市・猪名川町の個別進学塾
+            川西市・猪名川町の１中学専門塾
           </p>
         </div>
 
@@ -382,7 +384,14 @@
           <div
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
-            <img src="pics/hero2.jpg" alt="hero" class="object-cover" />
+            <div class="relative">
+              <img
+                src="pics/hero2.jpg"
+                alt="hero"
+                class="object-cover w-full h-auto"
+              />
+              <div class="absolute inset-0 bg-white/40"></div>
+            </div>
             <div class="p-4">
               <h3
                 class="text-lg lg:text-2xl font-bold text-lime-700 text-center mb-2"
@@ -391,7 +400,7 @@
               </h3>
               <div class="text-center">
                 <div
-                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left"
+                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left font-semibold"
                 >
                   <p>
                     無理なく、でも確かに伸びる。 学校の授業が "わかる"
@@ -407,7 +416,7 @@
       <!-- #endregion section イントロコメント -->
 
       <!-- #region section 猪名川体験会-->
-      <section class="mt-32 md:mt-40 w-full bg-white mb-12 relative">
+      <section class="mt-24 md:mt-40 w-full bg-white mb-12 md:mb-20 relative">
         <!-- 飾り文字（左上固定） -->
         <div class="relative max-w-[800px] mx-auto">
           <img
@@ -455,7 +464,7 @@
             />
             <div class="p-4">
               <h3
-                class="text-lg lg:text-2xl font-bold text-lime-700 text-center mb-2"
+                class="text-lg md:text-xl font-bold text-lime-700 text-center mb-2"
               >
                 私たちが大切にしていること
               </h3>
@@ -1075,11 +1084,8 @@
       </section>
       <!-- #endregion section 7つの理由 -->
 
-      <!-- #region section 安心 -->
-      <section
-        id="安心"
-        class="reveal fade-up mt-32 md:mt-40 relative w-full max-w-[1000px] mx-auto bg-lime-100 p-8"
-      >
+      <!-- #region section 安心(改良) -->
+      <section class="reveal fade-up py-8 mt-24 md:mt-40 bg-white">
         <!-- 飾り文字 -->
         <img
           src="pics/comfort.jpeg"
@@ -1089,102 +1095,205 @@
           loading="lazy"
           decoding="async"
         />
-        <!-- 枠線と枠エリア -->
-        <div
-          class="flex-col items-center justify-center mx-auto border-2 border-lime-600/50 bg-white max-w-[700px] p-4 md:p-6"
-        >
-          <!-- 項目1 -->
-          <h2
-            class="mt-4 md:mt-8 max-w-[600px] mx-auto text-2xl md:text-4xl text-lime-600 font-bold mb-4"
-          >
-            安心して長く続けられる
+        <!-- 見出し -->
+        <div class="text-center mb-8">
+          <h2 class="text-lg md:text-xl font-bold text-lime-600">
+            安全で快適な環境づくり
           </h2>
-          <!-- 内容 -->
+        </div>
+
+        <!-- カードグリッド -->
+        <div class="grid grid-cols-1 gap-8 max-w-[600px] mx-auto px-4">
+          <!-- カード1 -->
           <div
-            class="flex flex-col items-center justify-center mx-auto text-gray-900 text-lg md:text-2xl leading-relaxed max-w-[600px]"
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
-            <!-- 項目1 -->
             <img
               src="pics/safe01.jpg"
-              alt="pic01"
-              class="mt-4 block w-[400px] h-auto object-cover mb-4"
+              alt="hero"
+              class="w-full h-60 object-contain"
             />
-            <div class="text-left">
-              <p>授業の「開始」「終了」をメール / LINE でお知らせします</p>
-              <p class="mt-2">学習内容と小テスト結果もお知らせします</p>
-            </div>
-
-            <!-- 項目2 -->
-            <img
-              src="pics/safe02.jpg"
-              alt="pic01"
-              class="mt-12 block w-[400px] h-auto object-cover mb-4"
-            />
-            <div class="text-left">
-              <p>年2回の懇談会でお子さまのご家庭での様子をお聞きします</p>
-              <p class="mt-2">
-                現在の学習状況、模擬試験の結果分析、入試の見通しについて詳しくお伝えします
-              </p>
-            </div>
-
-            <!-- 項目3 -->
-            <img
-              src="pics/safe04.jpg"
-              alt="pic01"
-              class="mt-12 block w-[400px] h-auto object-cover mb-4"
-            />
-            <div class="text-left">
-              <p>教室予定表を保護者の スマホ / タブレット で確認できます</p>
-              <p class="mt-2 mb-8">
-                一部のオンライン教材はご家庭でも利用できます
-              </p>
+            <div class="p-4">
+              <div class="text-center">
+                <div
+                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left"
+                >
+                  <p>
+                    授業の「開始」「終了」をメールと LINE で通知。
+                    <br
+                      class="hidden md:block"
+                    />学習内容と小テスト結果もお知らせします。
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-      <!-- #endregion section 安心 -->
-
-      <!-- #region section デザインテンプレート -->
-      <section
-        id="template"
-        class="reveal fade-up relative w-full max-w-[800px] mx-auto px-4 mb-8 bg-white"
-      >
-        <div class="space-y-4">
-          <!-- 枠線：lime-600, 枠内：白 -->
-          <div class="p-4 bg-white border-2 rounded-xl border-lime-600">
-            <!-- タイトル -->
-            <h2
-              class="mt-8 flex items-center max-w-[600px] mx-auto gap-2 text-lime-600 text-2xl md:text-3xl font-bold"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M12 2v20M2 12h20" />
-              </svg>
-              タイトル
-            </h2>
-            <div
-              class="m-2 px-4 flex-col items-center justify-center mx-auto max-w-[600px] leading-relaxed text-gray-900 text-lg md:text-xl"
-            >
-              <!-- ここだけ lime-300 で塗りつぶし -->
-              <div class="mt-4 bg-lime-50 rounded-lg px-3 py-3">
-                <p class="">ここへ書く</p>
-                <p class="mt-4">ここへ書く</p>
-                <p class="mt-4">ここへ書く</p>
-                <p class="mt-4">ここへ書く</p>
-                <p class="mt-4">ここへ書く</p>
-                <p class="mt-4">ここへ書く</p>
-                <p class="mt-4">ここへ書く</p>
+          <!-- カード2 -->
+          <div
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <img
+              src="pics/safe02.jpg"
+              alt="hero"
+              class="w-full h-60 object-contain"
+            />
+            <div class="p-4">
+              <div class="text-center">
+                <div
+                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left"
+                >
+                  <p>
+                    年2回の懇談会では、ご家庭でのお子さまの様子を伺いながら、<br
+                      class="hidden md:block"
+                    />
+                    学習の進み具合や模試の結果、入試に向けた見通しを丁寧にお伝えします。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- カード3 -->
+          <div
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <img
+              src="pics/safe04.jpg"
+              alt="hero"
+              class="w-full h-60 object-contain"
+            />
+            <div class="p-4">
+              <div class="text-center">
+                <div
+                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left"
+                >
+                  <p>
+                    教室の予定表は、保護者のスマートフォンやタブレットからいつでもご確認いただけます。<br
+                      class="hidden md:block"
+                    />
+                    ご家庭でも一部のオンライン教材をご利用いただけるため、授業内容の復習やテスト前の学習にも役立ちます。
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <!-- #endregion section デザインテンプレート -->
+      <!-- #endregion section 安心(改良) -->
+      <!-- #region section CTA 1（カード2枚＋CTA下配置） -->
+      <section id="cta1" class="reveal fade-up py-8 mt-24 bg-white">
+        <!-- 見出し -->
+        <div class="text-center mb-6">
+          <h2 class="text-lg md:text-xl font-bold text-lime-600">
+            学習・進路のご相談
+          </h2>
+        </div>
+
+        <!-- 文章カード：2枚（md以上で横並び） -->
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto px-4"
+        >
+          <!-- カード1：無料相談 -->
+          <article
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <div class="p-4 sm:p-16 md:p-4">
+              <div class="flex items-start gap-3">
+                <div class="shrink-0 rounded-full bg-lime-100 p-2">
+                  <!-- chat icon -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-lime-600"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z"
+                    />
+                  </svg>
+                </div>
+                <div class="text-gray-900 text-base md:text-lg leading-relaxed">
+                  <p class="font-semibold">まずは短時間の無料相談から</p>
+                  <ul
+                    class="mt-2 list-disc pl-5 text-gray-700 text-sm md:text-base space-y-1"
+                  >
+                    <li>現状ヒアリングと課題の整理</li>
+                    <li>方向性のご提案（費用・通塾イメージ）</li>
+                    <li>ご家庭での声かけのポイント</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- カード2：無料体験 -->
+          <article
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <div class="p-4 sm:p-16 md:p-4">
+              <div class="flex items-start gap-3">
+                <div class="shrink-0 rounded-full bg-lime-100 p-2">
+                  <!-- book/plan icon -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-lime-600"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M4 19h16M4 15h16M7 11h10M10 7h4M12 3v4" />
+                  </svg>
+                </div>
+                <div class="text-gray-900 text-base md:text-lg leading-relaxed">
+                  <p class="font-semibold">無料体験で学び方を体感</p>
+                  <ul
+                    class="mt-2 list-disc pl-5 text-gray-700 text-sm md:text-base space-y-1"
+                  >
+                    <li>演習＋プロ講師の解説</li>
+                    <li>つまずきの可視化・弱点診断</li>
+                    <li>体験後に最適な学習計画をご提案</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- CTAカード：文章カードの下に単独配置（横並びにしない） -->
+        <div class="reveal fade-up max-w-[800px] mx-auto px-4 mt-6">
+          <div
+            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <div class="p-4">
+              <p
+                class="text-gray-900 text-base md:text-lg leading-relaxed text-center"
+              >
+                まずは
+                <span class="text-[#06c755] font-semibold"
+                  >LINE公式アカウント</span
+                >
+                からお気軽にご連絡ください。
+              </p>
+              <div class="mt-4 flex flex-col items-center gap-3">
+                <a
+                  href="https://lin.ee/sqkGCPT"
+                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px]"
+                  >山下教室</a
+                >
+                <a
+                  href="https://lin.ee/22k8QXA"
+                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px]"
+                  >猪名川パークプラザ教室</a
+                >
+              </div>
+              <p class="mt-3 text-center text-gray-500 text-sm">
+                ※ LINEで「体験希望」「相談希望」とお送りください。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- #endregion section CTA 1（カード2枚＋CTA下配置） -->
 
       <!-- #region section CTA 1 -->
       <section
