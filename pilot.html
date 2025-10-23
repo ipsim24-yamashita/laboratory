@@ -2506,45 +2506,8 @@
       </section>
       <!-- #endregion section mini CTA 3 -->
 
-      <!-- #region section 画面サイズ判定 -->
-      <section
-        id="screen-check"
-        class="w-full max-w-[800px] mx-auto p-4 bg-gray-100 rounded-lg shadow-md text-center font-semibold text-gray-700"
-      >
-        <p class="text-lg">
-          現在の画面幅：
-          <span id="screen-width" class="text-blue-600">--</span> px
-        </p>
-        <p class="mt-2">
-          Tailwindブレークポイント：<br />
-          <span id="screen-breakpoint" class="text-lime-600">--</span>
-        </p>
-      </section>
 
-      <script>
-        function updateScreenInfo() {
-          const width = window.innerWidth;
-          const widthDisplay = document.getElementById("screen-width");
-          const bpDisplay = document.getElementById("screen-breakpoint");
-
-          widthDisplay.textContent = width;
-
-          let bp = "";
-          if (width < 640) bp = "＜ 無印 (〜640)";
-          else if (width < 768) bp = "sm (640〜)";
-          else if (width < 1024) bp = "md (768〜)";
-          else if (width < 1280) bp = "lg (1024〜)";
-          else if (width < 1536) bp = "xl (1280〜)";
-          else bp = "2xl (1536〜)";
-
-          bpDisplay.textContent = bp;
-        }
-
-        window.addEventListener("resize", updateScreenInfo);
-        updateScreenInfo(); // 初回実行
-      </script>
-      <!-- #endregion section 画面サイズ判定 -->
-</main>
+    </main>
     <!-- #endregion main -->
 
     <!-- #region footer -->
@@ -2834,41 +2797,6 @@
       })();
     </script>
     <!-- #endregion script アニメーション -->
-  
-  
-      <!-- #region button script トップへ戻る -->
-<!-- トップへ戻るボタン -->
-<button
-  id="backToTop"
-  class="opacity-0 pointer-events-none fixed left-4 
-         bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] 
-         z-50 bg-lime-500 text-white font-semibold rounded-full 
-         shadow-lg px-4 py-2 transition-opacity duration-500 
-         hover:bg-lime-600 focus-visible:outline focus-visible:outline-2 
-         focus-visible:outline-offset-2 focus-visible:outline-lime-500"
->
-  ↑ トップへ
-</button>
-
-<script>
-  const topBtn = document.getElementById("backToTop");
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 4000) {
-      topBtn.classList.remove("opacity-0", "pointer-events-none");
-      topBtn.classList.add("opacity-100");
-    } else {
-      topBtn.classList.add("opacity-0", "pointer-events-none");
-      topBtn.classList.remove("opacity-100");
-    }
-  });
-
-  topBtn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-</script>
-<!-- #endregion button script トップへ戻る -->
-    
   
   
   </body>
