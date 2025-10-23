@@ -240,7 +240,7 @@
   </head>
   <body>
     <!-- #region main -->
-    <main>
+    <main class="space-y-6 md:space-y-12">
       <!-- #region h1 -->
       <h1 class="sr-only">
         個別進学塾 ipsim 山下教室 / 猪名川パークプラザ教室
@@ -434,21 +434,21 @@
       </section>
       <!-- #endregion section イントロコメント -->
 
-      <!-- #region section 猪名川体験会-->
-      <section
-        class="reveal fade-up mt-24 md:mt-40 w-full bg-white mb-12 md:mb-20 relative"
-      >
-        <!-- 飾り文字 -->
-        <div class="relative max-w-[700px] mx-auto">
+      <!-- #region section 飾り文字 information -->
+      <section class="reveal fade-up mt-8 mx-auto px-4 max-w-[400px]">
+        <div
+          class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+        >
           <img
             src="pics/information.jpeg"
-            alt="information"
-            class="absolute -top-16 md:-top-24 left-0 h-12 md:h-20 z-10 max-w-[600px]"
-            loading="lazy"
-            decoding="async"
+            class="object-contain max-h-full max-w-full"
           />
         </div>
+      </section>
+      <!-- #endregion section 飾り文字 information -->
 
+      <!-- #region section 猪名川体験会-->
+      <section class="reveal fade-up w-full bg-white relative">
         <!-- メイン画像（中央揃え） -->
         <img
           src="pics/inagawa_taiken.jpg"
@@ -458,8 +458,21 @@
       </section>
       <!-- #endregion section 猪名川体験会-->
 
+      <!-- #region section 飾り文字 philosophy -->
+      <section class="reveal fade-up mx-auto px-4 max-w-[400px]">
+        <div
+          class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+        >
+          <img
+            src="pics/philosophy.jpeg"
+            class="object-contain max-h-full max-w-full"
+          />
+        </div>
+      </section>
+      <!-- #endregion section 飾り文字 philosophy -->
+
       <!-- #region section ipsimの想い -->
-      <section class="reveal fade-up py-12 bg-lime-50">
+      <section class="reveal fade-up py-8 bg-lime-50">
         <!-- 見出し -->
         <div class="text-center mb-8">
           <h2 class="text-xl md:text-2xl font-bold text-gray-900">
@@ -639,7 +652,7 @@
       <!-- #endregion section ipsimの想い -->
 
       <!-- #region section 教室画像 1 -->
-      <section class="reveal fade-up w-[400px] mx-auto mt-8 px-4 mb-8">
+      <section class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
@@ -650,7 +663,7 @@
       <!-- #endregion section 教室画像 1 -->
 
       <!-- #region section ipsimがピッタリなお子さま -->
-      <section class="reveal fade-up py-12 bg-gray-50">
+      <section class="reveal fade-up py-8 bg-gray-50">
         <!-- 見出し -->
         <div class="text-center mb-8">
           <h2 class="text-xl md:text-2xl font-bold text-gray-900">
@@ -791,7 +804,7 @@
       <!-- #endregion section ipsimがピッタリなお子さま -->
 
       <!-- #region section 教室画像 2 -->
-      <section class="reveal fade-up w-[400px] mx-auto mt-8 px-4 mb-8">
+      <section class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
@@ -802,12 +815,13 @@
       <!-- #endregion section 教室画像 2 -->
 
       <!-- #region section 飾り文字 7つの理由 -->
-      <section class="reveal fade-up max-w-[600px] mx-auto mt-20 px-4">
-        <div class="bg-whiteoverflow-hidden transition relative">
+      <section class="reveal fade-up mx-auto px-4 max-w-[400px]">
+        <div
+          class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+        >
           <img
             src="pics/7reasons.jpeg"
-            alt="7reasons"
-            class="object-cover w-full"
+            class="object-contain max-h-full max-w-full"
           />
         </div>
       </section>
@@ -2427,7 +2441,7 @@
             </svg>
             山下教室
           </strong>
-          <div class="text-base md:text-lg px-4">
+          <div class="text-sm md:text-base px-4">
             〒666-0105<br />
             兵庫県川西市見野2-35-6 IBS 山下駅前ビル2F<br />能勢電鉄 山下駅
             徒歩2分<br />
@@ -2490,7 +2504,7 @@
             </svg>
             猪名川パークプラザ教室
           </strong>
-          <div class="text-base md:text-lg px-4">
+          <div class="text-sm md:text-base px-4">
             〒666-0251<br />
             兵庫県川辺郡猪名川町若葉1-39-1 パークプラザB棟2号室<br />
             ※ TEL <a class="text-blue-400" href="tel:0727686410">072-768-6410</a
@@ -2533,7 +2547,7 @@
         </li>
         <li class="px-4 text-base md:text-lg">
           岡村ゼミナール株式会社
-          <div class="text-base md:text-lg px-4">
+          <div class="text-sm md:text-base px-4">
             〒670-0877<br />
             兵庫県姫路市北八代1-7-2<br />
             TEL <a class="text-blue-400" href="tel:0792840253">079-284-0253</a
