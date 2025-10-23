@@ -1234,18 +1234,24 @@
       </section>
       <!-- #endregion section 安全で快適 -->
 
-      <!-- #region section 飾り文字 7つの理由 -->
-      <div class="reveal fade-up max-w-[600px] mx-auto mt-20 px-4">
-        <div class="bg-whiteoverflow-hidden transition relative">
-          <img src="pics/stepstojoin.jpeg" class="object-cover w-full" />
-        </div>
-      </div>
-      <!-- #endregion section 飾り文字 7つの理由 -->
-
-      <!-- #region section CTA 1（カード2枚＋CTA下配置） -->
+      <!-- #region section CTA -->
       <section
-        class="reveal fade-up py-8 mt-24 md:mt-40 relative w-full max-w-[800px] mx-auto px-4 bg-white"
+        id="cta"
+        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
+        <!-- 飾り文字 安全で快適 -->
+        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+          <div
+            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+          >
+            <img
+              src="pics/stepstojoin.jpeg"
+              class="reveal fade-up object-contain max-h-full max-w-full"
+            />
+          </div>
+        </div>
+        <!-- 飾り文字 安全で快適 -->
+
         <!-- 見出し -->
         <div class="text-center mb-8">
           <h2 class="text-lg md:text-xl font-bold text-lime-600">
@@ -1360,34 +1366,43 @@
       </section>
       <!-- #endregion section CTA 1（カード2枚＋CTA下配置） -->
 
+
+      <!-- #region section 教室画像 2 -->
+      <section class="reveal fade-up w-[400px] mx-auto px-4">
+        <div
+          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
+        >
+          <img src="pics/room06.jpg" alt="room06" class="object-cover w-full" />
+          <div class="absolute inset-0 bg-white/40"></div>
+        </div>
+      </section>
+      <!-- #endregion section 教室画像 2 -->
+
+
+
       <!-- #region section コース・料金（カード＆グリッド版） -->
       <section
         id="course"
-        class="reveal fade-up mt-24 md:mt-40 w-full max-w-[800px] mx-auto px-4 mb-12 bg-white"
+        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
-        <img
-          src="pics/courseandprice.jpeg"
-          alt="courseandprice"
-          aria-hidden="true"
-          class="absolute -top-16 md:-top-24 left-4 h-12 md:h-20 z-10"
-          loading="lazy"
-          decoding="async"
-        />
+        <!-- 飾り文字 安全で快適 -->
+        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+          <div
+            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+          >
+            <img
+              src="pics/courseandprice.jpeg"
+              class="reveal fade-up object-contain max-h-full max-w-full"
+            />
+          </div>
+        </div>
+        <!-- 飾り文字 安全で快適 -->
+
         <!-- セクション枠 -->
         <div class="p-4 bg-white border-2 rounded-xl">
-          <!-- 見出し -->
-          <h2
-            class="flex items-center gap-2 text-lime-600 text-2xl md:text-3xl font-bold justify-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M12 2v20M2 12h20" />
-            </svg>
+        <!-- 見出し -->
+        <div class="text-center mb-8">
+          <h2 class="text-lg md:text-xl font-bold text-lime-600">
             コース・料金
           </h2>
 
@@ -1395,14 +1410,14 @@
           <p
             class="mt-2 text-gray-900 text-sm md:text-lg leading-relaxed text-center"
           >
-            授業料は税込・教材費等別（月額）／学年・通塾回数・時期により変動します。目安としてご確認ください。
+            授業料は税込・教材費等別（月額）です。<br/>学年・通塾回数・時期により変動します。
           </p>
 
           <!-- コースカード：2枚横並び（md〜） -->
           <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- 中学生コース -->
             <article
-              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border border-lime-200"
+              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border"
             >
               <header
                 class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
@@ -1433,29 +1448,29 @@
                 <dl class="mt-3 text-gray-900">
                   <div class="grid grid-cols-2 gap-y-1 items-end">
                     <dt
-                      class="mt-3 px-1 text-blue-600 text-lg md:text-xl font-bold"
+                      class="text-blue-600 text-base md:text-lg font-bold"
                     >
                       週1回（数学）
                     </dt>
                     <dd
-                      class="mt-3 text-right text-red-600 text-xl md:text-2xl font-bold"
+                      class="text-right text-red-600 text-base md:text-lg font-bold"
                     >
                       ¥12,100〜
                     </dd>
 
                     <dt
-                      class="mt-3 px-1 text-blue-600 text-lg md:text-xl font-bold"
+                      class="text-blue-600 text-base md:text-lg font-bold"
                     >
                       週2回（5科目）
                     </dt>
                     <dd
-                      class="mt-3 text-right text-red-600 text-xl md:text-2xl font-bold"
+                      class="text-right text-red-600 text-base md:text-lg font-bold"
                     >
                       ¥20,900〜
                     </dd>
 
-                    <dt class="mt-3 px-1 text-gray-900">週4回（5科目）</dt>
-                    <dd class="mt-3 text-right">¥27,500〜</dd>
+                    <dt class="text-gray-900">週4回（5科目）</dt>
+                    <dd class="text-right">¥27,500〜</dd>
                   </div>
                 </dl>
                 <p
@@ -1468,7 +1483,7 @@
 
             <!-- 小学生コース -->
             <article
-              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border border-lime-200"
+              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border"
             >
               <header
                 class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
@@ -1563,20 +1578,34 @@
       </section>
       <!-- #endregion section コース・料金（カード＆グリッド版） -->
 
+      <!-- #region section 教室画像 2 -->
+      <section class="reveal fade-up w-[400px] mx-auto px-4">
+        <div
+          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
+        >
+          <img src="pics/room06.jpg" alt="room06" class="object-cover w-full" />
+          <div class="absolute inset-0 bg-white/40"></div>
+        </div>
+      </section>
+      <!-- #endregion section 教室画像 2 -->
+
       <!-- #region section 実績（カード型） -->
       <section
-        id="jisseki"
-        class="reveal fade-up relative mt-24 md:mt-40 w-full max-w-[800px] mx-auto px-4 mb-8 bg-white"
+        id="実績"
+        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
-        <!-- 飾り画像（例：王冠アイコン） -->
-        <img
-          src="pics/performance.jpeg"
-          alt="performance"
-          aria-hidden="true"
-          class="absolute -top-16 md:-top-24 left-4 h-12 md:h-20 z-10"
-          loading="lazy"
-          decoding="async"
-        />
+        <!-- 飾り文字 安全で快適 -->
+        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+          <div
+            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+          >
+            <img
+              src="pics/performance.jpeg"
+              class="reveal fade-up object-contain max-h-full max-w-full"
+            />
+          </div>
+        </div>
+        <!-- 飾り文字 安全で快適 -->
 
         <!-- カード全体（枠色なし・背景白） -->
         <div class="m-4 p-4 mb-32 relative rounded-xl bg-white shadow-sm">
@@ -2276,6 +2305,17 @@
         </div>
       </section>
       <!-- #endregion section 実績（カード型） -->
+
+      <!-- #region section 教室画像 2 -->
+      <section class="reveal fade-up w-[400px] mx-auto px-4">
+        <div
+          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
+        >
+          <img src="pics/room06.jpg" alt="room06" class="object-cover w-full" />
+          <div class="absolute inset-0 bg-white/40"></div>
+        </div>
+      </section>
+      <!-- #endregion section 教室画像 2 -->
 
       <!-- #region section アクセス 山下 -->
       <section
