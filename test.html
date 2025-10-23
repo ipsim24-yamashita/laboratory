@@ -297,120 +297,6 @@
       </section>
       <!-- #endregion section hero -->
 
-      <!-- #region section intralink-->
-      <section
-        id="intralink"
-        class="mx-auto w-full max-w-mobile text-center border-b border-lime-600 border-t-[3px] border-t-lime-600 flex divide-x divide-lime-600"
-      >
-        <!-- 左ブロック -->
-        <div class="flex-1 py-4">
-          <a
-            href="#course"
-            class="font-bold text-lime-600 text-lg md:text-xl lg:text-2xl xl:text-3xl"
-            >コース</a
-          >
-        </div>
-
-        <!-- 中央ブロック -->
-        <div class="flex-1 py-4">
-          <a
-            href="#yamashita"
-            class="font-bold text-lime-600 text-lg md:text-xl lg:text-2xl xl:text-3xl"
-            >山下教室</a
-          >
-        </div>
-
-        <!-- 右ブロック -->
-        <div class="flex-1 py-4">
-          <a
-            href="#inagawa"
-            class="font-bold text-lime-600 text-lg md:text-xl lg:text-2xl xl:text-3xl"
-            >猪名川教室</a
-          >
-        </div>
-      </section>
-      <!-- #endregion section intralink-->
-
-      <!-- #region section 画面サイズ判定 -->
-      <section
-        id="screen-check"
-        class="w-full max-w-[800px] mx-auto p-4 bg-gray-100 rounded-lg shadow-md text-center font-semibold text-gray-700"
-      >
-        <p class="text-lg">
-          現在の画面幅：
-          <span id="screen-width" class="text-blue-600">--</span> px
-        </p>
-        <p class="mt-2">
-          Tailwindブレークポイント：<br />
-          <span id="screen-breakpoint" class="text-lime-600">--</span>
-        </p>
-      </section>
-
-      <script>
-        function updateScreenInfo() {
-          const width = window.innerWidth;
-          const widthDisplay = document.getElementById("screen-width");
-          const bpDisplay = document.getElementById("screen-breakpoint");
-
-          widthDisplay.textContent = width;
-
-          let bp = "";
-          if (width < 640) bp = "＜ 無印 (〜640)";
-          else if (width < 768) bp = "sm (640〜)";
-          else if (width < 1024) bp = "md (768〜)";
-          else if (width < 1280) bp = "lg (1024〜)";
-          else if (width < 1536) bp = "xl (1280〜)";
-          else bp = "2xl (1536〜)";
-
-          bpDisplay.textContent = bp;
-        }
-
-        window.addEventListener("resize", updateScreenInfo);
-        updateScreenInfo(); // 初回実行
-      </script>
-      <!-- #endregion section 画面サイズ判定 -->
-
-      <!-- #region section mini CTA -->
-      <section
-        id="minicta1"
-        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-      >
-        <!-- セクション見出し（視覚非表示だが意味付け） -->
-        <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
-
-        <div class="reveal fade-up px-4 mt-6">
-          <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-            <div class="p-4">
-              <p class="text-gray-900 text-base md:text-lg leading-relaxed text-center">
-                <span class="text-[#06c755] font-semibold">LINE公式アカウント</span>
-                から<br class="md:hidden" />お気軽にご連絡ください。
-              </p>
-
-              <div class="mt-4 flex flex-col items-center gap-3">
-                <a
-                  href="https://lin.ee/sqkGCPT"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >山下教室</a>
-
-                <a
-                  href="https://lin.ee/22k8QXA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >猪名川パークプラザ教室</a>
-              </div>
-
-              <p class="mt-3 text-center text-gray-500 text-sm">
-                ※ ぜひLINEでお問い合わせください。
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-<!-- #endregion section mini CTA -->
-
       <!-- #region section イントロコメント -->
       <section class="reveal fade-up py-8 bg-white">
         <!-- 見出し -->
@@ -439,7 +325,7 @@
             </div>
             <div class="p-4">
               <h3
-                class="text-lg lg:text-2xl font-bold text-lime-700 text-center mb-2"
+                class="text-lg lg:text-2xl font-bold text-lime-600 text-center mb-2"
               >
                 一人ひとりの "できる喜び" を大切にする
               </h3>
@@ -524,7 +410,7 @@
             />
             <div class="p-4">
               <h3
-                class="text-lg md:text-xl font-bold text-lime-700 text-center mb-2"
+                class="text-lg md:text-xl font-bold text-lime-600 text-center mb-2"
               >
                 私たちが大切にしていること
               </h3>
@@ -688,159 +574,7 @@
       </section>
       <!-- #endregion section 教室画像 1 -->
 
-      <!-- #region section ipsimがピッタリなお子さま -->
-      <section class="reveal fade-up py-8 bg-gray-50">
-        <!-- 見出し -->
-        <div class="text-center mb-8">
-          <h2 class="text-xl md:text-2xl font-bold text-gray-900">
-            ipsimがピッタリなお子さま
-          </h2>
-          <p class="mt-2 text-lime-600 text-lg md:text-xl font-semibold">
-            4つのポイント
-          </p>
-        </div>
-
-        <!-- カードグリッド -->
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[800px] mx-auto px-4"
-        >
-          <!-- カード1 -->
-          <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <img
-              src="pics/pittari01.jpeg"
-              alt="通知表に「３」か「４」がある"
-              class="w-full h-60 object-contain"
-            />
-            <div class="p-4">
-              <h3
-                class="text-lg lg:text-2xl font-bold text-lime-700 text-center mb-2"
-              >
-                通知表に「３」か「４」がある
-              </h3>
-              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
-                <p>
-                  各教科ごとにレベルを設定し、平均点に届かないお子さまはまず平均点の突破を、平均点を超えているお子さまは80点・90点台を目標に指導します。
-                </p>
-                <p>
-                  お子さま一人ひとりの目標に合わせた個別カリキュラムで、内申点の向上と確かな実力アップを図り、志望校合格を目指します。
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- カード2 -->
-          <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <img
-              src="pics/pittari02.jpeg"
-              alt="５教科で成績を上げたい"
-              class="w-full h-60 object-contain"
-            />
-            <div class="p-4">
-              <h3
-                class="text-lg lg:text-2xl font-bold text-lime-700 text-center mb-2"
-              >
-                ５教科で成績を上げたい
-              </h3>
-              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
-                <p>
-                  個別指導塾で５教科を学ぶのは、費用面でも時間面でも簡単なことではありません。
-                </p>
-                <p>
-                  ipsimでは、その課題を解決するための料金体系と指導形態を採用しています。
-                </p>
-                <p>テスト前は、追加料金なしで５教科の学習が可能です。</p>
-                <p>さらに、季節講習でも低価格で５教科をしっかりと学べます。</p>
-                <p>
-                  効率的に、そしてバランスよく。ipsimで５教科の成績を一緒に伸ばしていきましょう！
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- カード3 -->
-          <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <img
-              src="pics/pittari03.jpeg"
-              alt="勉強の仕方がわからない"
-              class="w-full h-60 object-contain"
-            />
-            <div class="p-4">
-              <h3
-                class="text-lg lg:text-2xl font-bold text-lime-700 text-center mb-2"
-              >
-                勉強の仕方がわからない
-              </h3>
-              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
-                <p>
-                  『やる気がない』のではなく、『やり方がわからない』だけで行動に移せないお子さまを、これまでたくさん見てきました。
-                </p>
-                <p>
-                  そんなお子さまも、正しい方法を知ると目を輝かせて勉強に取り組みます。
-                </p>
-                <p>
-                  ipsimでは、そうなれるように**「勉強の仕方」**をテスト前オリエンテーションで徹底的に指導します。
-                </p>
-                <p>
-                  暗記のコツ、ノートのまとめ方、学習計画の立て方から進め方まで、丁寧にお伝えしますのでご安心ください。
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- カード4 -->
-          <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <img
-              src="pics/pittari04.jpeg"
-              alt="部活や習い事が忙しい"
-              class="w-full h-60 object-contain"
-            />
-            <div class="p-4">
-              <h3
-                class="text-lg lg:text-2xl font-bold text-lime-700 text-center mb-2"
-              >
-                部活や習い事が忙しい
-              </h3>
-              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
-                <p>
-                  忙しくても勉強を頑張っている姿、カッコいいと思いませんか？
-                  ipsimは、部活やクラブチーム、習い事にも全力で取り組む生徒を応援しています。
-                  「忙しい」というのは、「充実している」ということ。
-                </p>
-                <p>
-                  だからこそ、効率的に学ぶことで、部活も勉強も両立できます。
-                </p>
-                <p>
-                  これまでにも、部活を最後まで頑張りきり、引退後に驚くほど学力を伸ばした生徒をたくさん見てきました。
-                </p>
-                <p>どうすれば、どちらも全力で頑張れるのか――</p>
-                <p>一緒に考えていきましょう。</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section ipsimがピッタリなお子さま -->
-
-      <!-- #region section 教室画像 2 -->
-      <section class="reveal fade-up w-[400px] mx-auto px-4">
-        <div
-          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
-        >
-          <img src="pics/room06.jpg" alt="room06" class="object-cover w-full" />
-          <div class="absolute inset-0 bg-white/40"></div>
-        </div>
-      </section>
-      <!-- #endregion section 教室画像 2 -->
-
-      <!-- #region section mini CTA 2 -->
+      <!-- #region section mini CTA -->
       <section
         id="minicta1"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
@@ -879,7 +613,159 @@
           </div>
         </div>
       </section>
-      <!-- #endregion section mini CTA 2 -->
+<!-- #endregion section mini CTA -->
+
+      <!-- #region section ipsimがピッタリなお子さま -->
+      <section class="reveal fade-up py-8 bg-gray-50">
+        <!-- 見出し -->
+        <div class="text-center mb-8">
+          <h2 class="text-xl md:text-2xl font-bold text-gray-900">
+            ipsimがピッタリなお子さま
+          </h2>
+          <p class="mt-2 text-lime-600 text-lg md:text-xl font-semibold">
+            4つのポイント
+          </p>
+        </div>
+
+        <!-- カードグリッド -->
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[800px] mx-auto px-4"
+        >
+          <!-- カード1 -->
+          <div
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <img
+              src="pics/pittari01.jpeg"
+              alt="通知表に「３」か「４」がある"
+              class="w-full h-60 object-contain"
+            />
+            <div class="p-4">
+              <h3
+                class="text-lg lg:text-2xl font-bold text-lime-600 text-center mb-2"
+              >
+                通知表に「３」か「４」がある
+              </h3>
+              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
+                <p>
+                  各教科ごとにレベルを設定し、平均点に届かないお子さまはまず平均点の突破を、平均点を超えているお子さまは80点・90点台を目標に指導します。
+                </p>
+                <p>
+                  お子さま一人ひとりの目標に合わせた個別カリキュラムで、内申点の向上と確かな実力アップを図り、志望校合格を目指します。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- カード2 -->
+          <div
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <img
+              src="pics/pittari02.jpeg"
+              alt="５教科で成績を上げたい"
+              class="w-full h-60 object-contain"
+            />
+            <div class="p-4">
+              <h3
+                class="text-lg lg:text-2xl font-bold text-lime-600 text-center mb-2"
+              >
+                ５教科で成績を上げたい
+              </h3>
+              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
+                <p>
+                  個別指導塾で５教科を学ぶのは、費用面でも時間面でも簡単なことではありません。
+                </p>
+                <p>
+                  ipsimでは、その課題を解決するための料金体系と指導形態を採用しています。
+                </p>
+                <p>テスト前は、追加料金なしで５教科の学習が可能です。</p>
+                <p>さらに、季節講習でも低価格で５教科をしっかりと学べます。</p>
+                <p>
+                  効率的に、そしてバランスよく。ipsimで５教科の成績を一緒に伸ばしていきましょう！
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- カード3 -->
+          <div
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <img
+              src="pics/pittari03.jpeg"
+              alt="勉強の仕方がわからない"
+              class="w-full h-60 object-contain"
+            />
+            <div class="p-4">
+              <h3
+                class="text-lg lg:text-2xl font-bold text-lime-600 text-center mb-2"
+              >
+                勉強の仕方がわからない
+              </h3>
+              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
+                <p>
+                  『やる気がない』のではなく、『やり方がわからない』だけで行動に移せないお子さまを、これまでたくさん見てきました。
+                </p>
+                <p>
+                  そんなお子さまも、正しい方法を知ると目を輝かせて勉強に取り組みます。
+                </p>
+                <p>
+                  ipsimでは、そうなれるように**「勉強の仕方」**をテスト前オリエンテーションで徹底的に指導します。
+                </p>
+                <p>
+                  暗記のコツ、ノートのまとめ方、学習計画の立て方から進め方まで、丁寧にお伝えしますのでご安心ください。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- カード4 -->
+          <div
+            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+          >
+            <img
+              src="pics/pittari04.jpeg"
+              alt="部活や習い事が忙しい"
+              class="w-full h-60 object-contain"
+            />
+            <div class="p-4">
+              <h3
+                class="text-lg lg:text-2xl font-bold text-lime-600 text-center mb-2"
+              >
+                部活や習い事が忙しい
+              </h3>
+              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
+                <p>
+                  忙しくても勉強を頑張っている姿、カッコいいと思いませんか？
+                  ipsimは、部活やクラブチーム、習い事にも全力で取り組む生徒を応援しています。
+                  「忙しい」というのは、「充実している」ということ。
+                </p>
+                <p>
+                  だからこそ、効率的に学ぶことで、部活も勉強も両立できます。
+                </p>
+                <p>
+                  これまでにも、部活を最後まで頑張りきり、引退後に驚くほど学力を伸ばした生徒をたくさん見てきました。
+                </p>
+                <p>どうすれば、どちらも全力で頑張れるのか――</p>
+                <p>一緒に考えていきましょう。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- #endregion section ipsimがピッタリなお子さま -->
+
+      <!-- #region section 教室画像 2 -->
+      <section class="reveal fade-up w-[400px] mx-auto px-4">
+        <div
+          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
+        >
+          <img src="pics/room03.jpg" alt="room06" class="object-cover w-full" />
+          <div class="absolute inset-0 bg-white/40"></div>
+        </div>
+      </section>
+      <!-- #endregion section 教室画像 2 -->
 
       <!-- #region section 7つの理由 -->
       <section
@@ -1206,6 +1092,47 @@
       </section>
       <!-- #endregion section 7つの理由 -->
 
+      <!-- #region section mini CTA 2 -->
+      <section
+        id="minicta2"
+        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
+      >
+        <!-- セクション見出し（視覚非表示だが意味付け） -->
+        <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
+
+        <div class="reveal fade-up px-4 mt-6">
+          <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+            <div class="p-4">
+              <p class="text-gray-900 text-base md:text-lg leading-relaxed text-center">
+                <span class="text-[#06c755] font-semibold">LINE公式アカウント</span>
+                から<br class="md:hidden" />お気軽にご連絡ください。
+              </p>
+
+              <div class="mt-4 flex flex-col items-center gap-3">
+                <a
+                  href="https://lin.ee/sqkGCPT"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+                >山下教室</a>
+
+                <a
+                  href="https://lin.ee/22k8QXA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+                >猪名川パークプラザ教室</a>
+              </div>
+
+              <p class="mt-3 text-center text-gray-500 text-sm">
+                ※ ぜひLINEでお問い合わせください。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- #endregion section mini CTA 2 -->
+
       <!-- #region section 安全で快適 -->
       <section
         id="安全で快適"
@@ -1437,8 +1364,7 @@
       </section>
       <!-- #endregion section CTA 1（カード2枚＋CTA下配置） -->
 
-
-      <!-- #region section 教室画像 2 -->
+      <!-- #region section 教室画像 3 -->
       <section class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
@@ -1447,9 +1373,7 @@
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
-      <!-- #endregion section 教室画像 2 -->
-
-
+      <!-- #endregion section 教室画像 3 -->
 
       <!-- #region section コース・料金（カード＆グリッド版） -->
       <section
@@ -1649,16 +1573,16 @@
       </section>
       <!-- #endregion section コース・料金（カード＆グリッド版） -->
 
-      <!-- #region section 教室画像 2 -->
+      <!-- #region section 教室画像 4 -->
       <section class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
-          <img src="pics/room06.jpg" alt="room06" class="object-cover w-full" />
+          <img src="pics/high1.jpg" alt="room06" class="object-cover w-full" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
-      <!-- #endregion section 教室画像 2 -->
+      <!-- #endregion section 教室画像 4 -->
 
       <!-- #region section 実績（カード型） -->
       <section
@@ -2377,16 +2301,16 @@
       </section>
       <!-- #endregion section 実績（カード型） -->
 
-      <!-- #region section 教室画像 2 -->
+      <!-- #region section 教室画像 5 -->
       <section class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
-          <img src="pics/room06.jpg" alt="room06" class="object-cover w-full" />
+          <img src="pics/students.jpeg" alt="room06" class="object-cover w-full" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
-      <!-- #endregion section 教室画像 2 -->
+      <!-- #endregion section 教室画像 5 -->
 
       <!-- #region section アクセス 山下 -->
       <section
@@ -2540,6 +2464,86 @@
       </section>
       <!-- #endregion section アクセス 猪名川 -->
 
+      <!-- #region section mini CTA 2 -->
+      <section
+        id="minicta2"
+        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
+      >
+        <!-- セクション見出し（視覚非表示だが意味付け） -->
+        <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
+
+        <div class="reveal fade-up px-4 mt-6">
+          <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+            <div class="p-4">
+              <p class="text-gray-900 text-base md:text-lg leading-relaxed text-center">
+                <span class="text-[#06c755] font-semibold">LINE公式アカウント</span>
+                から<br class="md:hidden" />お気軽にご連絡ください。
+              </p>
+
+              <div class="mt-4 flex flex-col items-center gap-3">
+                <a
+                  href="https://lin.ee/sqkGCPT"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+                >山下教室</a>
+
+                <a
+                  href="https://lin.ee/22k8QXA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+                >猪名川パークプラザ教室</a>
+              </div>
+
+              <p class="mt-3 text-center text-gray-500 text-sm">
+                ※ ぜひLINEでお問い合わせください。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- #endregion section mini CTA 2 -->
+
+      <!-- #region section 画面サイズ判定 -->
+      <section
+        id="screen-check"
+        class="w-full max-w-[800px] mx-auto p-4 bg-gray-100 rounded-lg shadow-md text-center font-semibold text-gray-700"
+      >
+        <p class="text-lg">
+          現在の画面幅：
+          <span id="screen-width" class="text-blue-600">--</span> px
+        </p>
+        <p class="mt-2">
+          Tailwindブレークポイント：<br />
+          <span id="screen-breakpoint" class="text-lime-600">--</span>
+        </p>
+      </section>
+
+      <script>
+        function updateScreenInfo() {
+          const width = window.innerWidth;
+          const widthDisplay = document.getElementById("screen-width");
+          const bpDisplay = document.getElementById("screen-breakpoint");
+
+          widthDisplay.textContent = width;
+
+          let bp = "";
+          if (width < 640) bp = "＜ 無印 (〜640)";
+          else if (width < 768) bp = "sm (640〜)";
+          else if (width < 1024) bp = "md (768〜)";
+          else if (width < 1280) bp = "lg (1024〜)";
+          else if (width < 1536) bp = "xl (1280〜)";
+          else bp = "2xl (1536〜)";
+
+          bpDisplay.textContent = bp;
+        }
+
+        window.addEventListener("resize", updateScreenInfo);
+        updateScreenInfo(); // 初回実行
+      </script>
+      <!-- #endregion section 画面サイズ判定 -->
+
       <!-- #region button script トップへ戻る -->
       <!-- トップへ戻るボタン -->
       <button
@@ -2626,7 +2630,7 @@
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="flex-shrink-0 w-4 h-4 text-lime-400"
+              class="flex-shrink-0 w-4 h-4 text-lime-600"
               fill="none"
               stroke="currentColor"
               stroke-width="1.8"
@@ -2639,7 +2643,7 @@
               <circle cx="12" cy="10" r="2.5" />
             </svg>
             <a
-              class="underline transition text-lime-400 hover:text-lime-300"
+              class="underline transition text-lime-600 hover:text-lime-600"
               href="https://maps.google.com/?q=34.8931642,135.4109987"
               target="_blank"
               rel="noopener noreferrer"
@@ -2689,7 +2693,7 @@
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="flex-shrink-0 w-4 h-4 text-lime-400"
+              class="flex-shrink-0 w-4 h-4 text-lime-600"
               fill="none"
               stroke="currentColor"
               stroke-width="1.8"
@@ -2702,7 +2706,7 @@
               <circle cx="12" cy="10" r="2.5" />
             </svg>
             <a
-              class="underline transition text-lime-400 hover:text-lime-300"
+              class="underline transition text-lime-600 hover:text-lime-600"
               href="https://maps.google.com/?q=34.8969108,135.3685999"
               target="_blank"
               rel="noopener noreferrer"
