@@ -237,6 +237,15 @@
       }
     </script>
     <!-- #endregion head script SEO対策 -->
+
+    <!-- #region タップミス軽減-->
+    <style>
+      .acc-trigger { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      .acc-trigger img { display: block; width: 100%; height: auto; }
+    </style>
+    <!-- #endregion タップミス軽減-->
+
+
   </head>
   <body>
     <!-- #region main -->
@@ -769,7 +778,8 @@
 
       <!-- #region section 7つの理由 -->
       <section
-        id="7つの理由"
+        id="reasons"
+        data-accordion="single"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
         <!-- 飾り文字 7つの理由 -->
@@ -877,17 +887,6 @@
           </div>
         </article>
 
-        <script>
-          document.querySelectorAll(".acc-trigger").forEach((btn) => {
-            btn.addEventListener("click", () => {
-              const panel = btn.nextElementSibling;
-              const expanded = btn.getAttribute("aria-expanded") === "true";
-              btn.setAttribute("aria-expanded", !expanded);
-              panel.classList.toggle("max-h-0");
-              panel.classList.toggle("max-h-[1000px]"); // 開いたときの最大高さを十分に大きく
-            });
-          });
-        </script>
         <!-- ====== 3 ====== -->
         <article
           class="reveal slide-left delay-[300ms] acc-item border bg-white overflow-hidden"
@@ -1135,7 +1134,7 @@
 
       <!-- #region section 安全で快適 -->
       <section
-        id="安全で快適"
+        id="comfort"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
         <!-- 飾り文字 安全で快適 -->
@@ -1324,8 +1323,8 @@
           </article>
         </div>
 
-        <!-- CTAカード：文章カードの下に単独配置（横並びにしない） -->
-        <div id="cta" class="reveal fade-up max-w-[800px] mx-auto px-4 mt-6">
+        <!-- CTAカード -->
+        <div class="reveal fade-up max-w-[800px] mx-auto px-4 mt-6">
           <div
             class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
@@ -1377,7 +1376,7 @@
 
       <!-- #region section コース・料金（カード＆グリッド版） -->
       <section
-        id="course"
+        id="courseandprice"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
         <!-- 飾り文字 安全で快適 -->
@@ -1586,7 +1585,7 @@
 
       <!-- #region section 実績（カード型） -->
       <section
-        id="実績"
+        id="performance"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto px-4 py-6"
       >
         <!-- 飾り文字 安全で快適 -->
@@ -2741,16 +2740,6 @@
           });
         });
       })();
-
-      document.querySelectorAll(".acc-trigger").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const panel = btn.nextElementSibling;
-          const expanded = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", !expanded);
-          panel.classList.toggle("max-h-0");
-          panel.classList.toggle("max-h-[1000px]"); // 開いたときの最大高さを十分に大きく
-        });
-      });
     </script>
     <!-- #endregion script 7つの理由 -->
 
