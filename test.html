@@ -2545,37 +2545,7 @@
         updateScreenInfo(); // 初回実行
       </script>
       <!-- #endregion section 画面サイズ判定 -->
-
-      <!-- #region button script トップへ戻る -->
-      <!-- トップへ戻るボタン -->
-      <button
-        id="backToTop"
-        class="opacity-0 pointer-events-none fixed bottom-4 left-4 z-50 bg-lime-500 text-white font-semibold rounded-full shadow-lg px-4 py-2 transition-opacity duration-500 hover:bg-lime-600"
-      >
-        ↑ トップへ
-      </button>
-
-      <script>
-        const topBtn = document.getElementById("backToTop");
-
-        window.addEventListener("scroll", () => {
-          if (window.scrollY > 4000) {
-            // ここの数字で表示開始位置を決める
-            topBtn.classList.remove("opacity-0", "pointer-events-none");
-            topBtn.classList.add("opacity-100");
-          } else {
-            topBtn.classList.add("opacity-0", "pointer-events-none");
-            topBtn.classList.remove("opacity-100");
-          }
-        });
-
-        topBtn.addEventListener("click", () => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      </script>
-
-      <!-- #endregion button script トップへ戻る -->
-    </main>
+</main>
     <!-- #endregion main -->
 
     <!-- #region footer -->
@@ -2659,172 +2629,6 @@
       © ipsim / OKAMURA Seminar. All rights reserved.
     </small>
   </div>
-</footer>
-<!-- #endregion footer -->
-
-    <!-- #region footer -->
-<footer
-  id="footer"
-  class="mt-12 relative w-fullmx-auto px-8 py-8 text-white bg-cyan-950"
-><div class=" max-w-[800px] ">
-  <p class="text-white text-sm md:text-base">岡村ゼミナールグループ</p>
-  <p class="text-white text-xl md:text-2xl font-bold mb-4 tracking-[4px]">
-    <span>個別進学塾 ipsim </span>
-    <span class="text-lg md:text-xl">(イプシム)</span>
-  </p>
-
-  <!-- ここをflexレイアウトに変更 -->
-  <ul
-    class="flex flex-col lg:flex-row justify-between gap-8 text-white text-lg md:text-xl leading-relaxed"
-  >
-    <!-- 山下教室 -->
-    <li class="flex-1">
-      <strong class="flex items-center gap-2 text-white">
-        <svg
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          class="flex-shrink-0 w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M3 11l9-6 9 6" />
-          <rect x="5" y="11" width="14" height="9" rx="1" ry="1" />
-          <rect x="11" y="15" width="2" height="5" />
-        </svg>
-        山下教室
-      </strong>
-      <div class="text-sm md:text-base px-4 mt-1">
-        〒666-0105<br />
-        兵庫県川西市見野2-35-6<br />
-        IBS 山下駅前ビル2F<br />
-        能勢電鉄 山下駅 徒歩2分<br />
-        ※ TEL <a class="text-blue-400" href="tel:0727676537">072-767-6537</a><br />
-        MAIL
-        <a
-          class="text-blue-400"
-          href="mailto:kawanishi@oksemi.co.jp"
-          aria-label="ipsim 山下教室 メールアドレス"
-        >kawanishi@oksemi.co.jp</a>
-      </div>
-
-      <div class="text-base md:text-lg px-4 flex items-center gap-1 mt-1">
-        <svg
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          class="flex-shrink-0 w-4 h-4 text-lime-600"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
-          <circle cx="12" cy="10" r="2.5" />
-        </svg>
-        <a
-          class="underline text-lime-600 hover:text-lime-500 transition"
-          href="https://maps.google.com/?q=34.8931642,135.4109987"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Googleマップで見る
-        </a>
-      </div>
-    </li>
-
-    <!-- 猪名川パークプラザ教室 -->
-    <li class="flex-1">
-      <strong class="flex items-center gap-2 text-white">
-        <svg
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          class="flex-shrink-0 w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M3 11l9-6 9 6" />
-          <rect x="5" y="11" width="14" height="9" rx="1" ry="1" />
-          <rect x="11" y="15" width="2" height="5" />
-        </svg>
-        猪名川パークプラザ教室
-      </strong>
-      <div class="text-sm md:text-base px-4 mt-1">
-        〒666-0251<br />
-        兵庫県川辺郡猪名川町若葉1-39-1<br />
-        パークプラザB棟2号室<br />
-        ※ TEL <a class="text-blue-400" href="tel:0727686410">072-768-6410</a><br />
-        MAIL
-        <a
-          class="text-blue-400"
-          href="mailto:inagawa@oksemi.co.jp"
-          aria-label="ipsim 猪名川パークプラザ教室 メールアドレス"
-        >inagawa@oksemi.co.jp</a>
-      </div>
-
-      <div class="text-base md:text-lg px-4 flex items-center gap-1 mt-1">
-        <svg
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          class="flex-shrink-0 w-4 h-4 text-lime-600"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
-          <circle cx="12" cy="10" r="2.5" />
-        </svg>
-        <a
-          class="underline text-lime-600 hover:text-lime-500 transition"
-          href="https://maps.google.com/?q=34.8969108,135.3685999"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Googleマップで見る
-        </a>
-      </div>
-    </li>
-  </ul>
-
-  <!-- 岡村ゼミナール -->
-  <div class="px-4 mt-8 text-base md:text-lg">
-    岡村ゼミナール株式会社
-    <div class="text-sm md:text-base px-4">
-      〒670-0877<br />
-      兵庫県姫路市北八代1-7-2<br />
-      TEL <a class="text-blue-400" href="tel:0792840253">079-284-0253</a><br />
-      <a
-        class="text-blue-400"
-        href="https://oksemi.co.jp"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        https://oksemi.co.jp
-      </a>
-    </div>
-  </div>
-
-  <div class="text-xs md:text-sm mt-4 px-4 py-4">
-    ※<br />
-    誠に申し訳ございませんが お電話でのお問い合わせには対応しておりません。<br />
-    LINE公式アカウントまたはメールにて お問い合わせください。
-  </div>
-
-  <small class="block text-center mt-4 text-sm">
-    © ipsim / OKAMURA Seminar. All rights reserved.
-  </small>
-</div>
 </footer>
 <!-- #endregion footer -->
 
@@ -3041,5 +2845,42 @@
       })();
     </script>
     <!-- #endregion script アニメーション -->
+  
+  
+      <!-- #region button script トップへ戻る -->
+<!-- トップへ戻るボタン -->
+<button
+  id="backToTop"
+  class="opacity-0 pointer-events-none fixed left-4 
+         bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] 
+         z-50 bg-lime-500 text-white font-semibold rounded-full 
+         shadow-lg px-4 py-2 transition-opacity duration-500 
+         hover:bg-lime-600 focus-visible:outline focus-visible:outline-2 
+         focus-visible:outline-offset-2 focus-visible:outline-lime-500"
+>
+  ↑ トップへ
+</button>
+
+<script>
+  const topBtn = document.getElementById("backToTop");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 4000) {
+      topBtn.classList.remove("opacity-0", "pointer-events-none");
+      topBtn.classList.add("opacity-100");
+    } else {
+      topBtn.classList.add("opacity-0", "pointer-events-none");
+      topBtn.classList.remove("opacity-100");
+    }
+  });
+
+  topBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+<!-- #endregion button script トップへ戻る -->
+    
+  
+  
   </body>
 </html>
