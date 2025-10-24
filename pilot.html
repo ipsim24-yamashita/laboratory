@@ -29,7 +29,7 @@
     <meta property="og:site_name" content="個別進学塾 ipsim" />
     <meta
       property="og:image"
-      content="https://ipsim17.jp/pics/og-ipsim-1200x630.jpg"
+      content="https://ipsim17.jp/pics/og-ipsim-1200x630.webp"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -136,43 +136,8 @@
     <!-- #endregion head style Google Map iframe -->
 
     <!-- #region head link hero_pics preload -->
-    <link rel="preload" as="image" href="pics/main.jpg" fetchpriority="high" />
-    <link rel="preload" as="image" href="pics/og-ipsim-1200x630.jpg" />
+    <link rel="preload" as="image" href="pics/main.webp" fetchpriority="high" />
     <link rel="preload" as="image" href="pics/logo.png" />
-    <link rel="preload" as="image" href="pics/hero2.jpg" />
-    <link rel="preload" as="image" href="pics/information.jpg" />
-    <link rel="preload" as="image" href="pics/inagawa_taiken.jpg" />
-    <link rel="preload" as="image" href="pics/philosophy.jpg" />
-    <link rel="preload" as="image" href="pics/course-img01.jpg" />
-    <link rel="preload" as="image" href="pics/course-img02.jpg" />
-    <link rel="preload" as="image" href="pics/course-img03.jpg" />
-    <link rel="preload" as="image" href="pics/course-img04.jpg" />
-    <link rel="preload" as="image" href="pics/room01.jpg" />
-    <link rel="preload" as="image" href="pics/pittari01.jpg" />
-    <link rel="preload" as="image" href="pics/pittari02.jpg" />
-    <link rel="preload" as="image" href="pics/pittari03.jpg" />
-    <link rel="preload" as="image" href="pics/pittari04.jpg" />
-    <link rel="preload" as="image" href="pics/room03.jpg" />
-    <link rel="preload" as="image" href="pics/7reasons.jpg" />
-    <link rel="preload" as="image" href="pics/toku01.jpg" />
-    <link rel="preload" as="image" href="pics/toku02.jpg" />
-    <link rel="preload" as="image" href="pics/toku03.jpg" />
-    <link rel="preload" as="image" href="pics/toku04.jpg" />
-    <link rel="preload" as="image" href="pics/toku05.jpg" />
-    <link rel="preload" as="image" href="pics/toku06.jpg" />
-    <link rel="preload" as="image" href="pics/toku07.jpg" />
-    <link rel="preload" as="image" href="pics/comfort.jpg" />
-    <link rel="preload" as="image" href="pics/safe01.jpg" />
-    <link rel="preload" as="image" href="pics/safe02.jpg" />
-    <link rel="preload" as="image" href="pics/safe04.jpg" />
-    <link rel="preload" as="image" href="pics/stepstojoin.jpg" />
-    <link rel="preload" as="image" href="pics/room06.jpg" />
-    <link rel="preload" as="image" href="pics/courseandprice.jpg" />
-    <link rel="preload" as="image" href="pics/high1.jpg" />
-    <link rel="preload" as="image" href="pics/performance.jpg" />
-    <link rel="preload" as="image" href="pics/students.jpg" />
-    <link rel="preload" as="image" href="pics/access_yamashita.jpg" />
-    <link rel="preload" as="image" href="pics/access_inagawa.jpg" />
     <!-- #endregion head link hero_pics preload -->
 
     <!-- #region head link Google Map 接続のウォームアップ -->
@@ -278,6 +243,21 @@
     <!-- #endregion タップミス軽減-->
 
 
+    <!-- #region ローカルフォント -->
+    <style>
+      @font-face {
+        font-family: 'PresentAnthem';
+        src: url('./fonts/PresentAnthem-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      .font-present {
+        font-family: 'PresentAnthem', system-ui, sans-serif;
+      }
+    </style>
+    <!-- #endregion ローカルフォント -->
+
   </head>
   <body>
     <!-- #region main -->
@@ -306,7 +286,7 @@
         <!-- ヒーロー用コンテナ -->
         <div class="z-0">
           <img
-            src="pics/main.jpg"
+            src="pics/main.webp"
             alt="ヒーロー"
             fetchpriority="high"
             decoding="async"
@@ -358,8 +338,12 @@
           >
             <div class="relative">
               <img
-                src="pics/hero2.jpg"
+                src="pics/hero2.webp"
                 alt="hero2"
+                loading="lazy"
+                decoding="async"
+                width="1024"
+                height="259"
                 class="object-cover w-full h-auto"
               />
               <div class="absolute inset-0 bg-white/40"></div>
@@ -388,25 +372,27 @@
       <!-- #endregion section イントロコメント -->
 
       <!-- #region section 猪名川体験会-->
-      <section class="reveal fade-up w-full bg-white relative">
-        <!-- 飾り文字 information -->
-        <div class="reveal fade-up mt-8 mx-auto px-4 max-w-[400px]">
+      <section class="reveal fade-up bg-white relative">
+
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/information.jpg"
-              alt="information"
-              class="object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Information</p>
           </div>
         </div>
-        <!-- 飾り文字 information -->
+        <!-- 飾り文字 -->
 
         <!-- メイン画像（中央揃え） -->
         <img
-          src="pics/inagawa_taiken.jpg"
+          src="pics/inagawa_taiken.webp"
           alt="体験会/説明会"
+                loading="lazy"
+                decoding="async"
+                width="1024"
+                height="576"
           class="reveal fade-up shadow-md w-full max-w-[800px] mt-4 mx-auto object-cover block"
         />
       </section>
@@ -414,19 +400,17 @@
 
       <!-- #region section ipsimの想い -->
       <section class="reveal fade-up py-8">
-        <!-- 飾り文字 philosophy -->
-        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+        
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/philosophy.jpg"
-              alt="philosophy"
-              class="object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Philosophy of ipsim</p>
           </div>
         </div>
-        <!--飾り文字 philosophy -->
+        <!-- 飾り文字 -->
 
         <!-- 見出し -->
         <div class="text-center mt-4 mb-8">
@@ -447,8 +431,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/course-img01.jpg"
+              src="pics/course-img01.webp"
               alt="img01"
+                loading="lazy"
+                decoding="async"
+                width="1020"
+                height="260"
               class="w-full h-30 object-contain"
             />
             <div class="p-4">
@@ -478,8 +466,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/course-img02.jpg"
+              src="pics/course-img02.webp"
               alt="img02"
+                loading="lazy"
+                decoding="async"
+                width="1020"
+                height="260"
               class="w-full h-30 object-contain"
             />
             <div class="p-4">
@@ -524,8 +516,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/course-img03.jpg"
+              src="pics/course-img03.webp"
               alt="img03"
+                loading="lazy"
+                decoding="async"
+                width="1020"
+                height="260"
               class="w-full h-30 object-contain"
             />
             <div class="p-4">
@@ -560,8 +556,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/course-img04.jpg"
+              src="pics/course-img04.webp"
               alt="img04"
+                loading="lazy"
+                decoding="async"
+                width="793"
+                height="181"
               class="w-full h-30 object-contain"
             />
             <div class="p-4">
@@ -611,7 +611,13 @@
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
-          <img src="pics/room01.jpg" alt="room01" class="object-cover w-full" />
+          <img src="pics/room01.webp"
+                alt="room01" 
+                loading="lazy"
+                decoding="async"
+                width="1024"
+                height="603"
+                class="object-cover w-full" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -679,8 +685,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/pittari01.jpg"
+              src="pics/pittari01.webp"
               alt="pittari01"
+              loading="lazy"
+              decoding="async"
+              width="606"
+              height="408"
               class="w-full h-60 object-contain"
             />
             <div class="p-4">
@@ -705,8 +715,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/pittari02.jpg"
+              src="pics/pittari02.webp"
               alt="pittari02"
+              loading="lazy"
+              decoding="async"
+              width="606"
+              height="407"
               class="w-full h-60 object-contain"
             />
             <div class="p-4">
@@ -736,8 +750,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/pittari03.jpg"
+              src="pics/pittari03.webp"
               alt="pittari03"
+              loading="lazy"
+              decoding="async"
+              width="606"
+              height="407"
               class="w-full h-60 object-contain"
             />
             <div class="p-4">
@@ -768,8 +786,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/pittari04.jpg"
+              src="pics/pittari04.webp"
               alt="pittari04"
+              loading="lazy"
+              decoding="async"
+              width="606"
+              height="408"
               class="w-full h-60 object-contain"
             />
             <div class="p-4">
@@ -804,7 +826,13 @@
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
-          <img src="pics/room03.jpg" alt="room03" class="object-cover w-full" />
+          <img src="pics/room03.webp"
+          alt="room03"
+              loading="lazy"
+              decoding="async"
+              width="1024"
+              height="682"
+          class="object-cover w-full" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -816,19 +844,19 @@
         data-accordion="single"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
-        <!-- 飾り文字 7つの理由 -->
-        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+      
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/7reasons.jpg"
-              alt="7reasons"
-              class="reveal fade-up object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >7 Reasons for the Results</p>
           </div>
         </div>
-        <!-- 飾り文字 7つの理由 -->
+        <!-- 飾り文字 -->
+
+
         <!-- 見出し -->
         <div class="text-center mt-4 mb-8">
           <h2 class="reveal fade-up text-lg md:text-xl font-bold text-lime-600 text-shadow-lime">
@@ -846,10 +874,12 @@
             aria-controls="panel-01"
           >
             <img
-              src="pics/toku01.jpg"
+              src="pics/toku01.webp"
               alt="toku01"
               loading="lazy"
               decoding="async"
+              width="1024"
+              height="197"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
@@ -886,10 +916,12 @@
             aria-controls="panel-02"
           >
             <img
-              src="pics/toku02.jpg"
+              src="pics/toku02.webp"
               alt="toku02"
               loading="lazy"
               decoding="async"
+              width="1024"
+              height="197"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
@@ -932,10 +964,12 @@
             aria-controls="panel-03"
           >
             <img
-              src="pics/toku03.jpg"
+              src="pics/toku03.webp"
               alt="toku03"
               loading="lazy"
               decoding="async"
+              width="1024"
+              height="197"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
@@ -973,10 +1007,12 @@
             aria-controls="panel-04"
           >
             <img
-              src="pics/toku04.jpg"
+              src="pics/toku04.webp"
               alt="toku04"
               loading="lazy"
               decoding="async"
+              width="1024"
+              height="197"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
@@ -1016,10 +1052,12 @@
             aria-controls="panel-05"
           >
             <img
-              src="pics/toku05.jpg"
+              src="pics/toku05.webp"
               alt="toku05"
               loading="lazy"
               decoding="async"
+              width="1024"
+              height="197"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
@@ -1055,10 +1093,12 @@
             aria-controls="panel-06"
           >
             <img
-              src="pics/toku06.jpg"
+              src="pics/toku06.webp"
               alt="toku06"
               loading="lazy"
               decoding="async"
+              width="1024"
+              height="197"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
@@ -1094,10 +1134,12 @@
             aria-controls="panel-07"
           >
             <img
-              src="pics/toku07.jpg"
+              src="pics/toku07.webp"
               alt="toku07"
               loading="lazy"
               decoding="async"
+              width="1024"
+              height="197"
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
@@ -1172,19 +1214,17 @@
         id="comfort"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
-        <!-- 飾り文字 安全で快適 -->
-        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+     
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/comfort.jpg"
-              alt="comfort"
-              class="reveal fade-up object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Comfort and Safety</p>
           </div>
         </div>
-        <!-- 飾り文字 安全で快適 -->
+        <!-- 飾り文字 -->
 
         <!-- 見出し -->
         <div class="text-center mt-4 mb-8">
@@ -1199,7 +1239,13 @@
           <div
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
-            <img src="pics/safe01.jpg" alt="safe01" class="w-full h-60 object-contain" />
+            <img src="pics/safe01.webp"
+              alt="safe01"
+              loading="lazy"
+              decoding="async"
+              width="570"
+              height="370"
+              class="w-full h-60 object-contain" />
             <div class="p-4">
               <div class="text-center">
                 <div
@@ -1219,7 +1265,12 @@
           <div
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
-            <img src="pics/safe02.jpg" alt="safe02" class="w-full h-60 object-contain" />
+            <img src="pics/safe02.webp" alt="safe02"
+              loading="lazy"
+              decoding="async"
+              width="570"
+              height="370"
+              class="w-full h-60 object-contain" />
             <div class="p-4">
               <div class="text-center">
                 <div
@@ -1240,8 +1291,12 @@
             class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
             <img
-              src="pics/safe04.jpg"
+              src="pics/safe04.webp"
               alt="safe04"
+              loading="lazy"
+              decoding="async"
+              width="570"
+              height="370"
               class="w-full h-60 object-contain"
             />
             <div class="p-4">
@@ -1268,19 +1323,17 @@
         id="cta"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
-        <!-- 飾り文字 安全で快適 -->
-        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+      
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/stepstojoin.jpg"
-              alt="stepstojoin"
-              class="reveal fade-up object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Steps to Join ipsim</p>
           </div>
         </div>
-        <!-- 飾り文字 安全で快適 -->
+        <!-- 飾り文字 -->
 
         <!-- 見出し -->
         <div class="text-center mb-8">
@@ -1405,7 +1458,13 @@
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
-          <img src="pics/room06.jpg" alt="room06" class="object-cover w-full" />
+          <img src="pics/room06.webp"
+          alt="room06"
+              loading="lazy"
+              decoding="async"
+              width="1024"
+              height="682"
+          class="object-cover w-full" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -1416,19 +1475,17 @@
         id="courseandprice"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
-        <!-- 飾り文字 安全で快適 -->
-        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+      
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/courseandprice.jpg"
-              alt="courseandprice"
-              class="reveal fade-up object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Course and Price</p>
           </div>
         </div>
-        <!-- 飾り文字 安全で快適 -->
+        <!-- 飾り文字 -->
 
         <!-- セクション枠 -->
         <div class="p-4 bg-white border-2 rounded-xl">
@@ -1615,7 +1672,13 @@
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
-          <img src="pics/high1.jpg" alt="room06" class="object-cover w-full" />
+          <img src="pics/high1.webp"
+          alt="room06"
+              loading="lazy"
+              decoding="async"
+              width="1024"
+              height="576"
+              class="object-cover w-full" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -1626,22 +1689,20 @@
         id="performance"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto px-4 py-6"
       >
-        <!-- 飾り文字 安全で快適 -->
-        <div class="reveal fade-up mx-auto px-4 max-w-[400px]">
+      
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/performance.jpg"
-              alt="performance"
-              class="reveal fade-up object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Performance</p>
           </div>
         </div>
-        <!-- 飾り文字 安全で快適 -->
+        <!-- 飾り文字 -->
 
         <!-- カード全体（枠色なし・背景白） -->
-        <div class="m-4 p-4 relative rounded-xl bg-white shadow-sm">
+        <div class="p-4 relative rounded-xl bg-white shadow-sm">
           <!-- 説明 -->
           <div class="text-cyan-600 font-semibold text-lg">
             <div class="pl-4">
@@ -2344,7 +2405,13 @@
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
-          <img src="pics/students.jpg" alt="room06" class="object-cover w-full" />
+          <img src="pics/students.webp"
+          alt="students"
+              loading="lazy"
+              decoding="async"
+              width="826"
+              height="549"
+          class="object-cover w-full" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -2355,18 +2422,17 @@
         id="yamashita"
         class="reveal slide-left delay-[1000ms] w-full bg-white relative"
       >
-        <!-- 飾り文字 information -->
-        <div class="reveal fade-up mt-8 mx-auto px-4 max-w-[400px]">
+      
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/access_yamashita.jpg"
-              alt="access_yamashita"
-              class="object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Access to Yamashita</p>
           </div>
         </div>
+        <!-- 飾り文字 -->
 
         <!-- 全体を左右中央揃え -->
         <div class="flex justify-center">
@@ -2433,18 +2499,17 @@
         id="inagawa"
         class="reveal slide-left delay-[1000ms] w-full bg-white relative"
       >
-        <!-- 飾り文字 information -->
-        <div class="reveal fade-up mt-8 mx-auto px-4 max-w-[400px]">
+      
+        <!-- 飾り文字 -->
+        <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
-            class="relative bg-white overflow-hidden flex justify-center max-h-[60px] md:max-h-[100px]"
+            class="relative bg-white overflow-hidden flex justify-center"
           >
-            <img
-              src="pics/access_inagawa.jpg"
-              alt="access_inagawa"
-              class="object-contain max-h-full max-w-full"
-            />
+            <p class="font-present text-4xl text-blue-400 mb-4"
+            >Access to Inagawa</p>
           </div>
         </div>
+        <!-- 飾り文字 -->
 
         <!-- 全体を左右中央揃え -->
         <div class="flex justify-center">
