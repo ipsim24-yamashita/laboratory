@@ -137,7 +137,22 @@
 
     <!-- #region head link hero_pics preload -->
     <link rel="preload" as="image" href="pics/main.jpg" fetchpriority="high" />
-    <link rel="preload" as="image" href="pics/" />
+    <link rel="preload" as="image" href="pics/logo.png" />
+    <link rel="preload" as="image" href="pics/hero2.jpg" />
+    <link rel="preload" as="image" href="pics/information.jpg" />
+    <link rel="preload" as="image" href="pics/inagawa_taiken.jpg" />
+    <link rel="preload" as="image" href="pics/philosophy.jpg" />
+    <link rel="preload" as="image" href="pics/course-img01.jpg" />
+    <link rel="preload" as="image" href="pics/course-img02.jpg" />
+    <link rel="preload" as="image" href="pics/course-img03.jpg" />
+    <link rel="preload" as="image" href="pics/course-img04.jpg" />
+    <link rel="preload" as="image" href="pics/room01.jpg" />
+    <link rel="preload" as="image" href="pics/pittari01.jpg" />
+    <link rel="preload" as="image" href="pics/pittari02.jpg" />
+    <link rel="preload" as="image" href="pics/pittari03.jpg" />
+    <link rel="preload" as="image" href="pics/pittari04.jpg" />
+    <link rel="preload" as="image" href="pics/room03.jpg" />
+    <link rel="preload" as="image" href="pics/7reasons.jpg" />
     <!-- #endregion head link hero_pics preload -->
 
     <!-- #region head link Google Map 接続のウォームアップ -->
@@ -2502,46 +2517,7 @@
         </div>
       </section>
       <!-- #endregion section mini CTA 3 -->
-
-      <!-- #region section 画面サイズ判定 -->
-      <section
-        id="screen-check"
-        class="w-full max-w-[800px] mx-auto p-4 bg-gray-100 rounded-lg shadow-md text-center font-semibold text-gray-700"
-      >
-        <p class="text-lg">
-          現在の画面幅：
-          <span id="screen-width" class="text-blue-600">--</span> px
-        </p>
-        <p class="mt-2">
-          Tailwindブレークポイント：<br />
-          <span id="screen-breakpoint" class="text-lime-600">--</span>
-        </p>
-      </section>
-
-      <script>
-        function updateScreenInfo() {
-          const width = window.innerWidth;
-          const widthDisplay = document.getElementById("screen-width");
-          const bpDisplay = document.getElementById("screen-breakpoint");
-
-          widthDisplay.textContent = width;
-
-          let bp = "";
-          if (width < 640) bp = "＜ 無印 (〜640)";
-          else if (width < 768) bp = "sm (640〜)";
-          else if (width < 1024) bp = "md (768〜)";
-          else if (width < 1280) bp = "lg (1024〜)";
-          else if (width < 1536) bp = "xl (1280〜)";
-          else bp = "2xl (1536〜)";
-
-          bpDisplay.textContent = bp;
-        }
-
-        window.addEventListener("resize", updateScreenInfo);
-        updateScreenInfo(); // 初回実行
-      </script>
-      <!-- #endregion section 画面サイズ判定 -->
-</main>
+    </main>
     <!-- #endregion main -->
 
     <!-- #region footer -->
