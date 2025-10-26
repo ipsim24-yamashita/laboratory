@@ -54,27 +54,235 @@
       html {
         scroll-behavior: smooth;
       }
+    </style>
+    <style type="text/tailwindcss">
+      /* ローカルフォント PresentAnthem */
+      @font-face {
+        font-family: 'PresentAnthem';
+        src: url('./fonts/PresentAnthem-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      .font-present {
+        font-family: 'PresentAnthem', system-ui, sans-serif;
+      }
       /* 柔らかいlimeの影 */
       .text-shadow-lime {
         text-shadow: 2px 2px 4px rgba(22, 163, 74, 0.6); /* lime-600の半透明影 */
       }
-      /* クレヨン風の黄色い下線 text-blue-600 font-semibold と併用推奨*/
-      .underline-crayon-yellow {
-        background-image: linear-gradient(
-            to bottom,
-            rgba(255, 235, 59, 0.7) 60%,
-            rgba(255, 235, 59, 0.7) 100%
-          ),
-          repeating-linear-gradient(
-            -45deg,
-            rgba(255, 255, 0, 0.15) 0 2px,
-            transparent 2px 4px
-          );
-        background-size: 100% 0.4em;
-        background-repeat: no-repeat;
-        background-position: 0 95%;
-        border-radius: 4px;
-        padding: 0 2px;
+      .text-shadow-gray {
+        text-shadow: 2px 2px 4px rgba(75, 85, 99, 0.6); /* gray-600の半透明影 */
+      }
+
+      @layer base {
+        /* -----------------------------
+                h1 : ヒーロー
+            ----------------------------- */
+        h1 {
+          @apply text-2xl;
+          @apply text-lime-600;
+          @apply text-shadow-lime;
+          @apply font-extrabold;
+        }
+        /* -----------------------------
+                h2 : セクションタイトル
+            ----------------------------- */
+        h2 {
+          @apply text-xl;
+          @apply text-gray-900;
+          @apply text-shadow-gray;
+          @apply font-extrabold;
+        }
+        /* -----------------------------
+                h3 : カードタイトル
+            ----------------------------- */
+        h3 {
+          @apply text-lg;
+          @apply text-gray-800;
+          @apply text-shadow-gray;
+          @apply font-bold;
+        }
+        /* -----------------------------
+                h4 : セクション小見出し
+            ----------------------------- */
+        h4 {
+          @apply text-base;
+          @apply text-lime-600;
+          @apply text-shadow-lime;
+          @apply font-bold;
+        }
+        /* -----------------------------
+                h5 : 本文段落見出し
+            ----------------------------- */
+        h5 {
+          @apply text-sm;
+          @apply text-gray-600;
+          @apply text-shadow-gray;
+          @apply font-bold;
+        }
+        /* -----------------------------
+                    h6 : 本文注釈
+            ----------------------------- */
+        h6 {
+          @apply text-xs;
+          @apply text-gray-500;
+        }
+        /* -----------------------------
+                    article : 本文
+            ----------------------------- */
+        article {
+          @apply text-base;
+          @apply text-gray-700;
+        }
+        /* -----------------------------
+                    figure : 飾り文字
+            ----------------------------- */
+        figure {
+          @apply font-present;
+          @apply text-5xl;
+          @apply text-blue-400;
+        }
+
+        /* sm（640px〜） */
+        @screen sm {
+          h1 {
+            @apply text-3xl;
+          } /* 30px */
+          h2 {
+            @apply text-2xl;
+          } /* 24px */
+          h3 {
+            @apply text-xl;
+          } /* 20px */
+          h4 {
+            @apply text-lg;
+          } /* 18px */
+          h5 {
+            @apply text-base;
+          } /* 16px */
+          h6 {
+            @apply text-sm;
+          } /* 14px */
+          article {
+            @apply text-lg;
+          } /* 18px */
+          figure {
+            @apply text-5xl;
+          }
+        }
+
+        /* md（768px〜） */
+        @screen md {
+          h1 {
+            @apply text-4xl;
+          } /* 36px */
+          h2 {
+            @apply text-3xl;
+          } /* 30px */
+          h3 {
+            @apply text-2xl;
+          } /* 24px */
+          h4 {
+            @apply text-xl;
+          } /* 20px */
+          h5 {
+            @apply text-lg;
+          } /* 18px */
+          h6 {
+            @apply text-base;
+          } /* 16px */
+          article {
+            @apply text-xl;
+          } /* 20px */
+          figure {
+            @apply text-6xl;
+          }
+        }
+
+        /* lg（1024px〜） */
+        @screen lg {
+          h1 {
+            @apply text-5xl;
+          } /* 48px */
+          h2 {
+            @apply text-4xl;
+          } /* 36px */
+          h3 {
+            @apply text-3xl;
+          } /* 30px */
+          h4 {
+            @apply text-2xl;
+          } /* 24px */
+          h5 {
+            @apply text-xl;
+          } /* 20px */
+          h6 {
+            @apply text-lg;
+          } /* 18px */
+          article {
+            @apply text-xl;
+          } /* 20px */
+          figure {
+            @apply text-6xl;
+          }
+        }
+
+        /* xl（1280px〜） */
+        @screen xl {
+          h1 {
+            @apply text-6xl;
+          } /* 60px */
+          h2 {
+            @apply text-5xl;
+          } /* 48px */
+          h3 {
+            @apply text-4xl;
+          } /* 36px */
+          h4 {
+            @apply text-3xl;
+          } /* 30px */
+          h5 {
+            @apply text-2xl;
+          } /* 24px */
+          h6 {
+            @apply text-xl;
+          } /* 20px */
+          article {
+            @apply text-2xl;
+          } /* 24px */
+          figure {
+            @apply text-7xl;
+          }
+        }
+
+        /* 2xl（1536px〜） */
+        @screen 2xl {
+          h1 {
+            @apply text-7xl;
+          } /* 72px */
+          h2 {
+            @apply text-6xl;
+          } /* 60px */
+          h3 {
+            @apply text-5xl;
+          } /* 48px */
+          h4 {
+            @apply text-4xl;
+          } /* 36px */
+          h5 {
+            @apply text-3xl;
+          } /* 30px */
+          h6 {
+            @apply text-2xl;
+          } /* 24px */
+          article {
+            @apply text-2xl;
+          } /* 24px */
+          figure {
+            @apply text-8xl;
+          }
+        }
       }
     </style>
     <!-- #endregion head style TailwindCSS custom -->
@@ -243,35 +451,20 @@
     <!-- #endregion タップミス軽減-->
 
 
-    <!-- #region ローカルフォント -->
-    <style>
-      @font-face {
-        font-family: 'PresentAnthem';
-        src: url('./fonts/PresentAnthem-Regular.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-      }
-      .font-present {
-        font-family: 'PresentAnthem', system-ui, sans-serif;
-      }
-    </style>
-    <!-- #endregion ローカルフォント -->
-
   </head>
   <body>
     <!-- #region main -->
-    <main class="space-y-6 md:space-y-12">
-      <!-- #region h1 -->
-      <h1 class="sr-only">
+    <main class="space-y-12 md:space-y-36">
+      <!-- #region h2 -->
+      <h2 class="sr-only">
         個別進学塾 ipsim 山下教室 / 猪名川パークプラザ教室
-      </h1>
-      <!-- #endregion h1 -->
+      </h2>
+      <!-- #endregion h2 -->
 
       <!-- #region section hero -->
       <section
         id="hero"
-        class="relative overflow-hidden bg-transparent text-white"
+        class="relative overflow-hidden bg-transparent"
       >
         <header
           class="absolute top-0 left-0 z-20 flex items-center justify-between w-full px-4 pt-4"
@@ -300,42 +493,29 @@
         <div
           class="absolute top-[72px] sm:top-[140px] md:top-[160px] lg:top-[200px] xl:top-[240px] left-[40px] sm:left-[80px] md:left-[120px] lg:left-[100px] xl:left-[80px] z-10"
         >
-          <h1 class="font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
-            <span
-              class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-lime-600 font-bold"
-            >
-              結果にこだわる<br class="sm:hidden" />進化した個別指導<br />
-            </span>
-            <span
-              class="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white text-shadow-lime"
-              >個別進学塾 </span
-            ><span
-              class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white text-shadow-lime"
-              >ipsim</span
-            >
-          </h1>
+        <h5>結果にこだわる<span class="hidden sm:inline-block">進化した個別指導</span></h5>
+        <h1>個別進学塾 ipsim</h1>
         </div>
       </section>
       <!-- #endregion section hero -->
 
       <!-- #region section イントロコメント -->
-      <section class="reveal fade-up py-8 bg-white">
-        <!-- 見出し -->
-        <div class="text-center mb-8">
-          <h2 class="text-xl md:text-2xl font-bold text-gray-900">
-            個別進学塾 ipsim (イプシム)
-          </h2>
-          <p class="mt-2 text-lime-600 text-base md:text-lg font-semibold text-shadow-lime">
-            川西市・猪名川町の１中学専門塾
-          </p>
+      <section class="reveal fade-up bg-white">
+        <!-- テキストエリア -->
+        <div class="text-center mb-4">
+          <!-- セクション見出し -->
+          <h2>個別進学塾 ipsim (イプシム)</h2>
+          <!-- セクション小見出し -->
+          <h4 class="mt-2">川西市・猪名川町の１中学専門塾</h4>
         </div>
 
-        <!-- カードグリッド -->
-        <div class="grid grid-cols-1 max-w-[800px] mx-auto px-4">
+        <!-- カード container -->
+        <div class="px-4 py-6 mx-auto rounded-lg max-w-[800px]">
           <!-- カード1 -->
           <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
+            <!-- 画像エリア -->
             <div class="relative">
               <img
                 src="pics/hero2.webp"
@@ -346,25 +526,18 @@
                 height="259"
                 class="object-cover w-full h-auto"
               />
+              <!-- 白いフィルター -->
               <div class="absolute inset-0 bg-white/40"></div>
             </div>
+            <!-- テキストエリア -->
             <div class="p-4">
-              <h3
-                class="text-lg lg:text-2xl font-bold text-lime-600 text-center text-shadow-lime mb-2"
-              >
-                結果にこわだる進化した個別指導
-              </h3>
+              <h3 class="text-center mb-2">結果にこわだる進化した個別指導</h3>
               <div class="text-center">
-                <div
-                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left font-semibold"
-                >
-                  <p>
-                    ipsimは「１中学専門」の個別指導塾です。<br class="hidden md:block" />
-                    対象を「１中学」に限定することで、
-                    学校の授業の進捗状況やテストの出題傾向を正確に把握。<br class="hidden md:block" />
-                    その上で、一人ひとりの理解度に合わせた質の高いテスト対策授業を行います。
-                  </p>
-                </div>
+                <article
+                class="inline-block text-left leading-relaxed">
+                  ipsimは「１中学専門」の個別指導塾です。<br class="hidden md:block" />
+                  対象を「１中学」に限定することで、学校の授業の進捗状況やテストの出題傾向を正確に把握。<br class="hidden md:block" />その上で、一人ひとりの理解度に合わせた質の高いテスト対策授業を行います。
+                </article>
               </div>
             </div>
           </div>
@@ -373,16 +546,13 @@
       <!-- #endregion section イントロコメント -->
 
       <!-- #region section 猪名川体験会-->
-      <section class="reveal fade-up bg-white relative">
+      <section class="reveal fade-up relative bg-white">
 
         <!-- 飾り文字 -->
-        <div class="reveal fade-up mt-8 mx-auto px-4">
-          <div
-            class="relative bg-white overflow-hidden flex justify-center"
-          >
-            <p class="font-present text-4xl text-blue-400 mb-4"
-            >Information</p>
-          </div>
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Information</figure>
         </div>
         <!-- 飾り文字 -->
 
@@ -645,19 +815,15 @@
         id="reasons"
         data-accordion="single"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-      >
-      
+      >     
+
         <!-- 飾り文字 -->
-        <div class="reveal fade-up mt-8 mx-auto px-4">
-          <div
-            class="relative bg-white overflow-hidden flex justify-center"
-          >
-            <p class="font-present text-4xl text-blue-400 mb-4"
-            >Seven Reasons</p>
-          </div>
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Seven Reasons</figure>
         </div>
         <!-- 飾り文字 -->
-
 
         <!-- 見出し -->
         <div class="text-center mt-4 mb-8">
@@ -976,6 +1142,14 @@
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >
      
+        <!-- 飾り文字 -->
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Comfort and Safety</figure>
+        </div>
+        <!-- 飾り文字 -->
+
         <!-- 飾り文字 -->
         <div class="reveal fade-up mt-8 mx-auto px-4">
           <div
