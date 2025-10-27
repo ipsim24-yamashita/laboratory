@@ -66,12 +66,18 @@
       .font-present {
         font-family: 'PresentAnthem', system-ui, sans-serif;
       }
-      /* 柔らかいlimeの影 */
+      /* 柔らかい影 */
       .text-shadow-lime {
         text-shadow: 2px 2px 4px rgba(22, 163, 74, 0.6); /* lime-600の半透明影 */
       }
       .text-shadow-gray {
         text-shadow: 2px 2px 4px rgba(75, 85, 99, 0.6); /* gray-600の半透明影 */
+      }
+      .text-shadow-red {
+        text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.6); /* red-600の半透明影 */
+      }
+      .text-shadow-blue {
+        text-shadow: 2px 2px 4px rgba(37, 99, 235, 0.6); /* blue-600の半透明影 */
       }
 
       @layer base {
@@ -616,6 +622,457 @@
         </div>
       </section>
       <!-- #endregion section 教室画像 1 -->
+
+
+      <!-- #region section 実績（カード型） -->
+      <section
+        id="Excellent"
+        class="reveal fade-up relative w-full max-w-[800px] mx-auto px-4 py-6"
+      >
+      
+        <!-- 飾り文字 -->
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Excellent !!</figure>
+        </div>
+        <!-- 飾り文字 -->
+
+        <!-- カード全体（枠色なし・背景白） -->
+        <div class="p-4 relative rounded-xl bg-white shadow-sm">
+          <!-- 説明 -->
+          <div class="text-gray-600 font-semibold text-lg md:text-2xl">
+            <div class="pl-4">
+              的を絞った
+              <span class="text-lime-600 text-shadow-lime text-xl md:text-2xl"
+                >"効率の良い"</span
+              >
+              問題演習と
+              <di class="text-lime-600 text-shadow-lime text-xl md:text-2xl"
+                >”できる”ための</di
+              >
+              徹底解説<br />
+              <div class="mx-auto flex justify-center items-center text-blue-600 text-shadow-blue font-semibold text-xl md:text-2xl">
+                結果にこだわるipsimの
+              </div>
+              <div class="mx-auto flex justify-center items-center text-red-600 text-shadow-red font-bold text-3xl md:text-4xl"">
+              成績アップ!! 
+              </div>
+              <div class="mx-auto flex justify-center items-center text-gray-600 text-shadow-gray font-bold text-xl md:text-2xl"">
+              実例!! 
+              </div>
+            </div>
+          </div>
+
+          <!-- 水平線 -->
+          <div class="m-2 py-2 border-t border-gray-200"></div>
+
+          <!-- 実例カードグリッド -->
+          <div id="実例カード"
+            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"
+          >
+            <!-- 1 -->
+            <article id="実例-01"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <!-- アイコン -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 2 -->
+            <article id="実例-02"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 3 -->
+            <article id="実例-03"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 4 -->
+            <article id="実例-04"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 5 -->
+            <article id="実例-05"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 6 -->
+            <article id="実例-06"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 7 -->
+            <article id="実例-07"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 8 -->
+            <article id="実例-08"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 9 -->
+            <article id="実例-09"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 10 -->
+            <article id="実例-10"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 11 -->
+            <article id="実例-11"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 12 -->
+            <article id="実例-12"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 13 -->
+            <article id="実例-13"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 14 -->
+            <article id="実例-14"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 15 -->
+            <article id="実例-15"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 16 -->
+            <article id="実例-16"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 17 -->
+            <article id="実例-17"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+            <!-- 18 -->
+            <article id="実例-18"
+              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
+            >
+              <header class="flex items-center gap-2 mb-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-blue-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 21V5M3 21h18" />
+                  <polyline points="6,15 11,10 15,13 21,7" />
+                </svg>
+                <h5>中2女子</h5>
+              </header>
+              <p class="text-sm text-gray-700">模擬試験 5教科</p>
+              <p class="mt-1 text-blue-600 font-semibold">偏差値 <span class="text-red-600 text-2xl font-extrabold">+11</span></p>
+            </article>
+
+          </div>
+          </div>
+        </div>
+      </section>
+      <!-- #endregion section 実績（カード型） -->
 
       <!-- #region section Why なぜ成績が上がるのか -->
       <section id="why">
@@ -1475,452 +1932,6 @@
         </div>
       </section>
       <!-- #endregion section 教室画像 4 -->
-
-      <!-- #region section 実績（カード型） -->
-      <section
-        id="performance"
-        class="reveal fade-up relative w-full max-w-[800px] mx-auto px-4 py-6"
-      >
-      
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
-        >
-          <figure class="mb-4">Performance</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- カード全体（枠色なし・背景白） -->
-        <div class="p-4 relative rounded-xl bg-white shadow-sm">
-          <!-- 説明 -->
-          <div class="text-cyan-600 font-semibold text-lg">
-            <div class="pl-4">
-              的を絞った
-              <span class="text-blue-600 font-semibold underline-crayon-yellow"
-                >"効率の良い"</span
-              >
-              問題演習と
-              <span class="text-blue-600 font-semibold underline-crayon-yellow"
-                >”できる”ための</span
-              >
-              徹底解説<br />
-              個別進学塾 ipsim の
-              <span class="text-blue-600 font-semibold underline-crayon-yellow"
-                >点数アップ</span
-              >
-              実例
-            </div>
-          </div>
-
-          <!-- 水平線 -->
-          <div class="m-2 py-2 border-t border-gray-200"></div>
-
-          <!-- 実例カードグリッド -->
-          <div
-            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"
-          >
-            <!-- 1 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <!-- アイコン -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中1男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">5教科</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +32点</p>
-            </article>
-
-            <!-- 2 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中1女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">英語</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +7</p>
-            </article>
-
-            <!-- 3 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中2男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">数学</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +28点</p>
-            </article>
-
-            <!-- 4 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中2女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">理科</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +6</p>
-            </article>
-
-            <!-- 5 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中3男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">社会</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +24点</p>
-            </article>
-
-            <!-- 6 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中3女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">国語</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +8</p>
-            </article>
-
-            <!-- 7 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中1男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">数学</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +5</p>
-            </article>
-
-            <!-- 8 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中1女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">5教科</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +41点</p>
-            </article>
-
-            <!-- 9 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中2男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">英語</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +27点</p>
-            </article>
-
-            <!-- 10 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中2女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">国語</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +18点</p>
-            </article>
-
-            <!-- 11 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中3男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">理科</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +9</p>
-            </article>
-
-            <!-- 12 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中3女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">社会</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +26点</p>
-            </article>
-
-            <!-- 13 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中1男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">国語</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +6</p>
-            </article>
-
-            <!-- 14 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中1女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">社会</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +22点</p>
-            </article>
-
-            <!-- 15 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中2男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">5教科</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +10</p>
-            </article>
-
-            <!-- 16 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中2女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">英語</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +7</p>
-            </article>
-
-            <!-- 17 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中3男子</h3>
-              </header>
-              <p class="text-sm text-gray-700">数学</p>
-              <p class="mt-1 text-blue-700 font-semibold">点数 +35点</p>
-            </article>
-
-            <!-- 18 -->
-            <article
-              class="rounded-xl bg-white shadow p-3 bg-gradient-to-b from-white to-yellow-100"
-            >
-              <header class="flex items-center gap-2 mb-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 text-blue-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M3 21V5M3 21h18" />
-                  <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-                <h3 class="font-bold text-gray-900">中3女子</h3>
-              </header>
-              <p class="text-sm text-gray-700">5教科</p>
-              <p class="mt-1 text-emerald-700 font-semibold">偏差値 +11</p>
-            </article>
-
-          </div>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section 実績（カード型） -->
 
       <!-- #region section 教室画像 5 -->
       <section id="img05" class="reveal fade-up w-[400px] mx-auto px-4">
