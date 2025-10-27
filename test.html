@@ -99,8 +99,8 @@
             ----------------------------- */
         h3 {
           @apply text-lg;
-          @apply text-gray-800;
-          @apply text-shadow-gray;
+          @apply text-lime-600;
+          @apply text-shadow-lime;
           @apply font-bold;
         }
         /* -----------------------------
@@ -502,7 +502,7 @@
       <!-- #endregion section hero -->
 
       <!-- #region section イントロコメント -->
-      <section class="reveal fade-up bg-white">
+      <section id="intro" class="reveal fade-up bg-white">
         <!-- テキストエリア -->
         <div class="text-center mb-4">
           <!-- セクション見出し -->
@@ -548,7 +548,7 @@
       <!-- #endregion section イントロコメント -->
 
       <!-- #region section 猪名川体験会-->
-      <section class="reveal fade-up relative bg-white">
+      <section id="inagawa_taiken" class="reveal fade-up relative bg-white">
 
         <!-- 飾り文字 -->
         <div
@@ -572,10 +572,12 @@
       <!-- #endregion section 猪名川体験会-->
 
       <!-- #region section 教室画像 1 -->
-      <section class="reveal fade-up w-[400px] mx-auto px-4">
+      <section id="img01" class="reveal fade-up w-[400px] mx-auto px-4">
+        <!-- カード -->
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
+          <!-- 画像エリア -->
           <img src="pics/room01.webp"
                 alt="room01" 
                 loading="lazy"
@@ -583,6 +585,7 @@
                 width="1024"
                 height="603"
                 class="object-cover w-full" />
+          <!-- 白いフィルター -->
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -598,25 +601,24 @@
       <!-- #endregion section Why なぜ成績が上がるのか -->
 
       <!-- #region section ipsimがピッタリなお子さま -->
-      <section class="reveal fade-up py-8 bg-gray-50">
-        <!-- 見出し -->
-        <div class="text-center mb-8">
-          <h2 class="text-xl md:text-2xl font-bold text-gray-900">
-            ipsimがピッタリなお子さま
-          </h2>
-          <p class="mt-2 text-lime-600 text-lg md:text-xl font-semibold text-shadow-lime">
-            4つのポイント
-          </p>
+      <section id="pittari" class="reveal fade-up py-8 bg-white">
+        <!-- テキストエリア -->
+        <div class="text-center">
+          <!-- セクション見出し -->
+          <h2>ipsimがピッタリなお子さま</h2>
+          <!-- セクション小見出し -->
+          <h4 class="mt-2">4つのポイント</h4>
         </div>
 
-        <!-- カードグリッド -->
+        <!-- カード container -->
         <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[800px] mx-auto px-4"
+          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[800px] px-4 py-6 mx-auto rounded-lg"
         >
           <!-- カード1 -->
           <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
+            <!-- 画像エリア -->
             <img
               src="pics/pittari01.webp"
               alt="pittari01"
@@ -626,27 +628,21 @@
               height="408"
               class="w-full h-60 object-contain"
             />
-            <div class="p-4">
-              <h3
-                class="text-lg lg:text-2xl font-bold text-lime-600 text-center text-shadow-lime mb-2"
-              >
-                通知表に「３」か「４」がある
-              </h3>
-              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
-                <p>
-                  各教科ごとにレベルを設定し、平均点に届かないお子さまはまず平均点の突破を、平均点を超えているお子さまは80点・90点台を目標に指導します。
-                </p>
-                <p>
-                  お子さま一人ひとりの目標に合わせた個別カリキュラムで、内申点の向上と確かな実力アップを図り、志望校合格を目指します。
-                </p>
-              </div>
+            <!-- テキストエリア -->
+            <div class="p-4 text-center">
+              <h3 class="text-center mb-2">通知表に「３」か「４」がある</h3>
+              <article class="inline-block text-left leading-relaxed">
+                各教科ごとにレベルを設定し、平均点に届かないお子さまはまず平均点の突破を、平均点を超えているお子さまは80点・90点台を目標に指導します。
+                お子さま一人ひとりの目標に合わせた個別カリキュラムで、内申点の向上と確かな実力アップを図り、志望校合格を目指します。
+              </article>
             </div>
           </div>
 
           <!-- カード2 -->
           <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
+            <!-- 画像エリア -->
             <img
               src="pics/pittari02.webp"
               alt="pittari02"
@@ -656,25 +652,13 @@
               height="407"
               class="w-full h-60 object-contain"
             />
-            <div class="p-4">
-              <h3
-                class="text-lg lg:text-2xl font-bold text-lime-600 text-center text-shadow-lime mb-2"
-              >
-                ５教科で成績を上げたい
-              </h3>
-              <div class="text-base md:text-lg text-gray-700 leading-relaxed">
-                <p>
-                  個別指導塾で５教科を学ぶのは、費用面でも時間面でも簡単なことではありません。
-                </p>
-                <p>
-                  ipsimでは、その課題を解決するための料金体系と指導形態を採用しています。
-                </p>
-                <p>テスト前は、追加料金なしで５教科の学習が可能です。</p>
-                <p>さらに、季節講習でも低価格で５教科をしっかりと学べます。</p>
-                <p>
-                  効率的に、そしてバランスよく。ipsimで５教科の成績を一緒に伸ばしていきましょう！
-                </p>
-              </div>
+            <!-- テキストエリア -->
+            <div class="p-4 text-center">
+            <h3 class="text-center mb-2">５教科で成績を上げたい</h3>
+              <article class="inline-block text-left leading-relaxed">
+                個別指導塾で５教科を学ぶのは、費用面でも時間面でも簡単なことではありません。
+                ipsimでは、その課題を解決するための料金体系と指導形態を採用しています。テスト前は、追加料金なしで５教科の学習が可能です。さらに、季節講習でも低価格で５教科をしっかりと学べます。効率的に、そしてバランスよく。ipsimで５教科の成績を一緒に伸ばしていきましょう！
+              </article>
             </div>
           </div>
 
@@ -1309,13 +1293,10 @@
       >
       
         <!-- 飾り文字 -->
-        <div class="reveal fade-up mt-8 mx-auto px-4">
-          <div
-            class="relative bg-white overflow-hidden flex justify-center"
-          >
-            <p class="font-present text-4xl text-blue-400 mb-4"
-            >Course and Price</p>
-          </div>
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Course and Price</figure>
         </div>
         <!-- 飾り文字 -->
 
@@ -1523,13 +1504,10 @@
       >
       
         <!-- 飾り文字 -->
-        <div class="reveal fade-up mt-8 mx-auto px-4">
-          <div
-            class="relative bg-white overflow-hidden flex justify-center"
-          >
-            <p class="font-present text-4xl text-blue-400 mb-4"
-            >Performance</p>
-          </div>
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Performance</figure>
         </div>
         <!-- 飾り文字 -->
 
@@ -1989,13 +1967,10 @@
       >
       
         <!-- 飾り文字 -->
-        <div class="reveal fade-up mt-8 mx-auto px-4">
-          <div
-            class="relative bg-white overflow-hidden flex justify-center"
-          >
-            <p class="font-present text-4xl text-blue-400 mb-4"
-            >Enrollment Steps</p>
-          </div>
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Enrollment Steps</figure>
         </div>
         <!-- 飾り文字 -->
 
@@ -2124,13 +2099,10 @@
       >
       
         <!-- 飾り文字 -->
-        <div class="reveal fade-up mt-8 mx-auto px-4">
-          <div
-            class="relative bg-white overflow-hidden flex justify-center"
-          >
-            <p class="font-present text-4xl text-blue-400 mb-4"
-            >Access to Yamashita</p>
-          </div>
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Access to Yamashita</figure>
         </div>
         <!-- 飾り文字 -->
 
@@ -2201,13 +2173,10 @@
       >
       
         <!-- 飾り文字 -->
-        <div class="reveal fade-up mt-8 mx-auto px-4">
-          <div
-            class="relative bg-white overflow-hidden flex justify-center"
-          >
-            <p class="font-present text-4xl text-blue-400 mb-4"
-            >Access to Inagawa</p>
-          </div>
+        <div
+          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
+        >
+          <figure class="mb-4">Access to Inagawa</figure>
         </div>
         <!-- 飾り文字 -->
 
