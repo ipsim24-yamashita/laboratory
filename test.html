@@ -772,53 +772,48 @@
       <!-- #endregion section 教室画像 2 -->
 
       <!-- #region section mini CTA -->
-      <section id="minicta1" class="reveal fade-up py-8 bg-white">
+      <section id="minicta1" class="reveal fade-up  max-w-[400px] mx-auto py-8 bg-white">
         <!-- セクション見出し（視覚非表示だが意味付け） -->
         <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
-        <!-- カード container -->
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[500px] px-4 py-6 mx-auto rounded-lg"
-        >
         <!-- カード1 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <div class="p-4">
-              <!-- テキストエリア -->
-              <h5 class="text-center">
-                お気軽にご連絡ください<br />
-                <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
-              </h5>
-              <!-- ボタンエリア -->
-              <div class="mt-4 flex flex-col items-center gap-3">
-                <!-- 山下 ボタン -->
-                <a
-                  href="https://lin.ee/sqkGCPT"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >山下教室</a>
-                <!-- 猪名川 ボタン -->
-                <a
-                  href="https://lin.ee/22k8QXA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >猪名川パークプラザ教室</a>
-              </div>
-              <!-- テキストエリア -->
-              <h6 class="mt-3 text-center">
-                ぜひLINEでお問い合わせください
-              </h6>
+        <div
+          class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+        >
+          <div class="p-4">
+            <!-- テキストエリア -->
+            <h5 class="text-center">
+              お気軽にご連絡ください<br />
+              <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
+            </h5>
+            <!-- ボタンエリア -->
+            <div class="mt-4 flex flex-col items-center gap-3">
+              <!-- 山下 ボタン -->
+              <a
+                href="https://lin.ee/sqkGCPT"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+              >山下教室</a>
+              <!-- 猪名川 ボタン -->
+              <a
+                href="https://lin.ee/22k8QXA"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+              >猪名川パークプラザ教室</a>
             </div>
+            <!-- テキストエリア -->
+            <h6 class="mt-3 text-center">
+              ぜひLINEでお問い合わせください
+            </h6>
           </div>
         </div>
       </section>
       <!-- #endregion section mini CTA -->
-
+      
       <!-- #region section 7つの理由 -->
       <section
-        id="reasons"
+        id="7reasons"
         data-accordion="single"
         class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
       >     
@@ -833,15 +828,14 @@
 
         <!-- テキストエリア -->
         <div class="text-center mt-4 mb-8">
-          <h2 class="reveal fade-up text-lg md:text-xl font-bold text-lime-600 text-shadow-lime">
-            成果を生む7つの理由
-          </h2>
+          <h3 class="reveal fade-up">成果を生む7つの理由</h3>
         </div>
 
         <!-- ====== 1 ====== -->
-        <article
+        <article id="panel-01"
           class="reveal slide-left delay-[100ms] acc-item border bg-lime-50/30 overflow-hidden"
         >
+          <!-- ボタン画像 -->
           <button
             class="acc-trigger w-full text-left"
             aria-expanded="false"
@@ -857,8 +851,8 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
+          <!-- テキストエリア -->
           <div
-            id="panel-01"
             class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
           >
             <div class="max-w-[700px] mx-auto">
@@ -879,9 +873,10 @@
         </article>
 
         <!-- ====== 2 ====== -->
-        <article
+        <article id="panel-02"
           class="reveal slide-left delay-[200ms] acc-item border bg-lime-50/30 overflow-hidden"
         >
+          <!-- ボタン画像 -->
           <button
             class="acc-trigger w-full text-left"
             aria-expanded="false"
@@ -897,8 +892,8 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
+          <!-- テキストエリア -->
           <div
-            id="panel-02"
             class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
           >
             <div class="max-w-[700px] mx-auto">
@@ -923,9 +918,10 @@
         </article>
 
         <!-- ====== 3 ====== -->
-        <article
+        <article id="panel-03"
           class="reveal slide-left delay-[300ms] acc-item border bg-lime-50/30 overflow-hidden"
         >
+          <!-- ボタン画像 -->
           <button
             class="acc-trigger w-full text-left"
             aria-expanded="false"
@@ -941,8 +937,8 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
+          <!-- テキストエリア -->
           <div
-            id="panel-03"
             class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
           >
             <div class="max-w-[700px] mx-auto">
@@ -965,9 +961,10 @@
         </article>
 
         <!-- ====== 4 ====== -->
-        <article
-          class="reveal slide-left delay-[400ms] acc-item border bg-white overflow-hidden"
+        <article id="panel-04"
+          class="reveal slide-left delay-[400ms] acc-item border bg-lime-50/30 overflow-hidden"
         >
+          <!-- ボタン画像 -->
           <button
             class="acc-trigger w-full text-left"
             aria-expanded="false"
@@ -983,36 +980,33 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
+          <!-- テキストエリア -->
           <div
-            id="panel-04"
             class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
           >
             <div class="max-w-[700px] mx-auto">
-              <h2 class="mt-4 text-gray-900 font-semibold text-lg md:text-2xl">
+              <h4 class="mt-4">
                 小中高一貫教育
-              </h2>
-              <div
-                class="mt-2 text-gray-900 text-base md:text-xl leading-relaxed space-y-2"
+              </h4>
+              <article
+                class="mt-2 leading-relaxed space-y-2"
               >
-                <p>
-                  ipsimでは、小学5年生から高校3年生まで、成長に合わせた学習コースをご用意しています。
-                </p>
-                <p>
-                  小学生は中学を見据えて、基礎をしっかりと。
-                  中学生は高校につながる力を育てながら、志望校合格を目指します。
-                </p>
-                <p>
-                  同じ教室で安心して長く通える環境を整え、長期通塾割引もございます。
-                </p>
-              </div>
+                ipsimでは、小学5年生から高校3年生まで、成長に合わせた学習コースをご用意しています。
+                <br/>
+                小学生は中学を見据えて、基礎をしっかりと。
+                中学生は高校につながる力を育てながら、志望校合格を目指します。
+                <br/>
+                同じ教室で安心して長く通える環境を整え、長期通塾割引もございます。
+              </article>
             </div>
           </div>
         </article>
 
         <!-- ====== 5 ====== -->
-        <article
-          class="reveal slide-left acc-item border bg-white overflow-hidden"
+        <article id="panel-05"
+          class="reveal slide-left acc-item border bg-lime-50/30 overflow-hidden"
         >
+          <!-- ボタン画像 -->
           <button
             class="acc-trigger w-full text-left"
             aria-expanded="false"
@@ -1028,32 +1022,30 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
+          <!-- テキストエリア -->
           <div
-            id="panel-05"
             class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
           >
             <div class="max-w-[700px] mx-auto">
-              <h2 class="mt-4 text-gray-900 font-semibold text-lg md:text-2xl">
+              <h4 class="mt-4">
                 無理のない教室運営
-              </h2>
-              <div
-                class="mt-2 text-gray-900 text-base md:text-xl leading-relaxed space-y-2"
+              </h4>
+              <article
+                class="mt-2 leading-relaxed space-y-2"
               >
-                <p>
-                  各学年ごとに定員を設け、指導対象を限定することで、一人ひとりに行き届いた質の高い学習サポートを提供しています。
-                </p>
-                <p>
-                  教室内の席にも余裕をもたせているため、自習の利用や当日の急な欠席振り替えにも柔軟に対応できます。
-                </p>
-              </div>
+                各学年ごとに定員を設け、指導対象を限定することで、一人ひとりに行き届いた質の高い学習サポートを提供しています。
+                <br/>
+                教室内の席にも余裕をもたせているため、自習の利用や当日の急な欠席振り替えにも柔軟に対応できます。
+              </article>
             </div>
           </div>
         </article>
 
         <!-- ====== 6 ====== -->
-        <article
-          class="reveal slide-left delay-[600ms] acc-item border bg-white overflow-hidden"
+        <article id="panel-06"
+          class="reveal slide-left delay-[600ms] acc-item border bg-lime-50/30 overflow-hidden"
         >
+          <!-- ボタン画像 -->
           <button
             class="acc-trigger w-full text-left"
             aria-expanded="false"
@@ -1069,32 +1061,30 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
+          <!-- テキストエリア -->
           <div
-            id="panel-06"
             class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
           >
             <div class="max-w-[700px] mx-auto">
-              <h2 class="mt-4 text-gray-900 font-semibold text-lg md:text-2xl">
+              <h4 class="mt-4">
                 保護者面談の実施
-              </h2>
-              <div
-                class="mt-2 text-gray-900 text-base md:text-xl leading-relaxed space-y-2"
+              </h4>
+              <article
+                class="mt-2 leading-relaxed space-y-2"
               >
-                <p>
-                  面談の頻度や内容はご要望を伺いながら柔軟に対応し、学習や進路に関するご相談を定期的に行っています。
-                </p>
-                <p>
-                  また、授業での理解度や小テストの結果などは、毎回メールやLINEでご報告いたします。
-                </p>
+                面談の頻度や内容はご要望を伺いながら柔軟に対応し、学習や進路に関するご相談を定期的に行っています。
+                <br/>
+                また、授業での理解度や小テストの結果などは、毎回メールやLINEでご報告いたします。
               </div>
             </div>
           </div>
         </article>
 
         <!-- ====== 7 ====== -->
-        <article
-          class="reveal slide-left delay-[700ms] acc-item border bg-white overflow-hidden"
+        <article id="panel-07"
+          class="reveal slide-left delay-[700ms] acc-item border bg-lime-50/30 overflow-hidden"
         >
+          <!-- ボタン画像 -->
           <button
             class="acc-trigger w-full text-left"
             aria-expanded="false"
@@ -1110,25 +1100,22 @@
               class="block w-full mx-auto max-w-[700px] h-auto object-cover"
             />
           </button>
+          <!-- テキストエリア -->
           <div
-            id="panel-07"
             class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
           >
             <div class="max-w-[700px] mx-auto">
-              <h2 class="mt-4 text-gray-900 font-semibold text-lg md:text-2xl">
+              <h4 class="mt-4">
                 安心と安全
-              </h2>
-              <div
-                class="mt-2 text-gray-900 text-base md:text-xl leading-relaxed space-y-2"
+              </h4>
+              <article
+                class="mt-2 leading-relaxed space-y-2"
               >
-                <p>
-                  清掃の徹底や空気清浄機の設置など、
-                  感染予防をはじめとした快適で安全な学習環境づくりに努めています。
-                </p>
-                <p>
-                  さらに、お子さまの入室・退室時にはメールやLINEでお知らせし、安心して通塾していただけます。
-                </p>
-              </div>
+                清掃の徹底や空気清浄機の設置など、
+                感染予防をはじめとした快適で安全な学習環境づくりに努めています。
+                <br/>
+                さらに、お子さまの入室・退室時にはメールやLINEでお知らせし、安心して通塾していただけます。
+              </article>
             </div>
           </div>
         </article>
@@ -1149,19 +1136,19 @@
         </div>
         <!-- 飾り文字 -->
 
-        <!-- 見出し -->
+        <!-- テキストエリア -->
         <div class="text-center mt-4 mb-8">
-          <h2 class="reveal fade-up text-lg md:text-xl font-bold text-lime-600 text-shadow-lime">
-            安全で快適な環境づくり
-          </h2>
+          <h3 class="reveal fade-up">安全で快適な環境づくり</h3>
         </div>
 
-        <!-- カードグリッド -->
-        <div class="grid grid-cols-1 gap-8 max-w-[600px] mx-auto px-4">
+        <!-- カード container -->
+        <div class="grid grid-cols-1 gap-8 max-w-[600px] px-4 py-6 mx-auto rounded-lg"
+        >
           <!-- カード1 -->
           <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
+            <!-- 画像エリア -->
             <img src="pics/safe01.webp"
               alt="safe01"
               loading="lazy"
@@ -1169,50 +1156,42 @@
               width="570"
               height="370"
               class="w-full h-60 object-contain" />
-            <div class="p-4">
-              <div class="text-center">
-                <div
-                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left"
-                >
-                  <p>
-                    授業の「開始」「終了」をメールと LINE で通知。
-                    <br
-                      class="hidden md:block"
-                    />学習内容と小テスト結果もお知らせします。
-                  </p>
-                </div>
-              </div>
+            <!-- テキストエリア -->
+            <div class="p-4 text-center">
+              <article class="inline-block text-left leading-relaxed">
+                授業の「開始」「終了」をメールと LINE で通知。
+                <br class="hidden md:block"/>
+                学習内容と小テスト結果もお知らせします。
+              </article>
             </div>
           </div>
+
           <!-- カード2 -->
           <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
+            <!-- 画像エリア -->
             <img src="pics/safe02.webp" alt="safe02"
               loading="lazy"
               decoding="async"
               width="570"
               height="370"
               class="w-full h-60 object-contain" />
-            <div class="p-4">
-              <div class="text-center">
-                <div
-                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left"
-                >
-                  <p>
-                    年2回の懇談会では、ご家庭でのお子さまの様子を伺いながら、<br
-                      class="hidden md:block"
-                    />
-                    学習の進み具合や模試の結果、入試に向けた見通しを丁寧にお伝えします。
-                  </p>
-                </div>
-              </div>
+            <!-- テキストエリア -->
+            <div class="p-4 text-center">
+              <article class="inline-block text-left leading-relaxed">
+                年2回の懇談会では、ご家庭でのお子さまの様子を伺いながら、
+                <br class="hidden md:block"/>
+                学習の進み具合や模試の結果、入試に向けた見通しを丁寧にお伝えします。
+              </article>
             </div>
           </div>
+
           <!-- カード3 -->
           <div
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
           >
+            <!-- 画像エリア -->
             <img
               src="pics/safe04.webp"
               alt="safe04"
@@ -1222,75 +1201,67 @@
               height="370"
               class="w-full h-60 object-contain"
             />
-            <div class="p-4">
-              <div class="text-center">
-                <div
-                  class="inline-block text-base md:text-lg text-gray-700 leading-relaxed text-left"
-                >
-                  <p>
-                    教室の予定表は、保護者のスマートフォンやタブレットからいつでもご確認いただけます。<br
-                      class="hidden md:block"
-                    />
-                    ご家庭でも一部のオンライン教材をご利用いただけるため、授業内容の復習やテスト前の学習にも役立ちます。
-                  </p>
-                </div>
-              </div>
+            <!-- テキストエリア -->
+            <div class="p-4 text-center">
+              <article class="inline-block text-left leading-relaxed">
+                教室の予定表は、保護者のスマートフォンやタブレットからいつでもご確認いただけます。
+                <br class="hidden md:block"/>
+                ご家庭でも一部のオンライン教材をご利用いただけるため、授業内容の復習やテスト前の学習にも役立ちます。
+              </article>
             </div>
+
           </div>
         </div>
       </section>
       <!-- #endregion section 安全で快適 -->
 
-      <!-- #region section mini CTA -->
-      <section id="minicta2" class="reveal fade-up py-8 bg-white">
+      <!-- #region section mini CTA 2 -->
+      <section id="minicta2" class="reveal fade-up  max-w-[400px] mx-auto py-8 bg-white">
         <!-- セクション見出し（視覚非表示だが意味付け） -->
         <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
-        <!-- カード container -->
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[500px] px-4 py-6 mx-auto rounded-lg"
-        >
         <!-- カード1 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <div class="p-4">
-              <!-- テキストエリア -->
-              <h5 class="text-center">
-                お気軽にご連絡ください<br />
-                <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
-              </h5>
-              <!-- ボタンエリア -->
-              <div class="mt-4 flex flex-col items-center gap-3">
-                <!-- 山下 ボタン -->
-                <a
-                  href="https://lin.ee/sqkGCPT"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >山下教室</a>
-                <!-- 猪名川 ボタン -->
-                <a
-                  href="https://lin.ee/22k8QXA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >猪名川パークプラザ教室</a>
-              </div>
-              <!-- テキストエリア -->
-              <h6 class="mt-3 text-center">
-                ぜひLINEでお問い合わせください
-              </h6>
+        <div
+          class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+        >
+          <div class="p-4">
+            <!-- テキストエリア -->
+            <h5 class="text-center">
+              お気軽にご連絡ください<br />
+              <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
+            </h5>
+            <!-- ボタンエリア -->
+            <div class="mt-4 flex flex-col items-center gap-3">
+              <!-- 山下 ボタン -->
+              <a
+                href="https://lin.ee/sqkGCPT"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+              >山下教室</a>
+              <!-- 猪名川 ボタン -->
+              <a
+                href="https://lin.ee/22k8QXA"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+              >猪名川パークプラザ教室</a>
             </div>
+            <!-- テキストエリア -->
+            <h6 class="mt-3 text-center">
+              ぜひLINEでお問い合わせください
+            </h6>
           </div>
         </div>
       </section>
-      <!-- #endregion section mini CTA -->
-
+      <!-- #endregion section mini CTA 2 -->
+      
       <!-- #region section 教室画像 3 -->
       <section id="img03" class="reveal fade-up w-[400px] mx-auto px-4">
+        <!-- カード -->
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
+          <!-- 画像エリア -->
           <img src="pics/room06.webp"
           alt="room06"
               loading="lazy"
@@ -1298,6 +1269,7 @@
               width="1024"
               height="682"
           class="object-cover w-full animate-zoom-out-cover" />
+          <!-- 白いフィルター -->
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -1321,23 +1293,22 @@
         <div class="p-4 bg-white border-2 rounded-xl">
         <!-- 見出し -->
         <div class="text-center mb-8">
-          <h2 class="text-lg md:text-xl font-bold text-lime-600 text-shadow-lime">
-            コース・料金
-          </h2>
+          <h3>コース・料金</h3>
 
           <!-- 説明 -->
-          <p
-            class="mt-2 text-gray-900 text-sm md:text-lg leading-relaxed text-center"
+          <h6
+            class="mt-2 leading-relaxed text-center"
           >
             授業料は税込・教材費等別（月額）です。<br/>学年・通塾回数・時期により変動します。
-          </p>
+          </h6>
 
           <!-- コースカード：2枚横並び（md〜） -->
           <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- 中学生コース -->
-            <article
+            <article id="JuniorHigh"
               class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border"
             >
+              <!-- カード見出し -->
               <header
                 class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
               >
@@ -1355,55 +1326,59 @@
                   <path d="M4 12l8 4 8-4" />
                   <path d="M4 16l8 4 8-4" />
                 </svg>
-                <h3 class="text-xl md:text-2xl font-bold">中学生コース</h3>
+                <h3>中学生コース</h3>
               </header>
               <div class="px-4 pb-4">
-                <p
-                  class="text-gray-800 text-sm md:text-base leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3"
+                <!-- 説明 -->
+                <article
+                  class="leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3"
                 >
                   5科目の基礎から応用まで。学校内容の定着から難関高校入試対策まで対応しています。
-                </p>
+                </article>
                 <!-- 料金 -->
                 <dl class="mt-3 text-gray-900">
+                  <h5>高校入試対策講座</h5>
                   <div class="grid grid-cols-2 gap-y-1 items-end">
-                    <dt
+                    <article
                       class="text-blue-600 text-base md:text-lg font-bold"
                     >
                       週1回（数学）
-                    </dt>
-                    <dd
+                    </article>
+                    <article
                       class="text-right text-red-600 text-base md:text-lg font-bold"
                     >
                       ¥12,100〜
-                    </dd>
+                    </article>
 
-                    <dt
+                    <article
                       class="text-blue-600 text-base md:text-lg font-bold"
                     >
                       週2回（5科目）
-                    </dt>
-                    <dd
+                    </article>
+                    <article
                       class="text-right text-red-600 text-base md:text-lg font-bold"
                     >
                       ¥20,900〜
-                    </dd>
+                    </article>
 
-                    <dt class="text-gray-900">週4回（5科目）</dt>
-                    <dd class="text-right">¥27,500〜</dd>
+                    <article class="text-gray-900">週4回（5科目）</article>
+                    <article class="text-right">¥27,500〜</article>
                   </div>
                 </dl>
-                <p
+                <!-- 補足 -->
+                <h6
                   class="mt-3 text-gray-700 text-xs md:text-sm leading-relaxed"
                 >
                   ※ 週2回以上の受講で週末テスト対策に参加できます
-                </p>
+                </h6>
               </div>
             </article>
 
             <!-- 小学生コース -->
-            <article
+            <article id="Elementary"
               class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border"
             >
+              <!-- カード見出し -->
               <header
                 class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
               >
@@ -1421,60 +1396,51 @@
                   <path d="M4 12l8 4 8-4" />
                   <path d="M4 16l8 4 8-4" />
                 </svg>
-                <h3 class="text-xl md:text-2xl font-bold">小学生コース</h3>
+                <h3>小学生コース</h3>
               </header>
               <div class="px-4 pb-4">
-                <p
-                  class="text-gray-800 text-sm md:text-base leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3"
+                <!-- 説明 -->
+                <article
+                  class="leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3"
                 >
                   算数・英語・国語の基礎から応用まで。学校内容の定着から中学受験対策まで幅広く対応しています。
-                </p>
+                </article>
 
                 <!-- 料金（2ブロック） -->
                 <div class="mt-3 space-y-4">
+
                   <!-- 入学準備 -->
                   <section>
-                    <h4
-                      class="text-gray-900 text-base md:text-lg font-semibold underline underline-offset-4"
-                    >
-                      中学
-                      <span class="font-bold text-lg md:text-xl">入学準備</span>
-                      講座
-                    </h4>
-                    <dl
+                    <h5>中学入学準備講座</h5>
+                    <div
                       class="mt-2 grid grid-cols-2 gap-y-1 items-end text-gray-900"
                     >
-                      <dt class="font-bold text-blue-600">週1回（算数）</dt>
-                      <dd class="font-bold text-right text-red-600">
+                      <article class="font-bold text-blue-600">週1回（算数）</article>
+                      <article class="font-bold text-right text-red-600">
                         ¥6,600〜
-                      </dd>
-                      <dt class="font-bold text-blue-600">週2回（算/英）</dt>
-                      <dd class="font-bold text-right text-red-600">
+                      </article>
+                      <article class="font-bold text-blue-600">週2回（算/英）</article>
+                      <article class="font-bold text-right text-red-600">
                         ¥12,100〜
-                      </dd>
-                      <dt class="">週2回（算/国）</dt>
-                      <dd class="text-right">¥12,100〜</dd>
-                    </dl>
+                      </article>
+                      <article class="">週2回（算/国）</article>
+                      <article class="text-right">¥12,100〜</article>
+                    </div>
                   </section>
 
                   <!-- 受験特別 -->
                   <section>
-                    <h4
-                      class="text-gray-900 text-base md:text-lg font-semibold underline underline-offset-4"
-                    >
-                      <span class="font-bold text-lg md:text-xl">中学受験</span>
-                      特別講座
-                    </h4>
-                    <dl
+                    <h5>中学受験特別講座</h5>
+                    <div
                       class="mt-2 grid grid-cols-2 gap-y-1 items-end text-gray-900"
                     >
-                      <dt>週2回（算数）</dt>
-                      <dd class="text-right">¥20,900〜</dd>
-                      <dt>週2回（理科）</dt>
-                      <dd class="text-right">¥20,900〜</dd>
-                      <dt>週4回（算/理）</dt>
-                      <dd class="text-right">¥27,500〜</dd>
-                    </dl>
+                      <article>週2回（算数）</article>
+                      <article class="text-right">¥20,900〜</article>
+                      <article>週2回（理科）</article>
+                      <article class="text-right">¥20,900〜</article>
+                      <article>週4回（算/理）</article>
+                      <article class="text-right">¥27,500〜</article>
+                    </div>
                   </section>
                 </div>
               </div>
@@ -1485,13 +1451,9 @@
           <div
             class="px-4 py-3 mt-6 bg-white rounded-xl border border-gray-200"
           >
-            <ul
-              class="text-xs md:text-sm text-gray-900 list-disc pl-5 space-y-1"
-            >
-              <li>入会金・教材費・模試代が別途かかります</li>
-              <li>季節講習（春・夏・冬）は別途ご案内します</li>
-              <li>兄弟姉妹割引があります（詳細はお問い合わせください）</li>
-            </ul>
+            <h6>入会金・教材費・模試代が別途かかります</h6>
+            <h6>季節講習（春・夏・冬）は別途ご案内します</h6>
+            <h6>兄弟姉妹割引があります（詳細はお問い合わせください）</h6>
           </div>
         </div>
       </section>
@@ -2257,51 +2219,46 @@
       </section>
       <!-- #endregion section アクセス 猪名川 -->
 
-      <!-- #region section mini CTA -->
-      <section id="minicta3" class="reveal fade-up py-8 bg-white">
+      <!-- #region section mini CTA 3 -->
+      <section id="minicta3" class="reveal fade-up  max-w-[400px] mx-auto py-8 bg-white">
         <!-- セクション見出し（視覚非表示だが意味付け） -->
         <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
-        <!-- カード container -->
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[500px] px-4 py-6 mx-auto rounded-lg"
-        >
         <!-- カード1 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <div class="p-4">
-              <!-- テキストエリア -->
-              <h5 class="text-center">
-                お気軽にご連絡ください<br />
-                <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
-              </h5>
-              <!-- ボタンエリア -->
-              <div class="mt-4 flex flex-col items-center gap-3">
-                <!-- 山下 ボタン -->
-                <a
-                  href="https://lin.ee/sqkGCPT"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >山下教室</a>
-                <!-- 猪名川 ボタン -->
-                <a
-                  href="https://lin.ee/22k8QXA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-                >猪名川パークプラザ教室</a>
-              </div>
-              <!-- テキストエリア -->
-              <h6 class="mt-3 text-center">
-                ぜひLINEでお問い合わせください
-              </h6>
+        <div
+          class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+        >
+          <div class="p-4">
+            <!-- テキストエリア -->
+            <h5 class="text-center">
+              お気軽にご連絡ください<br />
+              <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
+            </h5>
+            <!-- ボタンエリア -->
+            <div class="mt-4 flex flex-col items-center gap-3">
+              <!-- 山下 ボタン -->
+              <a
+                href="https://lin.ee/sqkGCPT"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+              >山下教室</a>
+              <!-- 猪名川 ボタン -->
+              <a
+                href="https://lin.ee/22k8QXA"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
+              >猪名川パークプラザ教室</a>
             </div>
+            <!-- テキストエリア -->
+            <h6 class="mt-3 text-center">
+              ぜひLINEでお問い合わせください
+            </h6>
           </div>
         </div>
       </section>
-      <!-- #endregion section mini CTA -->
-
+      <!-- #endregion section mini CTA 3 -->
+      
 
     </main>
     <!-- #endregion main -->
