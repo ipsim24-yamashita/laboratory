@@ -39,23 +39,22 @@
     <!-- #endregion head meta -->
 
     <!--#region head title -->
-    <title>
+    <title id="タイトル">
       個別進学塾 ipsim 山下教室・猪名川パークプラザ教室 |
       川西市・猪名川町の個別指導
     </title>
     <!-- #endregion head title -->
 
     <!-- #region head script TailwindCSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="TailwindCSS CDN" src="https://cdn.tailwindcss.com"></script>
     <!-- #endregion head script TailwindCSS CDN -->
 
     <!-- #region head style TailwindCSS custom -->
-    <style>
+    <style id="TailwindCSS Custom" type="text/tailwindcss">
+      /* スムーズ動作 */
       html {
         scroll-behavior: smooth;
       }
-    </style>
-    <style type="text/tailwindcss">
       /* ローカルフォント PresentAnthem */
       @font-face {
         font-family: 'PresentAnthem';
@@ -289,7 +288,7 @@
     <!-- #endregion head style TailwindCSS custom -->
 
     <!-- #region head style Google Map iframe -->
-    <style>
+    <style id="Google Map">
       .map-shell {
         position: relative;
         width: 100%;
@@ -358,7 +357,7 @@
     <!-- #endregion head link Google Map 接続のウォームアップ -->
 
     <!-- #region head script SEO対策 -->
-    <script type="application/ld+json">
+    <script id="SEO" type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
@@ -445,11 +444,37 @@
     <!-- #endregion head script SEO対策 -->
 
     <!-- #region タップミス軽減-->
-    <style>
+    <style id="tap-miss">
       .acc-trigger { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       .acc-trigger img { display: block; width: 100%; height: auto; }
     </style>
     <!-- #endregion タップミス軽減-->
+
+
+    <!-- #region style image animation zoom-out -->
+    <style id="image-zoom">
+      /* 拡大状態 → 等倍へ（女の子が遠ざかる） */
+      @keyframes zoomOutCover {
+        0%   { transform: scale(1.1111); }
+        10%  { transform: scale(1.105); }  /* ゆっくり始まる */
+        90%  { transform: scale(1.01); }   /* ゆっくり止まる直前 */
+        100% { transform: scale(1); }
+      }
+
+      .animate-zoom-out-cover {
+        animation: zoomOutCover 10s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        transform-origin: center center;
+        will-change: transform;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .animate-zoom-out-cover {
+          animation: none;
+          transform: scale(1);
+        }
+      }
+    </style>
+    <!-- #endregion style image animation zoom-out -->
 
 
   </head>
@@ -465,7 +490,7 @@
       <!-- #region section hero -->
       <section
         id="hero"
-        class="relative overflow-hidden bg-transparent"
+        class="relative overflow-hidden bg-transparen"
       >
         <header
           class="absolute top-0 left-0 z-20 flex items-center justify-between w-full px-4 pt-4"
@@ -484,7 +509,7 @@
             alt="ヒーロー"
             fetchpriority="high"
             decoding="async"
-            class="block w-full h-auto object-contain"
+            class="block w-full h-auto object-contain animate-zoom-out-cover"
           />
 
           <div class="absolute inset-0 bg-white/20"></div>
@@ -567,7 +592,7 @@
                 decoding="async"
                 width="1024"
                 height="576"
-          class="reveal fade-up shadow-md w-full max-w-[800px] mt-4 mx-auto object-cover block"
+          class="shadow-md w-full max-w-[800px] mt-4 mx-auto object-cover block animate-zoom-out-cover"
         />
       </section>
       <!-- #endregion section 猪名川体験会-->
@@ -585,7 +610,7 @@
                 decoding="async"
                 width="1024"
                 height="603"
-                class="object-cover w-full" />
+                class="object-cover w-full animate-zoom-out-cover" />
           <!-- 白いフィルター -->
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
@@ -593,11 +618,11 @@
       <!-- #endregion section 教室画像 1 -->
 
       <!-- #region section Why なぜ成績が上がるのか -->
-      <senction>
+      <section id="why">
         <div class="text-2xl text-red-500">
           ここへ「Why なぜ成績が上がるのか」を入れる
         </div>
-      </senction>
+      </section>
 
       <!-- #endregion section Why なぜ成績が上がるのか -->
 
@@ -727,7 +752,7 @@
       <!-- #endregion section ipsimがピッタリなお子さま -->
 
       <!-- #region section 教室画像 2 -->
-      <section id="img01" class="reveal fade-up w-[400px] mx-auto px-4">
+      <section id="img02" class="reveal fade-up w-[400px] mx-auto px-4">
         <!-- カード -->
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
@@ -739,7 +764,7 @@
               decoding="async"
               width="1024"
               height="682"
-          class="object-cover w-full" />
+          class="object-cover w-full animate-zoom-out-cover" />
           <!-- 白いフィルター -->
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
@@ -1261,7 +1286,7 @@
       <!-- #endregion section mini CTA 2 -->
 
       <!-- #region section 教室画像 3 -->
-      <section class="reveal fade-up w-[400px] mx-auto px-4">
+      <section id="img03" class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
@@ -1271,7 +1296,7 @@
               decoding="async"
               width="1024"
               height="682"
-          class="object-cover w-full" />
+          class="object-cover w-full animate-zoom-out-cover" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -1472,7 +1497,7 @@
       <!-- #endregion section コース・料金（カード＆グリッド版） -->
 
       <!-- #region section 教室画像 4 -->
-      <section class="reveal fade-up w-[400px] mx-auto px-4">
+      <section id="img04" class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
@@ -1482,7 +1507,7 @@
               decoding="async"
               width="1024"
               height="576"
-              class="object-cover w-full" />
+              class="object-cover w-full animate-zoom-out-cover" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
@@ -1935,7 +1960,7 @@
       <!-- #endregion section 実績（カード型） -->
 
       <!-- #region section 教室画像 5 -->
-      <section class="reveal fade-up w-[400px] mx-auto px-4">
+      <section id="img05" class="reveal fade-up w-[400px] mx-auto px-4">
         <div
           class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
         >
@@ -1945,7 +1970,7 @@
               decoding="async"
               width="826"
               height="549"
-          class="object-cover w-full" />
+          class="object-cover w-full animate-zoom-out-cover" />
           <div class="absolute inset-0 bg-white/40"></div>
         </div>
       </section>
