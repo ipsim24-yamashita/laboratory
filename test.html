@@ -233,62 +233,6 @@
             @apply text-6xl;
           }
         }
-
-        /* xl（1280px〜） */
-        @screen xl {
-          h1 {
-            @apply text-6xl;
-          } /* 60px */
-          h2 {
-            @apply text-5xl;
-          } /* 48px */
-          h3 {
-            @apply text-4xl;
-          } /* 36px */
-          h4 {
-            @apply text-3xl;
-          } /* 30px */
-          h5 {
-            @apply text-2xl;
-          } /* 24px */
-          h6 {
-            @apply text-xl;
-          } /* 20px */
-          article {
-            @apply text-2xl;
-          } /* 24px */
-          figure {
-            @apply text-7xl;
-          }
-        }
-
-        /* 2xl（1536px〜） */
-        @screen 2xl {
-          h1 {
-            @apply text-7xl;
-          } /* 72px */
-          h2 {
-            @apply text-6xl;
-          } /* 60px */
-          h3 {
-            @apply text-5xl;
-          } /* 48px */
-          h4 {
-            @apply text-4xl;
-          } /* 36px */
-          h5 {
-            @apply text-3xl;
-          } /* 30px */
-          h6 {
-            @apply text-2xl;
-          } /* 24px */
-          article {
-            @apply text-2xl;
-          } /* 24px */
-          figure {
-            @apply text-8xl;
-          }
-        }
       }
     </style>
     <!-- #endregion head style TailwindCSS custom -->
@@ -461,8 +405,8 @@
     <style id="image-zoom">
       /* 拡大状態 → 等倍へ（女の子が遠ざかる） */
       @keyframes zoomOutCover {
-        0%   { transform: scale(1.1111); }
-        10%  { transform: scale(1.105); }  /* ゆっくり始まる */
+        0%   { transform: scale(1.07); }
+        10%  { transform: scale(1.065); }  /* ゆっくり始まる */
         90%  { transform: scale(1.01); }   /* ゆっくり止まる直前 */
         100% { transform: scale(1); }
       }
@@ -485,7 +429,6 @@
 
   </head>
   <body>
-    <main class="space-y-12 md:space-y-36">
       <!-- #region h2 -->
       <h2 class="sr-only">
         個別進学塾 ipsim 山下教室 / 猪名川パークプラザ教室
@@ -531,6 +474,8 @@
         </div>
       </section>
       <!-- #endregion section hero -->
+
+    <main class="space-y-12 md:space-y-36">
 
       <!-- #region section イントロコメント -->
       <section id="intro" class="reveal fade-up bg-white">
@@ -621,7 +566,6 @@
         </div>
       </section>
       <!-- #endregion section 教室画像 1 -->
-
 
       <!-- #region section 実績 偏差値UP -->
       <section
