@@ -401,13 +401,11 @@
     <!-- #endregion タップミス軽減-->
 
 
-    <!-- #region style image animation zoom-out -->
-    <style id="image-zoom">
+    <!-- #region style 画像 zoom-out アニメーション -->
+    <style id="zoom-out">
       /* 拡大状態 → 等倍へ（女の子が遠ざかる） */
       @keyframes zoomOutCover {
-        0%   { transform: scale(1.07); }
-        10%  { transform: scale(1.065); }  /* ゆっくり始まる */
-        90%  { transform: scale(1.01); }   /* ゆっくり止まる直前 */
+        0%   { transform: scale(1.4); }
         100% { transform: scale(1); }
       }
 
@@ -424,7 +422,7 @@
         }
       }
     </style>
-    <!-- #endregion style image animation zoom-out -->
+    <!-- #endregion style 画像 zoom-out アニメーション -->
 
 
   </head>
@@ -2996,7 +2994,7 @@
       <!-- #endregion section 実績 偏差値UP -->
 
       <!-- #region section 本当のチカラ -->
-      <section id="chikara" class="reveal fade-up py-8 border-b">
+      <section id="chikara" class="reveal fade-up">
         <!-- テキストエリア -->
         <div class="text-center">
           <!-- セクション見出し -->
@@ -4388,7 +4386,7 @@
     </script>
     <!-- #endregion script 7つの理由 -->
 
-    <!-- #region script アニメーション（ゆっくり版） -->
+    <!-- #region script fade-up アニメーション -->
     <script>
       (function () {
         const els = document.querySelectorAll(".reveal");
@@ -4478,9 +4476,8 @@
         }
       })();
     </script>
-    <!-- #endregion script アニメーション -->
-  
-  
+    <!-- #endregion script fade-up アニメーション -->
+    
   <!-- #region button script トップへ戻る -->
 <!-- トップへ戻るボタン -->
 <button
