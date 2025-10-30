@@ -621,13 +621,20 @@
   </div>
 </section>
 
+
 <script>
 (() => {
   // ---------- DOM util ----------
   const $ = (sel, root=document) => root.querySelector(sel);
 
-  // ---------- カードHTML ----------
+  // ---------- カードHTML（影つきフォントを復元） ----------
   function cardHTML(c) {
+    const grade  = c.grade ?? "";
+    const type   = c.type ?? "";
+    const subj   = c.subject ?? "";
+    const before = c.before ?? "";
+    const after  = c.after ?? "";
+    const diff   = c.diff ?? "";
     return `
       <article class="rounded-xl bg-gradient-to-b from-white to-yellow-100 shadow p-3">
         <header class="flex items-center gap-2 mb-1">
@@ -635,19 +642,26 @@
             <path d="M3 21V5M3 21h18" />
             <polyline points="6,15 11,10 15,13 21,7" />
           </svg>
-          <h5>${c.grade ?? ""}</h5>
+          <!-- 学年と性別 -->
+          <h5>${grade}</h5>
         </header>
-        <p class="text-center text-gray-600 text-shadow-gray text-sm font-semibold">
-          ${(c.type ?? "")} ${(c.subject ?? "")}
+
+        <!-- 種別と教科 -->
+        <p class="text-gray-600 text-shadow-gray text-lg md:text-xl font-semibold text-center">
+          ${type} ${subj}
         </p>
-        <div class="text-center mt-1">
-          <span class="text-blue-600 font-semibold text-xl">${c.before}</span>
-          <span class="text-gray-600 text-xl">→</span>
-          <span class="text-red-600 font-extrabold text-2xl">${c.after}!</span>
+
+        <!-- 前 と 後 -->
+        <div class="mt-1 text-center">
+          <span class="text-blue-600 text-shadow-blue text-2xl md:text-3xl font-semibold">${before}</span>
+          <span class="text-gray-600 text-shadow-gray text-2xl md:text-3xl font-semibold">→</span>
+          <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold">${after} !</span>
         </div>
-        <div class="text-center mt-1">
-          <span class="text-blue-600 font-semibold text-lg">偏差値</span><br/>
-          <span class="text-red-600 text-2xl font-extrabold">${c.diff} UP</span>
+
+        <!-- 偏差値 と 上昇幅 -->
+        <div class="mt-1 text-center">
+          <span class="text-blue-600 text-shadow-blue font-semibold text-2xl">偏差値</span><br class="md:hidden"/>
+          <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold">${diff} UP</span>
         </div>
       </article>
     `;
@@ -663,48 +677,48 @@
     return { initial: 20, more1: 22 };                     // スマホ：2列
   }
 
-  // ---------- ボタン色（毎回フルリセット） ----------
-  const GREEN = ["bg-lime-500"];
-  const ORANGE = ["bg-orange-500","hover:bg-orange-600"];
+  // ---------- ボタン色（hoverなし／JSで完全管理） ----------
+  const GREEN  = ["bg-lime-500"];
+  const ORANGE = ["bg-orange-500"];
   function setBtnColor(btn, isOpen) {
+    // 旧hoverクラスが残っている可能性にも対応して除去
+    btn.classList.remove("hover:bg-lime-600", "hover:bg-orange-600");
     btn.classList.remove(...GREEN, ...ORANGE);
     btn.classList.add(...(isOpen ? ORANGE : GREEN));
   }
 
   // ---------- アコーディオン（max-height管理） ----------
-  // 開く：アニメ完了後に max-height:none 固定 → 再レイアウトでも閉じない
+  // 開：アニメ完了後に max-height:none 固定 → スクロール復帰やアドレスバー変動でも閉じない
   function openAccordion(wrapper, btn) {
     if (wrapper.dataset.state === "open") return;
-    // 一旦オートで高さアニメ
-    wrapper.style.maxHeight = wrapper.scrollHeight + "px";
-    wrapper.dataset.state = "opening";
-
-    const onEnd = (e) => {
-      if (e.propertyName !== "max-height") return;
-      wrapper.removeEventListener("transitionend", onEnd);
-      wrapper.style.maxHeight = "none"; // 固定
+    // 既に 'none' ならそのまま固定扱い
+    if (wrapper.style.maxHeight === "none") {
       wrapper.dataset.state = "open";
-    };
-    wrapper.addEventListener("transitionend", onEnd, { once: true });
-
+    } else {
+      wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+      wrapper.dataset.state = "opening";
+      const onEnd = (e) => {
+        if (e.propertyName !== "max-height") return;
+        wrapper.removeEventListener("transitionend", onEnd);
+        wrapper.style.maxHeight = "none"; // 固定
+        wrapper.dataset.state = "open";
+      };
+      wrapper.addEventListener("transitionend", onEnd, { once: true });
+    }
     btn.setAttribute("aria-expanded", "true");
     btn.textContent = "とじる";
     setBtnColor(btn, true);
   }
 
-  // 閉じる：none → 現在高に一瞬戻してから 0px でアニメ
+  // 閉：none → 現在高に一瞬戻してから 0px へアニメ
   function closeAccordion(wrapper, btn) {
     if (wrapper.dataset.state === "closed") return;
-
-    // none の場合は現在高を算出してから0へ
     if (wrapper.style.maxHeight === "none") {
       wrapper.style.maxHeight = wrapper.scrollHeight + "px";
-      // リフロー強制
-      void wrapper.offsetHeight;
+      void wrapper.offsetHeight; // reflow
     }
     wrapper.dataset.state = "closing";
     wrapper.style.maxHeight = "0px";
-
     const onEnd = (e) => {
       if (e.propertyName !== "max-height") return;
       wrapper.removeEventListener("transitionend", onEnd);
@@ -713,24 +727,14 @@
     wrapper.addEventListener("transitionend", onEnd, { once: true });
 
     btn.setAttribute("aria-expanded", "false");
-    btn.textContent = btn.id === "btn-more2" ? "もっともっと見る" : "もっと見る";
+    btn.textContent = (btn.id === "btn-more2") ? "もっともっと見る" : "もっと見る";
     setBtnColor(btn, false);
   }
 
   function syncAccordion(wrapper, btn, shouldOpen) {
-    // 目標状態へ
     if (shouldOpen) {
-      // すでに固定openなら色とラベルだけ同期
-      if (wrapper.style.maxHeight === "none") {
-        wrapper.dataset.state = "open";
-        btn.setAttribute("aria-expanded", "true");
-        btn.textContent = "とじる";
-        setBtnColor(btn, true);
-      } else {
-        openAccordion(wrapper, btn);
-      }
+      openAccordion(wrapper, btn);
     } else {
-      // 閉のときは必ず0pxへ
       closeAccordion(wrapper, btn);
     }
   }
@@ -741,19 +745,14 @@
     expanded1: false,
     expanded2: false,
     cards: [],
-    // 直近のブレークポイントスロット（sm/md/lg切替確認用）
-    slot() {
-      if (mqLG.matches) return "lg";
-      if (mqSM.matches) return "sm";
-      return "xs";
-    },
+    slot() { return mqLG.matches ? "lg" : mqSM.matches ? "sm" : "xs"; },
     currentSlot: null,
   };
 
   // ---------- データ読み込み（1回） ----------
   async function ensureData() {
     if (state.cards.length) return;
-    const res = await fetch("Excellent_JSON.json", { cache: "no-store" }); //  [oai_citation:2‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
+    const res = await fetch("Excellent_JSON.json", { cache: "no-store" }); // cards:[{grade,subject,type,before,after,diff}]
     const data = await res.json();
     state.cards = Array.isArray(data.cards) ? data.cards : [];
   }
@@ -778,7 +777,7 @@
 
     const { first, second, rest } = sliceByCounts();
 
-    // コンテンツ差し替え（※アコ開状態は維持＝後でsync）
+    // 内容差し替え
     initialWrap.innerHTML = first.map(cardHTML).join("");
     more1Grid.innerHTML   = second.map(cardHTML).join("");
     more2Grid.innerHTML   = rest.map(cardHTML).join("");
@@ -787,28 +786,23 @@
     btnMore.classList.toggle("hidden", second.length === 0);
     btnMore2.classList.toggle("hidden", rest.length === 0);
 
-    // 開閉状態に同期
+    // 開閉状態に同期（開いていたら max-height:none で固定）
     syncAccordion(more1Outer, btnMore,  state.expanded1);
     syncAccordion(more2Outer, btnMore2, state.expanded2);
 
-    // フォントや画像で高さが変わりうるので、開状態なら none を再確認
-    if (state.expanded1) {
-      // none でなければ再固定
-      if (more1Outer.style.maxHeight !== "none") {
-        more1Outer.style.maxHeight = "none";
-        more1Outer.dataset.state = "open";
-      }
+    // 安全のため、開状態は none 再確認
+    if (state.expanded1 && more1Outer.style.maxHeight !== "none") {
+      more1Outer.style.maxHeight = "none";
+      more1Outer.dataset.state = "open";
     }
-    if (state.expanded2) {
-      if (more2Outer.style.maxHeight !== "none") {
-        more2Outer.style.maxHeight = "none";
-        more2Outer.dataset.state = "open";
-      }
+    if (state.expanded2 && more2Outer.style.maxHeight !== "none") {
+      more2Outer.style.maxHeight = "none";
+      more2Outer.dataset.state = "open";
     }
   }
 
   async function renderAll() {
-    await ensureData(); // JSON読み込み [oai_citation:3‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
+    await ensureData();
     renderGrids();
   }
 
@@ -819,9 +813,11 @@
     const btnMore  = $("#btn-more");
     const btnMore2 = $("#btn-more2");
 
-    // 初期色を閉状態の緑に統一
-    setBtnColor(btnMore, false);
-    setBtnColor(btnMore2, false);
+    // HTML側に hover クラスが残っていても除去して安定化
+    [btnMore, btnMore2].forEach((b) => {
+      b.classList.remove("hover:bg-lime-600","hover:bg-orange-600");
+      setBtnColor(b, false); // 初期は閉の緑
+    });
 
     btnMore.onclick = () => {
       state.expanded1 = !state.expanded1;
@@ -832,33 +828,31 @@
       syncAccordion(more2Outer, btnMore2, state.expanded2);
     };
 
-    // コンテンツ高さが変わった時：開状態なら常に none に戻す（固定）
-    const ro1 = new ResizeObserver(() => {
+    // 中の高さが変わったら、開状態は常に none に戻す（固定）
+    new ResizeObserver(() => {
       if (state.expanded1 && more1Outer.style.maxHeight !== "none") {
         more1Outer.style.maxHeight = "none";
         more1Outer.dataset.state = "open";
       }
-    });
-    const ro2 = new ResizeObserver(() => {
+    }).observe($("#excellent-more1 > div"));
+
+    new ResizeObserver(() => {
       if (state.expanded2 && more2Outer.style.maxHeight !== "none") {
         more2Outer.style.maxHeight = "none";
         more2Outer.dataset.state = "open";
       }
-    });
-    ro1.observe($("#excellent-more1 > div"));
-    ro2.observe($("#excellent-more2 > div"));
+    }).observe($("#excellent-more2 > div"));
   }
 
   // ---------- ブレークポイント跨ぎのみ再スライス ----------
   function wireBreakpointReflow() {
     state.currentSlot = state.slot();
     const reflow = () => {
-      const nextSlot = state.slot();
-      if (nextSlot !== state.currentSlot) {
-        state.currentSlot = nextSlot;
+      const next = state.slot();
+      if (next !== state.currentSlot) {
+        state.currentSlot = next;
         state.counts = computeCounts();
-        // 再スライスしても開状態は維持、none固定で閉じない
-        renderGrids();
+        renderGrids(); // 開閉状態は維持
       }
     };
     mqSM.addEventListener("change", reflow);
@@ -866,7 +860,7 @@
   }
 
   // ---------- Init ----------
-  if (document.getElementById("Excellent")) { // セクション確認 [oai_citation:4‡index.html](sediment://file_000000005d80620683296150fb344056)
+  if (document.getElementById("Excellent")) {
     renderAll().then(() => {
       wireButtons();
       wireBreakpointReflow();
