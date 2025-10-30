@@ -628,7 +628,7 @@
   const $ = (sel, root=document) => root.querySelector(sel);
 
   // ---------- カードHTML（影つきフォントを復元） ----------
-function cardHTML(c) {
+  function cardHTML(c) {
   const grade  = c.grade ?? "";
   const type   = c.type ?? "";
   const subj   = c.subject ?? "";
@@ -659,14 +659,17 @@ function cardHTML(c) {
         <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold align-middle">${after} !</span>
       </div>
 
-      <!-- 偏差値 と 上昇幅（1行固定） -->
-      <div class="mt-1 text-center whitespace-nowrap leading-none">
+      <!-- 偏差値 と 上昇幅 -->
+      <div class="mt-1 text-center leading-none">
         <span class="text-blue-600 text-shadow-blue font-semibold text-2xl align-middle">偏差値</span>
-        <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold align-middle">${diff} UP</span>
+        <!-- スマホ時のみ改行 -->
+        <br class="sm:hidden" />
+        <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold align-middle whitespace-nowrap">${diff} UP</span>
       </div>
     </article>
   `;
 }
+
   // ---------- ブレークポイント別件数 ----------
   const mqSM = window.matchMedia("(min-width: 640px)");   // sm+
   const mqLG = window.matchMedia("(min-width: 1024px)");  // lg+
