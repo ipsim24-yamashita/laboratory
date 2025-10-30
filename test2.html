@@ -234,7 +234,7 @@
           }
         }
       }
-      
+
       /* 偏差値UP カード背景を黄グラデに統一 */
       @layer utilities {
         .ex-card {
@@ -574,123 +574,206 @@
       </section>
       <!-- #endregion section 教室画像 1 -->
 
-      <!-- #region section 実績 偏差値UP -->
-      <section
-        id="Excellent"
-        class="relative w-full max-w-[800px] mx-auto px-4 py-6"
-      >
-      
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white  flex justify-center"
-        >
-          <figure class="mb-4">Excellent !!</figure>
+      <!-- #region 偏差値UP -->
+<!-- #region section 実績 偏差値UP（2段アコーディオン版） -->
+<section id="Excellent" class="relative w-full max-w-[800px] mx-auto px-4 py-6">
+  <!-- 飾り文字 -->
+  <div class="reveal fade-up mt-8 flex justify-center bg-white">
+    <figure class="mb-4">Excellent !!</figure>
+  </div>
+
+  <!-- 見出し -->
+  <div class="text-center text-gray-600 font-semibold text-lg md:text-2xl mb-4">
+    <div>成績アップの実例</div>
+  </div>
+
+  <!-- カードの入れ物（レスポンシブ列数） -->
+  <div id="excellent-initial"
+       class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+  </div>
+
+  <!-- ▼ 1段目アコーディオン：もっと見る -->
+  <div class="mt-3">
+    <button id="btn-more"
+            type="button"
+            class="w-full sm:w-auto sm:px-6 sm:mx-auto block px-4 py-2 rounded-full bg-lime-500 text-white font-semibold shadow hover:bg-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
+            aria-expanded="false" aria-controls="excellent-more1">
+      もっと見る
+    </button>
+    <div id="excellent-more1"
+         class="overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out">
+      <div class="pt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+    </div>
+  </div>
+
+  <!-- ▼ 2段目アコーディオン：もっともっと見る -->
+  <div class="mt-3">
+    <button id="btn-more2"
+            type="button"
+            class="w-full sm:w-auto sm:px-6 sm:mx-auto block px-4 py-2 rounded-full bg-lime-500 text-white font-semibold shadow hover:bg-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
+            aria-expanded="false" aria-controls="excellent-more2">
+      もっともっと見る
+    </button>
+    <div id="excellent-more2"
+         class="overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out">
+      <div class="pt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  // -------- ユーティリティ --------
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+  // カードHTML（JSONの1件を表示） [oai_citation:2‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
+  function cardHTML(c) {
+    return `
+      <article class="rounded-xl bg-gradient-to-b from-white to-yellow-100 shadow p-3">
+        <header class="flex items-center gap-2 mb-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M3 21V5M3 21h18" />
+            <polyline points="6,15 11,10 15,13 21,7" />
+          </svg>
+          <h5>${c.grade ?? ""}</h5>
+        </header>
+        <p class="text-center text-gray-600 text-shadow-gray text-sm font-semibold">
+          ${(c.type ?? "")} ${(c.subject ?? "")}
+        </p>
+        <div class="text-center mt-1">
+          <span class="text-blue-600 font-semibold text-xl">${c.before}</span>
+          <span class="text-gray-600 text-xl">→</span>
+          <span class="text-red-600 font-extrabold text-2xl">${c.after}!</span>
         </div>
-        <!-- 飾り文字 -->
-
-        <!-- カード全体（枠色なし・背景白） -->
-        <div class="p-4 relative rounded-xl bg-white shadow-sm">
-          <!-- 説明 -->
-          <div class="reveal fade-up text-gray-600 font-semibold text-lg md:text-2xl">
-            <div class="pl-4">
-              的を絞った
-              <span class="text-lime-600 text-shadow-lime text-xl md:text-2xl"
-                >"効率の良い"</span
-              >
-              問題演習と
-              <di class="text-lime-600 text-shadow-lime text-xl md:text-2xl"
-                >”できる”ための</di
-              >
-              徹底解説<br />
-              <div class="mx-auto flex justify-center items-center text-blue-600 text-shadow-blue font-semibold text-xl md:text-2xl">
-                結果にこだわるipsimの
-              </div>
-              <div class="mx-auto flex justify-center items-center text-red-600 text-shadow-red font-bold text-3xl md:text-4xl"">
-              成績アップ!! 
-              </div>
-              <div class="mx-auto flex justify-center items-center text-gray-600 text-shadow-gray font-bold text-xl md:text-2xl"">
-              実例
-              </div>
-            </div>
-          </div>
-
-          <!-- 水平線 -->
-          <div class="m-2 py-2 border-t border-gray-200"></div>
-
-          <!-- 実例カードグリッド -->
-          <div
-            id="up-card-grid"
-            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mt-6"
-          ></div>
-          </div>
+        <div class="text-center mt-1">
+          <span class="text-blue-600 font-semibold text-lg">偏差値</span><br/>
+          <span class="text-red-600 text-2xl font-extrabold">${c.diff} UP</span>
         </div>
-      </section>
-      <!-- #endregion section 実績 偏差値UP -->
+      </article>
+    `;
+  }
 
-      <!-- #region script 偏差値UP JSON データ読み込み -->
-      <script>
-      // JSON ファイルを読み込む
-      fetch("./Excellent_JSON.json")
-        .then((res) => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          return res.json();
-        })
-        .then((data) => {
-          const grid = document.querySelector("#up-card-grid");
+  // ブレークポイント別の件数設定
+  function computeCounts() {
+    const isLG = window.matchMedia("(min-width: 1024px)").matches; // lg以上
+    const isSMplus = window.matchMedia("(min-width: 640px)").matches; // sm以上
 
-          data.cards.forEach((c) => {
-            const before = Number(c.before);
-            const after = Number(c.after);
-            const diff = after - before;
-            const isUp = diff >= 0;
+    if (isLG) {
+      return { initial: 20, more1: 24 };      // 4列
+    } else if (isSMplus) {
+      return { initial: 18, more1: 24 };      // 3列（sm, md）
+    } else {
+      return { initial: 20, more1: 22 };      // 2列（スマホ）
+    }
+  }
 
-            const article = document.createElement("article");
-            article.className = "ex-card";
+  // アコーディオン開閉（max-heightでスムーズ）
+  function expandAccordion(wrapper) {
+    wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+  }
+  function collapseAccordion(wrapper) {
+    wrapper.style.maxHeight = "0px";
+  }
 
-            article.innerHTML = `
-            <header class="flex items-center gap-2 mb-1">
-                <!-- SVG -->  
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 text-blue-600"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path d="M3 21V5M3 21h18" />
-                    <polyline points="6,15 11,10 15,13 21,7" />
-                </svg>
-              <!-- 学年と性別 -->
-              <h5>${c.grade}</h5>
-            </header>
+  // レンダリング本体
+  async function renderExcellent() {
+    // JSON読み込み（cards配列） [oai_citation:3‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
+    const res = await fetch("Excellent_JSON.json", { cache: "no-store" });
+    const data = await res.json();
+    const cards = Array.isArray(data.cards) ? data.cards : [];
 
-            <!-- 種別と教科 -->
-            <p class="text-gray-600 text-shadow-gray text-lg md:text-xl font-semibold text-center">${c.type} ${c.subject}</p>
+    const initialWrap = $("#excellent-initial");
+    const more1Outer = $("#excellent-more1");
+    const more1Grid  = $("#excellent-more1 > div");
+    const more2Outer = $("#excellent-more2");
+    const more2Grid  = $("#excellent-more2 > div");
+    const btnMore  = $("#btn-more");
+    const btnMore2 = $("#btn-more2");
 
-            <!-- 前 と 後 -->
-            <div class="mt-1 text-center">
-              <span class="text-blue-600 text-shadow-blue text-2xl md:text-3xl font-semibold">${before}</span>
-              <span class="text-gray-600 text-shadow-gray text-2xl md:text-3xl font-semibold">→</span>
-              <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold">${after} !</span>
-            </div>
+    // 状態をリセット
+    initialWrap.innerHTML = "";
+    more1Grid.innerHTML = "";
+    more2Grid.innerHTML = "";
+    collapseAccordion(more1Outer);
+    collapseAccordion(more2Outer);
+    btnMore.setAttribute("aria-expanded", "false");
+    btnMore2.setAttribute("aria-expanded", "false");
+    btnMore.classList.remove("hidden");
+    btnMore2.classList.remove("hidden");
 
-            <!-- 偏差値 と 上昇幅 -->
-            <div class="mt-1 text-center">
-              <span class="text-blue-600 text-shadow-blue font-semibold text-2xl">偏差値</span><br class="md:hidden"/>
-              <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold">${diff} UP</span>
-            </div>
-          `;
-            grid.appendChild(article);
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-          const grid = document.querySelector("#up-card-grid");
-          grid.innerHTML = `<p class="text-red-600">データの読み込みに失敗しました。</p>`;
-        });
-      </script>
-      <!-- #endregion script 偏差値UP JSON データ読み込み -->
+    // 件数計算
+    const { initial, more1 } = computeCounts();
+
+    const first = cards.slice(0, initial);
+    const second = cards.slice(initial, initial + more1);
+    const rest = cards.slice(initial + more1);
+
+    // 初期表示
+    initialWrap.innerHTML = first.map(cardHTML).join("");
+
+    // “もっと見る”用の内容
+    more1Grid.innerHTML = second.map(cardHTML).join("");
+
+    // “もっともっと見る”用の内容（残り全部）
+    more2Grid.innerHTML = rest.map(cardHTML).join("");
+
+    // ボタン表示制御
+    if (second.length === 0) btnMore.classList.add("hidden");
+    if (rest.length === 0)   btnMore2.classList.add("hidden");
+
+    // 1段目：もっと見る
+    btnMore.onclick = () => {
+      const expanded = btnMore.getAttribute("aria-expanded") === "true";
+      if (expanded) {
+        btnMore.setAttribute("aria-expanded", "false");
+        collapseAccordion(more1Outer);
+        btnMore.textContent = "もっと見る";
+      } else {
+        btnMore.setAttribute("aria-expanded", "true");
+        expandAccordion(more1Outer);
+        btnMore.textContent = "とじる";
+      }
+    };
+
+    // 2段目：もっともっと見る
+    btnMore2.onclick = () => {
+      const expanded = btnMore2.getAttribute("aria-expanded") === "true";
+      if (expanded) {
+        btnMore2.setAttribute("aria-expanded", "false");
+        collapseAccordion(more2Outer);
+        btnMore2.textContent = "もっともっと見る";
+      } else {
+        btnMore2.setAttribute("aria-expanded", "true");
+        expandAccordion(more2Outer);
+        btnMore2.textContent = "とじる";
+      }
+    };
+  }
+
+  // 初回＆リサイズ時（ブレークポイント変化で件数が変わるため再描画）
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderExcellent, 150);
+  });
+
+  // セクションが存在する場合のみ実行（念のため） [oai_citation:4‡index.html](sediment://file_000000005d80620683296150fb344056)
+  if (document.getElementById("Excellent")) {
+    renderExcellent();
+  }
+})();
+</script>
+<!-- #endregion section 実績 偏差値UP（2段アコーディオン版） -->
+
+
+
+      <!-- #endregion 偏差値UP -->
+
+
+
+
+
 
       <!-- #region section 本当のチカラ -->
       <section id="chikara" class="reveal fade-up">
