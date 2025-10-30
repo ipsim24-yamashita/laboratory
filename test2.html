@@ -620,14 +620,12 @@
     </div>
   </div>
 </section>
-
 <script>
 (() => {
-  // -------- ユーティリティ --------
+  // -------------------- DOM util --------------------
   const $ = (sel, root=document) => root.querySelector(sel);
-  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-  // カードHTML（JSONの1件を表示） [oai_citation:2‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
+  // -------------------- Card template --------------------
   function cardHTML(c) {
     return `
       <article class="rounded-xl bg-gradient-to-b from-white to-yellow-100 shadow p-3">
@@ -654,113 +652,155 @@
     `;
   }
 
-  // ブレークポイント別の件数設定
-  function computeCounts() {
-    const isLG = window.matchMedia("(min-width: 1024px)").matches; // lg以上
-    const isSMplus = window.matchMedia("(min-width: 640px)").matches; // sm以上
+  // -------------------- Breakpoint logic --------------------
+  const mqSM = window.matchMedia("(min-width: 640px)");   // sm+
+  const mqLG = window.matchMedia("(min-width: 1024px)");  // lg+
 
-    if (isLG) {
-      return { initial: 20, more1: 24 };      // 4列
-    } else if (isSMplus) {
-      return { initial: 18, more1: 24 };      // 3列（sm, md）
+  function computeCounts() {
+    if (mqLG.matches) {
+      return { initial: 20, more1: 24 };      // lg以上：4列
+    } else if (mqSM.matches) {
+      return { initial: 18, more1: 24 };      // sm, md：3列
     } else {
-      return { initial: 20, more1: 22 };      // 2列（スマホ）
+      return { initial: 20, more1: 22 };      // スマホ：2列
     }
   }
 
-  // アコーディオン開閉（max-heightでスムーズ）
-  function expandAccordion(wrapper) {
+  // -------------------- Accordion helpers --------------------
+  function setBtnColor(btn, expanded) {
+    // 開：オレンジ / 閉：明るい緑
+    const clsOn  = ["bg-orange-500","hover:bg-orange-600"];
+    const clsOff = ["bg-lime-500","hover:bg-lime-600"];
+    btn.classList.remove(...clsOn, ...clsOff);
+    btn.classList.add(...(expanded ? clsOn : clsOff));
+  }
+  function expand(wrapper) {
     wrapper.style.maxHeight = wrapper.scrollHeight + "px";
   }
-  function collapseAccordion(wrapper) {
+  function collapse(wrapper) {
     wrapper.style.maxHeight = "0px";
   }
+  function syncAccordion(wrapper, btn, expanded) {
+    if (expanded) {
+      expand(wrapper);
+      btn.setAttribute("aria-expanded", "true");
+      btn.textContent = btn.id === "btn-more2" ? "とじる" : "とじる";
+    } else {
+      collapse(wrapper);
+      btn.setAttribute("aria-expanded", "false");
+      btn.textContent = btn.id === "btn-more2" ? "もっともっと見る" : "もっと見る";
+    }
+    setBtnColor(btn, expanded);
+  }
 
-  // レンダリング本体
-  async function renderExcellent() {
-    // JSON読み込み（cards配列） [oai_citation:3‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
-    const res = await fetch("Excellent_JSON.json", { cache: "no-store" });
+  // -------------------- State (永続) --------------------
+  const state = {
+    // レイアウト
+    counts: computeCounts(),
+    // 開閉状態（「閉じる」を押すまで閉じない）
+    expanded1: false,
+    expanded2: false,
+    // データ
+    cards: []
+  };
+
+  // -------------------- Render --------------------
+  async function ensureData() {
+    if (state.cards.length) return;
+    const res = await fetch("Excellent_JSON.json", { cache: "no-store" }); //  [oai_citation:2‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
     const data = await res.json();
-    const cards = Array.isArray(data.cards) ? data.cards : [];
+    state.cards = Array.isArray(data.cards) ? data.cards : [];
+  }
 
+  function sliceByCounts() {
+    const { initial, more1 } = state.counts;
+    const first  = state.cards.slice(0, initial);
+    const second = state.cards.slice(initial, initial + more1);
+    const rest   = state.cards.slice(initial + more1);
+    return { first, second, rest };
+  }
+
+  function renderGrids() {
     const initialWrap = $("#excellent-initial");
+    const more1Outer  = $("#excellent-more1");
+    const more1Grid   = $("#excellent-more1 > div");
+    const more2Outer  = $("#excellent-more2");
+    const more2Grid   = $("#excellent-more2 > div");
+    const btnMore     = $("#btn-more");
+    const btnMore2    = $("#btn-more2");
+
+    const { first, second, rest } = sliceByCounts();
+
+    // コンテンツ差し替え
+    initialWrap.innerHTML = first.map(cardHTML).join("");
+    more1Grid.innerHTML   = second.map(cardHTML).join("");
+    more2Grid.innerHTML   = rest.map(cardHTML).join("");
+
+    // ボタンの表示／非表示
+    btnMore.classList.toggle("hidden", second.length === 0);
+    btnMore2.classList.toggle("hidden", rest.length === 0);
+
+    // アコーディオンの開閉状態を維持
+    syncAccordion(more1Outer, btnMore,  state.expanded1);
+    syncAccordion(more2Outer, btnMore2, state.expanded2);
+
+    // 開いたままのとき、リサイズで高さが変わる可能性があるので再計測
+    setTimeout(() => {
+      if (state.expanded1) expand(more1Outer);
+      if (state.expanded2) expand(more2Outer);
+    }, 0);
+  }
+
+  async function renderAll() {
+    await ensureData();          // JSON読み込み（1回だけ） [oai_citation:3‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
+    renderGrids();               // グリッド描画
+  }
+
+  // -------------------- Events --------------------
+  function wireButtons() {
     const more1Outer = $("#excellent-more1");
-    const more1Grid  = $("#excellent-more1 > div");
     const more2Outer = $("#excellent-more2");
-    const more2Grid  = $("#excellent-more2 > div");
     const btnMore  = $("#btn-more");
     const btnMore2 = $("#btn-more2");
 
-    // 状態をリセット
-    initialWrap.innerHTML = "";
-    more1Grid.innerHTML = "";
-    more2Grid.innerHTML = "";
-    collapseAccordion(more1Outer);
-    collapseAccordion(more2Outer);
-    btnMore.setAttribute("aria-expanded", "false");
-    btnMore2.setAttribute("aria-expanded", "false");
-    btnMore.classList.remove("hidden");
-    btnMore2.classList.remove("hidden");
-
-    // 件数計算
-    const { initial, more1 } = computeCounts();
-
-    const first = cards.slice(0, initial);
-    const second = cards.slice(initial, initial + more1);
-    const rest = cards.slice(initial + more1);
-
-    // 初期表示
-    initialWrap.innerHTML = first.map(cardHTML).join("");
-
-    // “もっと見る”用の内容
-    more1Grid.innerHTML = second.map(cardHTML).join("");
-
-    // “もっともっと見る”用の内容（残り全部）
-    more2Grid.innerHTML = rest.map(cardHTML).join("");
-
-    // ボタン表示制御
-    if (second.length === 0) btnMore.classList.add("hidden");
-    if (rest.length === 0)   btnMore2.classList.add("hidden");
-
-    // 1段目：もっと見る
     btnMore.onclick = () => {
-      const expanded = btnMore.getAttribute("aria-expanded") === "true";
-      if (expanded) {
-        btnMore.setAttribute("aria-expanded", "false");
-        collapseAccordion(more1Outer);
-        btnMore.textContent = "もっと見る";
-      } else {
-        btnMore.setAttribute("aria-expanded", "true");
-        expandAccordion(more1Outer);
-        btnMore.textContent = "とじる";
-      }
+      state.expanded1 = !state.expanded1;
+      syncAccordion(more1Outer, btnMore, state.expanded1);
+    };
+    btnMore2.onclick = () => {
+      state.expanded2 = !state.expanded2;
+      syncAccordion(more2Outer, btnMore2, state.expanded2);
     };
 
-    // 2段目：もっともっと見る
-    btnMore2.onclick = () => {
-      const expanded = btnMore2.getAttribute("aria-expanded") === "true";
-      if (expanded) {
-        btnMore2.setAttribute("aria-expanded", "false");
-        collapseAccordion(more2Outer);
-        btnMore2.textContent = "もっともっと見る";
-      } else {
-        btnMore2.setAttribute("aria-expanded", "true");
-        expandAccordion(more2Outer);
-        btnMore2.textContent = "とじる";
-      }
-    };
+    // 中の内容が変わった場合も高さ再計測（フォント読み込み等に備え）
+    new ResizeObserver(() => {
+      if (state.expanded1) expand(more1Outer);
+    }).observe($("#excellent-more1 > div"));
+    new ResizeObserver(() => {
+      if (state.expanded2) expand(more2Outer);
+    }).observe($("#excellent-more2 > div"));
   }
 
-  // 初回＆リサイズ時（ブレークポイント変化で件数が変わるため再描画）
-  let resizeTimer = null;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(renderExcellent, 150);
-  });
+  // 幅ブレークポイントを跨いだときのみ再レイアウト（状態は保持）
+  function wireBreakpointReflow() {
+    const reflow = () => {
+      const old = state.counts;
+      const next = computeCounts();
+      if (old.initial !== next.initial || old.more1 !== next.more1) {
+        state.counts = next;
+        renderGrids(); // 開閉状態(state.expandedX)は維持
+      }
+    };
+    mqSM.addEventListener("change", reflow);
+    mqLG.addEventListener("change", reflow);
+  }
 
-  // セクションが存在する場合のみ実行（念のため） [oai_citation:4‡index.html](sediment://file_000000005d80620683296150fb344056)
-  if (document.getElementById("Excellent")) {
-    renderExcellent();
+  // -------------------- Init --------------------
+  if (document.getElementById("Excellent")) { // セクションがあるときのみ [oai_citation:4‡index.html](sediment://file_000000005d80620683296150fb344056)
+    renderAll().then(() => {
+      wireButtons();
+      wireBreakpointReflow();
+    });
   }
 })();
 </script>
@@ -2492,192 +2532,39 @@
   ↑ トップへ
 </button>
 
-
 <script>
-(() => {
-  // -------------------- DOM util --------------------
-  const $ = (sel, root=document) => root.querySelector(sel);
+  const topBtn = document.getElementById("backToTop");
 
-  // -------------------- Card template --------------------
-  function cardHTML(c) {
-    return `
-      <article class="rounded-xl bg-gradient-to-b from-white to-yellow-100 shadow p-3">
-        <header class="flex items-center gap-2 mb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M3 21V5M3 21h18" />
-            <polyline points="6,15 11,10 15,13 21,7" />
-          </svg>
-          <h5>${c.grade ?? ""}</h5>
-        </header>
-        <p class="text-center text-gray-600 text-shadow-gray text-sm font-semibold">
-          ${(c.type ?? "")} ${(c.subject ?? "")}
-        </p>
-        <div class="text-center mt-1">
-          <span class="text-blue-600 font-semibold text-xl">${c.before}</span>
-          <span class="text-gray-600 text-xl">→</span>
-          <span class="text-red-600 font-extrabold text-2xl">${c.after}!</span>
-        </div>
-        <div class="text-center mt-1">
-          <span class="text-blue-600 font-semibold text-lg">偏差値</span><br/>
-          <span class="text-red-600 text-2xl font-extrabold">${c.diff} UP</span>
-        </div>
-      </article>
-    `;
+  function isSmallScreen() {
+    return window.matchMedia("(max-width: 767px)").matches; // sm以下
   }
 
-  // -------------------- Breakpoint logic --------------------
-  const mqSM = window.matchMedia("(min-width: 640px)");   // sm+
-  const mqLG = window.matchMedia("(min-width: 1024px)");  // lg+
+  function toggleButton() {
+    if (!isSmallScreen()) {
+      // ✅ md以上なら常に非表示・非作動
+      topBtn.classList.add("opacity-0", "pointer-events-none");
+      return;
+    }
 
-  function computeCounts() {
-    if (mqLG.matches) {
-      return { initial: 20, more1: 24 };      // lg以上：4列
-    } else if (mqSM.matches) {
-      return { initial: 18, more1: 24 };      // sm, md：3列
+    // ✅ sm以下のときのみ動作
+    if (window.scrollY > 4000) {
+      topBtn.classList.remove("opacity-0", "pointer-events-none");
+      topBtn.classList.add("opacity-100");
     } else {
-      return { initial: 20, more1: 22 };      // スマホ：2列
+      topBtn.classList.add("opacity-0", "pointer-events-none");
+      topBtn.classList.remove("opacity-100");
     }
   }
 
-  // -------------------- Accordion helpers --------------------
-  function setBtnColor(btn, expanded) {
-    // 開：オレンジ / 閉：明るい緑
-    const clsOn  = ["bg-orange-500","hover:bg-orange-600"];
-    const clsOff = ["bg-lime-500","hover:bg-lime-600"];
-    btn.classList.remove(...clsOn, ...clsOff);
-    btn.classList.add(...(expanded ? clsOn : clsOff));
-  }
-  function expand(wrapper) {
-    wrapper.style.maxHeight = wrapper.scrollHeight + "px";
-  }
-  function collapse(wrapper) {
-    wrapper.style.maxHeight = "0px";
-  }
-  function syncAccordion(wrapper, btn, expanded) {
-    if (expanded) {
-      expand(wrapper);
-      btn.setAttribute("aria-expanded", "true");
-      btn.textContent = btn.id === "btn-more2" ? "とじる" : "とじる";
-    } else {
-      collapse(wrapper);
-      btn.setAttribute("aria-expanded", "false");
-      btn.textContent = btn.id === "btn-more2" ? "もっともっと見る" : "もっと見る";
+  window.addEventListener("scroll", toggleButton);
+  window.addEventListener("resize", toggleButton); // ✅ 画面サイズ変更にも対応
+
+  topBtn.addEventListener("click", () => {
+    if (isSmallScreen()) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-    setBtnColor(btn, expanded);
-  }
-
-  // -------------------- State (永続) --------------------
-  const state = {
-    // レイアウト
-    counts: computeCounts(),
-    // 開閉状態（「閉じる」を押すまで閉じない）
-    expanded1: false,
-    expanded2: false,
-    // データ
-    cards: []
-  };
-
-  // -------------------- Render --------------------
-  async function ensureData() {
-    if (state.cards.length) return;
-    const res = await fetch("Excellent_JSON.json", { cache: "no-store" }); //  [oai_citation:2‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
-    const data = await res.json();
-    state.cards = Array.isArray(data.cards) ? data.cards : [];
-  }
-
-  function sliceByCounts() {
-    const { initial, more1 } = state.counts;
-    const first  = state.cards.slice(0, initial);
-    const second = state.cards.slice(initial, initial + more1);
-    const rest   = state.cards.slice(initial + more1);
-    return { first, second, rest };
-  }
-
-  function renderGrids() {
-    const initialWrap = $("#excellent-initial");
-    const more1Outer  = $("#excellent-more1");
-    const more1Grid   = $("#excellent-more1 > div");
-    const more2Outer  = $("#excellent-more2");
-    const more2Grid   = $("#excellent-more2 > div");
-    const btnMore     = $("#btn-more");
-    const btnMore2    = $("#btn-more2");
-
-    const { first, second, rest } = sliceByCounts();
-
-    // コンテンツ差し替え
-    initialWrap.innerHTML = first.map(cardHTML).join("");
-    more1Grid.innerHTML   = second.map(cardHTML).join("");
-    more2Grid.innerHTML   = rest.map(cardHTML).join("");
-
-    // ボタンの表示／非表示
-    btnMore.classList.toggle("hidden", second.length === 0);
-    btnMore2.classList.toggle("hidden", rest.length === 0);
-
-    // アコーディオンの開閉状態を維持
-    syncAccordion(more1Outer, btnMore,  state.expanded1);
-    syncAccordion(more2Outer, btnMore2, state.expanded2);
-
-    // 開いたままのとき、リサイズで高さが変わる可能性があるので再計測
-    setTimeout(() => {
-      if (state.expanded1) expand(more1Outer);
-      if (state.expanded2) expand(more2Outer);
-    }, 0);
-  }
-
-  async function renderAll() {
-    await ensureData();          // JSON読み込み（1回だけ） [oai_citation:3‡Excellent_JSON.json](sediment://file_0000000027a461fdac1ddf322d83dcae)
-    renderGrids();               // グリッド描画
-  }
-
-  // -------------------- Events --------------------
-  function wireButtons() {
-    const more1Outer = $("#excellent-more1");
-    const more2Outer = $("#excellent-more2");
-    const btnMore  = $("#btn-more");
-    const btnMore2 = $("#btn-more2");
-
-    btnMore.onclick = () => {
-      state.expanded1 = !state.expanded1;
-      syncAccordion(more1Outer, btnMore, state.expanded1);
-    };
-    btnMore2.onclick = () => {
-      state.expanded2 = !state.expanded2;
-      syncAccordion(more2Outer, btnMore2, state.expanded2);
-    };
-
-    // 中の内容が変わった場合も高さ再計測（フォント読み込み等に備え）
-    new ResizeObserver(() => {
-      if (state.expanded1) expand(more1Outer);
-    }).observe($("#excellent-more1 > div"));
-    new ResizeObserver(() => {
-      if (state.expanded2) expand(more2Outer);
-    }).observe($("#excellent-more2 > div"));
-  }
-
-  // 幅ブレークポイントを跨いだときのみ再レイアウト（状態は保持）
-  function wireBreakpointReflow() {
-    const reflow = () => {
-      const old = state.counts;
-      const next = computeCounts();
-      if (old.initial !== next.initial || old.more1 !== next.more1) {
-        state.counts = next;
-        renderGrids(); // 開閉状態(state.expandedX)は維持
-      }
-    };
-    mqSM.addEventListener("change", reflow);
-    mqLG.addEventListener("change", reflow);
-  }
-
-  // -------------------- Init --------------------
-  if (document.getElementById("Excellent")) { // セクションがあるときのみ [oai_citation:4‡index.html](sediment://file_000000005d80620683296150fb344056)
-    renderAll().then(() => {
-      wireButtons();
-      wireBreakpointReflow();
-    });
-  }
-})();
+  });
 </script>
-
 <!-- #endregion button script トップへ戻る -->
     
   </body>
