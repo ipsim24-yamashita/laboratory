@@ -57,14 +57,14 @@
       }
       /* ローカルフォント PresentAnthem */
       @font-face {
-        font-family: 'PresentAnthem';
-        src: url('./fonts/PresentAnthem-Regular.ttf') format('truetype');
+        font-family: "PresentAnthem";
+        src: url("./fonts/PresentAnthem-Regular.ttf") format("truetype");
         font-weight: normal;
         font-style: normal;
         font-display: swap;
       }
       .font-present {
-        font-family: 'PresentAnthem', system-ui, sans-serif;
+        font-family: "PresentAnthem", system-ui, sans-serif;
       }
       /* 柔らかい影 */
       .text-shadow-lime {
@@ -243,2387 +243,473 @@
       }
     </style>
     <!-- #endregion head style TailwindCSS custom -->
-
-    <!-- #region head style Google Map iframe -->
-    <style id="Google Map">
-      .map-shell {
-        position: relative;
-        width: 100%;
-        max-width: 760px;
-        margin: 0 auto;
-      }
-      .map-ratio {
-        position: relative;
-        width: 100%;
-        padding-top: 56.25%; /* 16:9 */
-        overflow: hidden;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-        background: #f3f4f6;
-      }
-      .map-iframe,
-      .map-placeholder {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-        display: block;
-      }
-      .map-placeholder {
-        object-fit: cover;
-      }
-      .map-cta {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(255, 255, 255, 0.9);
-        padding: 0.65rem 1rem;
-        border-radius: 9999px;
-        font: 600 15px/1.2 system-ui, -apple-system, "Noto Sans JP", sans-serif;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        cursor: pointer;
-        user-select: none;
-        border: 1px solid rgba(0, 0, 0, 0.06);
-      }
-      .map-cta:active {
-        transform: translate(-50%, -50%) scale(0.98);
-      }
-      .map-note {
-        margin-top: 0.5rem;
-        font: 14px/1.6 system-ui, -apple-system, "Noto Sans JP", sans-serif;
-        color: #374151;
-        opacity: 0.9;
-        text-align: center;
-      }
-    </style>
-    <!-- #endregion head style Google Map iframe -->
-
-    <!-- #region head link hero_pics preload -->
-    <link rel="preload" as="image" href="pics/main.webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="pics/logo.png" />
-    <!-- #endregion head link hero_pics preload -->
-
-    <!-- #region head link Google Map 接続のウォームアップ -->
-    <link rel="preconnect" href="https://www.google.com" crossorigin />
-    <link rel="preconnect" href="https://maps.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://maps.gstatic.com" crossorigin />
-    <!-- 参考: prefetch は非保証。状況により効果が薄いです -->
-    <!-- <link rel="prefetch" href="https://www.google.com/maps" as="document"> -->
-    <!-- #endregion head link Google Map 接続のウォームアップ -->
-
-    <!-- #region head script SEO対策 -->
-    <script id="SEO" type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "EducationalOrganization",
-        "name": "個別進学塾 ipsim",
-        "url": "https://ipsim17.jp/",
-        "telephone": "+81-72-767-6537",
-        "sameAs": [
-          "https://lin.ee/sqkGCPT",
-          "https://lin.ee/22k8QXA",
-          "https://www.instagram.com/ipsim.17/"
-        ],
-        "hasPart": [
-          {
-            "@type": "EducationalOrganization",
-            "name": "ipsim 山下教室",
-            "url": "https://ipsim17.jp/class/yamashita",
-            "telephone": "+81-72-767-6537",
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "JP",
-              "postalCode": "666-0105",
-              "addressRegion": "兵庫県",
-              "addressLocality": "川西市見野",
-              "streetAddress": "2-35-6 IBS 山下駅前ビル2F"
-            },
-            "geo": {
-              "@type": "GeoCoordinates",
-              "latitude": 34.8931642,
-              "longitude": 135.4109987
-            },
-            "hasMap": "https://maps.google.com/?q=34.8931642,135.4109987",
-            "openingHoursSpecification": [
-              {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday"],
-                "opens": "14:30",
-                "closes": "21:00"
-              },
-              {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": "Saturday",
-                "opens": "14:00",
-                "closes": "19:00"
-              }
-            ]
-          },
-          {
-            "@type": "EducationalOrganization",
-            "name": "ipsim 猪名川パークプラザ教室",
-            "url": "https://ipsim17.jp/class/inagawa",
-            "telephone": "+81-72-768-6410",
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "JP",
-              "postalCode": "666-0251",
-              "addressRegion": "兵庫県",
-              "addressLocality": "川辺郡猪名川町若葉",
-              "streetAddress": "1-39-1 パークプラザB棟2号室"
-            },
-            "geo": {
-              "@type": "GeoCoordinates",
-              "latitude": 34.8969108,
-              "longitude": 135.3685999
-            },
-            "hasMap": "https://maps.google.com/?q=34.8969108,135.3685999",
-            "openingHoursSpecification": [
-              {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday"],
-                "opens": "14:30",
-                "closes": "21:00"
-              },
-              {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": "Saturday",
-                "opens": "14:00",
-                "closes": "19:00"
-              }
-            ]
-          }
-        ]
-      }
-    </script>
-    <!-- #endregion head script SEO対策 -->
-
-    <!-- #region タップミス軽減-->
-    <style id="tap-miss">
-      .acc-trigger { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-      .acc-trigger img { display: block; width: 100%; height: auto; }
-    </style>
-    <!-- #endregion タップミス軽減-->
-
-    <!-- #region style 画像 zoom-out アニメーション -->
-    <style id="zoom-out">
-      /* 拡大状態 → 等倍へ（女の子が遠ざかる） */
-      @keyframes zoomOutCover {
-        0%   { transform: scale(1.7); }
-        100% { transform: scale(1); }
-      }
-
-      .animate-zoom-out-cover {
-        animation: zoomOutCover 20s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        transform-origin: center center;
-        will-change: transform;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .animate-zoom-out-cover {
-          animation: none;
-          transform: scale(1);
-        }
-      }
-    </style>
-    <!-- #endregion style 画像 zoom-out アニメーション -->
-
   </head>
   <body>
-      <!-- #region h2 -->
-      <h2 class="sr-only">
-        個別進学塾 ipsim 山下教室 / 猪名川パークプラザ教室
-      </h2>
-      <!-- #endregion h2 -->
+    <!-- #region h2 -->
+    <h2 class="sr-only">個別進学塾 ipsim 山下教室 / 猪名川パークプラザ教室</h2>
+    <!-- #endregion h2 -->
 
-      <!-- #region section hero -->
-      <section
-        id="hero"
-        class="relative overflow-hidden bg-transparen"
+    <!-- #region section hero -->
+    <section id="hero" class="relative overflow-hidden bg-transparen">
+      <header
+        class="absolute top-0 left-0 z-20 flex items-center justify-between w-full px-4 pt-4"
       >
-        <header
-          class="absolute top-0 left-0 z-20 flex items-center justify-between w-full px-4 pt-4"
-        >
-          <img
-            src="pics/logo.png"
-            alt="ロゴ"
-            width="623"
-            height="221"
-            class="h-auto w-28 md:w-40 drop-shadow-lg"
-          />
-        </header>
+        <img
+          src="pics/logo.png"
+          alt="ロゴ"
+          width="623"
+          height="221"
+          class="h-auto w-28 md:w-40 drop-shadow-lg"
+        />
+      </header>
 
-        <!-- ヒーロー用コンテナ -->
-        <div class="z-0">
-          <img
-            src="pics/main.webp"
-            alt="ヒーロー"
-            width="1024"
-            height="587"
-            fetchpriority="high"
-            decoding="async"
-            class="block w-full h-auto object-contain animate-zoom-out-cover"
-          />
+      <!-- ヒーロー用コンテナ -->
+      <div class="z-0">
+        <img
+          src="pics/main.webp"
+          alt="ヒーロー"
+          width="1024"
+          height="587"
+          fetchpriority="high"
+          decoding="async"
+          class="block w-full h-auto object-contain animate-zoom-out-cover"
+        />
 
-          <div class="absolute inset-0 bg-white/20"></div>
-        </div>
+        <div class="absolute inset-0 bg-white/20"></div>
+      </div>
 
-        <!-- テキストエリア -->
-        <!-- 配置 -->
-        <div
-          class="absolute top-[72px] sm:top-[140px] md:top-[160px] lg:top-[200px] xl:top-[240px] left-[30px] sm:left-[80px] md:left-[120px] lg:left-[100px] xl:left-[80px] z-10"
-        >
+      <!-- テキストエリア -->
+      <!-- 配置 -->
+      <div
+        class="absolute top-[72px] sm:top-[140px] md:top-[160px] lg:top-[200px] xl:top-[240px] left-[30px] sm:left-[80px] md:left-[120px] lg:left-[100px] xl:left-[80px] z-10"
+      >
         <!-- テキスト -->
-        <h5>結果にこだわる<span class="hidden sm:inline-block">進化した個別指導</span></h5>
+        <h5>
+          結果にこだわる<span class="hidden sm:inline-block"
+            >進化した個別指導</span
+          >
+        </h5>
         <h1>個別進学塾 ipsim</h1>
-        </div>
-      </section>
-      <!-- #endregion section hero -->
+      </div>
+    </section>
+    <!-- #endregion section hero -->
 
     <main class="space-y-12 md:space-y-36">
-
-      <!-- #region section イントロコメント -->
-      <section id="intro" class="mt-12 md:mt-36 reveal fade-up bg-white">
-        <!-- テキストエリア -->
-        <div class="text-center mb-4">
-          <!-- セクション見出し -->
-          <h2>個別進学塾 ipsim (イプシム)</h2>
-          <!-- セクション小見出し -->
-          <h4 class="mt-2">川西市・猪名川町の１中学専門塾</h4>
-        </div>
-
-        <!-- カード container -->
-        <div class="px-4 py-6 mx-auto rounded-lg max-w-[800px]">
-          <!-- カード1 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <div class="relative">
-              <img
-                src="pics/hero2.webp"
-                alt="hero2"
-                loading="lazy"
-                decoding="async"
-                width="1024"
-                height="259"
-                class="object-cover w-full h-auto"
-              />
-              <!-- 白いフィルター -->
-              <div class="absolute inset-0 bg-white/40"></div>
-            </div>
-            <!-- テキストエリア -->
-            <div class="p-4">
-              <h3 class="text-center mb-2">結果にこわだる進化した個別指導</h3>
-              <div class="text-center">
-                <article
-                class="inline-block text-left leading-relaxed">
-                  ipsimは「１中学専門」の個別指導塾です。<br class="hidden md:block" />
-                  対象を「１中学」に限定することで、学校の授業の進捗状況やテストの出題傾向を正確に把握。<br class="hidden md:block" />その上で、一人ひとりの理解度に合わせた質の高いテスト対策授業を行います。
-                </article>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section イントロコメント -->
-
-      <!-- #region section 猪名川体験会-->
-      <section id="inagawa_taiken" class="reveal fade-up relative bg-white">
-
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white  flex justify-center"
-        >
-          <figure class="mb-4">Information</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- メイン画像（中央揃え） -->
-        <img
-          src="pics/inagawa_taiken.webp"
-          alt="体験会/説明会"
-                loading="lazy"
-                decoding="async"
-                width="1024"
-                height="576"
-          class="reveal fade-up shadow-md w-full max-w-[800px] mt-4 mx-auto object-cover block"
-        />
-      </section>
-      <!-- #endregion section 猪名川体験会-->
-
-      <!-- #region section 教室画像 1 -->
-      <section id="img01" class="reveal fade-up w-[400px] mx-auto px-4">
-        <!-- カード -->
-        <div
-          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
-        >
-          <!-- 画像エリア -->
-          <img src="pics/room01.webp"
-                alt="room01" 
-                loading="lazy"
-                decoding="async"
-                width="1024"
-                height="603"
-                class="reveal fade-up object-cover w-full" />
-          <!-- 白いフィルター -->
-          <div class="absolute inset-0 bg-white/40"></div>
-        </div>
-      </section>
-      <!-- #endregion section 教室画像 1 -->
-
-      <!-- #region section 実績 偏差値UP -->
-      <section id="Excellent" class="relative w-full max-w-[1024px] mx-auto px-4 py-6">
+      <!-- #region section 偏差値UP -->
+      <section
+        id="Excellent"
+        class="relative w-full max-w-[1024px] mx-auto px-4 py-6"
+      >
         <!-- 飾り文字 -->
         <div class="reveal fade-up mt-8 flex justify-center bg-white">
           <figure class="mb-4">Excellent !!</figure>
         </div>
 
-        <!-- 見出し -->
-        <div class="text-center text-gray-600 font-semibold text-lg md:text-2xl mb-4">
-          <div>成績アップの実例</div>
-        </div>
+          <!-- 説明 -->
+          <div class="reveal fade-up text-gray-600 font-semibold text-lg md:text-2xl text-center">
+            <div class="pl-4">
+              的を絞った
+              <span class="text-lime-600 text-shadow-lime text-xl md:text-2xl"
+                >"効率の良い"</span
+              >
+              問題演習と
+              <div><span class="text-lime-600 text-shadow-lime text-xl md:text-2xl"
+                >”できる”ための</span>徹底解説</div>
+              <div class="mx-auto flex justify-center items-center text-blue-600 text-shadow-blue font-semibold text-xl md:text-2xl">
+                結果にこだわるipsimの
+              </div>
+              <div class="mx-auto flex justify-center items-center text-red-600 text-shadow-red font-bold text-3xl md:text-4xl"">
+              成績アップ!! 
+              </div>
+              <div class="mx-auto flex justify-center items-center text-gray-600 text-shadow-gray font-bold text-xl md:text-2xl"">
+              実例
+              </div>
+            </div>
+          </div>
+
+          <!-- 水平線 -->
+          <div class="m-6 py-2 border-t border-gray-200"></div>
 
         <!-- カードの入れ物（レスポンシブ列数） -->
-        <div id="excellent-initial"
-            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        </div>
+        <div
+          id="excellent-initial"
+          class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
+        ></div>
 
         <!-- ▼ 1段目アコーディオン：もっと見る -->
         <div class="mt-8">
-          <button id="btn-more"
-                  type="button"
-                  class="w-full sm:w-auto sm:px-6 sm:mx-auto block px-4 py-2 rounded-full bg-lime-500 text-white font-semibold shadow hover:bg-lime-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
-                  aria-expanded="false" aria-controls="excellent-more1">
+          <button
+            id="btn-more"
+            type="button"
+            class="w-full sm:w-auto sm:px-6 sm:mx-auto block px-4 py-2 rounded-full bg-lime-500 text-white font-semibold shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
+            aria-expanded="false"
+            aria-controls="excellent-more1"
+          >
             もっと見る
           </button>
-          <div id="excellent-more1"
-              class="overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out">
-            <div class="pt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+          <div
+            id="excellent-more1"
+            class="overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out"
+          >
+            <div
+              class="pt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
+            ></div>
           </div>
         </div>
 
         <!-- ▼ 2段目アコーディオン：もっともっと見る -->
         <div class="mt-8">
-          <button id="btn-more2"
-                  type="button"
-                  class="w-full sm:w-auto sm:px-6 sm:mx-auto block px-4 py-2 rounded-full bg-lime-500 text-white font-semibold shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
-                  aria-expanded="false" aria-controls="excellent-more2">
+          <button
+            id="btn-more2"
+            type="button"
+            class="w-full sm:w-auto sm:px-6 sm:mx-auto block px-4 py-2 rounded-full bg-lime-500 text-white font-semibold shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
+            aria-expanded="false"
+            aria-controls="excellent-more2"
+          >
             もっともっと見る
           </button>
-          <div id="excellent-more2"
-              class="overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out">
-            <div class="pt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+          <div
+            id="excellent-more2"
+            class="overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out"
+          >
+            <div
+              class="pt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
+            ></div>
           </div>
         </div>
       </section>
-      <!-- #endregion section 実績 偏差値UP -->
+      <!-- #endregion section 偏差値UP -->
 
-      <!-- #region script 実績 偏差値UP -->
+      <!-- #region script 偏差値UP -->
       <script>
-      (() => {
-        // ---------- DOM util ----------
-        const $ = (sel, root=document) => root.querySelector(sel);
+        (() => {
+          // -------------------- DOM util --------------------
+          const $ = (sel, root = document) => root.querySelector(sel);
 
-        // ---------- カードHTML（影つきフォントを復元） ----------
-        function cardHTML(c) {
-        const grade  = c.grade ?? "";
-        const type   = c.type ?? "";
-        const subj   = c.subject ?? "";
-        const before = c.before ?? "";
-        const after  = c.after ?? "";
-        const diff   = c.diff ?? "";
+          // -------------------- Card template --------------------
+          function cardHTML(c) {
+            const grade  = c.grade ?? "";
+            const type   = c.type ?? "";
+            const subj   = c.subject ?? "";
+            const before = c.before ?? "";
+            const after  = c.after ?? "";
+            const diff   = c.diff ?? "";
 
-        return `
-          <article class="rounded-xl bg-gradient-to-b from-white to-yellow-100 shadow p-3">
-            <header class="flex items-center gap-2 mb-1">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M3 21V5M3 21h18" />
-                <polyline points="6,15 11,10 15,13 21,7" />
-              </svg>
-              <!-- 学年と性別（1行固定） -->
-              <h5 class="whitespace-nowrap">${grade}</h5>
-            </header>
+            return `
+              <article class="rounded-xl bg-gradient-to-b from-white to-yellow-100 shadow p-3">
+                <header class="flex items-center gap-2 mb-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M3 21V5M3 21h18" />
+                    <polyline points="6,15 11,10 15,13 21,7" />
+                  </svg>
+                  <!-- 学年と性別（1行固定） -->
+                  <h5 class="whitespace-nowrap">${grade}</h5>
+                </header>
 
-            <!-- 種別と教科（1行固定） -->
-            <p class="text-gray-600 text-shadow-gray text-lg md:text-xl font-semibold text-center whitespace-nowrap">
-              ${type} ${subj}
-            </p>
+                <!-- 種別と教科（1行固定） -->
+                <p class="text-gray-600 text-shadow-gray text-lg md:text-xl font-semibold text-center whitespace-nowrap">
+                  ${type} ${subj}
+                </p>
 
-            <!-- 前 と 後（1行固定） -->
-            <div class="mt-1 text-center whitespace-nowrap leading-none">
-              <span class="text-blue-600 text-shadow-blue text-2xl md:text-3xl font-semibold align-middle">${before}</span>
-              <span class="text-gray-600 text-shadow-gray text-2xl md:text-3xl font-semibold align-middle">→</span>
-              <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold align-middle">${after} !</span>
-            </div>
+                <!-- 前 と 後（1行固定） -->
+                <div class="mt-1 text-center whitespace-nowrap leading-none">
+                  <span class="text-blue-600 text-shadow-blue text-2xl md:text-3xl font-semibold align-middle">${before}</span>
+                  <span class="text-gray-600 text-shadow-gray text-2xl md:text-3xl font-semibold align-middle">→</span>
+                  <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold align-middle">${after} !</span>
+                </div>
 
-            <!-- 偏差値 と 上昇幅 -->
-            <div class="mt-1 text-center leading-none">
-              <span class="text-blue-600 text-shadow-blue font-semibold text-2xl align-middle">偏差値</span>
-              <!-- スマホ時のみ改行 -->
-              <br class="sm:hidden" />
-              <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold align-middle whitespace-nowrap">${diff} UP</span>
-            </div>
-          </article>
-        `;
-      }
-
-        // ---------- ブレークポイント別件数 ----------
-        const mqSM = window.matchMedia("(min-width: 640px)");   // sm+
-        const mqLG = window.matchMedia("(min-width: 1024px)");  // lg+
-
-        function computeCounts() {
-          if (mqLG.matches) return { initial: 20, more1: 24 };   // lg以上：4列
-          if (mqSM.matches) return { initial: 18, more1: 24 };   // sm, md：3列
-          return { initial: 20, more1: 22 };                     // スマホ：2列
-        }
-
-        // ---------- ボタン色（hoverなし／JSで完全管理） ----------
-        const GREEN  = ["bg-lime-500"];
-        const ORANGE = ["bg-orange-500"];
-        function setBtnColor(btn, isOpen) {
-          // 旧hoverクラスが残っている可能性にも対応して除去
-          btn.classList.remove("hover:bg-lime-600", "hover:bg-orange-600");
-          btn.classList.remove(...GREEN, ...ORANGE);
-          btn.classList.add(...(isOpen ? ORANGE : GREEN));
-        }
-
-        // ---------- アコーディオン（max-height管理） ----------
-        // 開：アニメ完了後に max-height:none 固定 → スクロール復帰やアドレスバー変動でも閉じない
-        function openAccordion(wrapper, btn) {
-          if (wrapper.dataset.state === "open") return;
-          // 既に 'none' ならそのまま固定扱い
-          if (wrapper.style.maxHeight === "none") {
-            wrapper.dataset.state = "open";
-          } else {
-            wrapper.style.maxHeight = wrapper.scrollHeight + "px";
-            wrapper.dataset.state = "opening";
-            const onEnd = (e) => {
-              if (e.propertyName !== "max-height") return;
-              wrapper.removeEventListener("transitionend", onEnd);
-              wrapper.style.maxHeight = "none"; // 固定
-              wrapper.dataset.state = "open";
-            };
-            wrapper.addEventListener("transitionend", onEnd, { once: true });
+                <!-- 偏差値 と 上昇幅 -->
+                <div class="mt-1 text-center leading-none">
+                  <span class="text-blue-600 text-shadow-blue font-semibold text-2xl align-middle">偏差値</span>
+                  <!-- スマホ時のみ改行 -->
+                  <br class="sm:hidden" />
+                  <span class="text-red-600 text-shadow-red text-4xl md:text-5xl font-extrabold align-middle whitespace-nowrap">${diff} UP</span>
+                </div>
+              </article>
+            `;
           }
-          btn.setAttribute("aria-expanded", "true");
-          btn.textContent = "とじる";
-          setBtnColor(btn, true);
-        }
 
-        // 閉：none → 現在高に一瞬戻してから 0px へアニメ
-        function closeAccordion(wrapper, btn) {
-          if (wrapper.dataset.state === "closed") return;
-          if (wrapper.style.maxHeight === "none") {
-            wrapper.style.maxHeight = wrapper.scrollHeight + "px";
-            void wrapper.offsetHeight; // reflow
+
+
+          
+          // -------------------- Breakpoint logic --------------------
+          const mqSM = window.matchMedia("(min-width: 640px)"); // sm+
+          const mqLG = window.matchMedia("(min-width: 1024px)"); // lg+
+
+          function computeCounts() {
+            if (mqLG.matches) {
+              return { initial: 20, more1: 24 }; // lg以上：4列
+            } else if (mqSM.matches) {
+              return { initial: 18, more1: 24 }; // sm, md：3列
+            } else {
+              return { initial: 20, more1: 22 }; // スマホ：2列
+            }
           }
-          wrapper.dataset.state = "closing";
-          wrapper.style.maxHeight = "0px";
-          const onEnd = (e) => {
-            if (e.propertyName !== "max-height") return;
-            wrapper.removeEventListener("transitionend", onEnd);
-            wrapper.dataset.state = "closed";
+
+          // -------------------- Accordion helpers --------------------
+          function setBtnColor(btn, expanded) {
+            // 開：オレンジ / 閉：明るい緑
+            const clsOn = ["bg-orange-500", "hover:bg-orange-600"];
+            const clsOff = ["bg-lime-500"];
+            btn.classList.remove(...clsOn, ...clsOff);
+            btn.classList.add(...(expanded ? clsOn : clsOff));
+          }
+          function expand(wrapper) {
+            wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+          }
+          function collapse(wrapper) {
+            wrapper.style.maxHeight = "0px";
+          }
+          function syncAccordion(wrapper, btn, expanded) {
+            if (expanded) {
+              expand(wrapper);
+              btn.setAttribute("aria-expanded", "true");
+              btn.textContent = btn.id === "btn-more2" ? "とじる" : "とじる";
+            } else {
+              collapse(wrapper);
+              btn.setAttribute("aria-expanded", "false");
+              btn.textContent =
+                btn.id === "btn-more2" ? "もっともっと見る" : "もっと見る";
+            }
+            setBtnColor(btn, expanded);
+          }
+
+          // -------------------- State (永続) --------------------
+          const state = {
+            // レイアウト
+            counts: computeCounts(),
+            // 開閉状態（「閉じる」を押すまで閉じない）
+            expanded1: false,
+            expanded2: false,
+            // データ
+            cards: [],
           };
-          wrapper.addEventListener("transitionend", onEnd, { once: true });
 
-          btn.setAttribute("aria-expanded", "false");
-          btn.textContent = (btn.id === "btn-more2") ? "もっともっと見る" : "もっと見る";
-          setBtnColor(btn, false);
-        }
+          // -------------------- Render --------------------
+          async function ensureData() {
+            if (state.cards.length) return;
+            const res = await fetch("Excellent_JSON.json", { cache: "no-store" });
+            const data = await res.json();
 
-        function syncAccordion(wrapper, btn, shouldOpen) {
-          if (shouldOpen) {
-            openAccordion(wrapper, btn);
-          } else {
-            closeAccordion(wrapper, btn);
+            state.cards = (Array.isArray(data.cards) ? data.cards : []).map((c) => {
+              const before = parseFloat(c.before);
+              const after = parseFloat(c.after);
+              const diff =
+                !isNaN(before) && !isNaN(after)
+                  ? Math.round(after - before) // ← 小数点を四捨五入して整数化
+                  : c.diff ?? "";
+              return { ...c, diff };
+            });
           }
-        }
 
-        // ---------- 状態 ----------
-        const state = {
-          counts: computeCounts(),
-          expanded1: false,
-          expanded2: false,
-          cards: [],
-          slot() { return mqLG.matches ? "lg" : mqSM.matches ? "sm" : "xs"; },
-          currentSlot: null,
-        };
-
-        // ---------- データ読み込み（1回） ----------
-        async function ensureData() {
-          if (state.cards.length) return;
-          const res = await fetch("Excellent_JSON.json", { cache: "no-store" }); // cards:[{grade,subject,type,before,after,diff}]
-          const data = await res.json();
-          state.cards = Array.isArray(data.cards) ? data.cards : [];
-        }
-
-        function sliceByCounts() {
-          const { initial, more1 } = state.counts;
-          const first  = state.cards.slice(0, initial);
-          const second = state.cards.slice(initial, initial + more1);
-          const rest   = state.cards.slice(initial + more1);
-          return { first, second, rest };
-        }
-
-        // ---------- 描画 ----------
-        function renderGrids() {
-          const initialWrap = $("#excellent-initial");
-          const more1Outer  = $("#excellent-more1");
-          const more1Grid   = $("#excellent-more1 > div");
-          const more2Outer  = $("#excellent-more2");
-          const more2Grid   = $("#excellent-more2 > div");
-          const btnMore     = $("#btn-more");
-          const btnMore2    = $("#btn-more2");
-
-          const { first, second, rest } = sliceByCounts();
-
-          // 内容差し替え
-          initialWrap.innerHTML = first.map(cardHTML).join("");
-          more1Grid.innerHTML   = second.map(cardHTML).join("");
-          more2Grid.innerHTML   = rest.map(cardHTML).join("");
-
-          // ボタンの有無
-          btnMore.classList.toggle("hidden", second.length === 0);
-          btnMore2.classList.toggle("hidden", rest.length === 0);
-
-          // 開閉状態に同期（開いていたら max-height:none で固定）
-          syncAccordion(more1Outer, btnMore,  state.expanded1);
-          syncAccordion(more2Outer, btnMore2, state.expanded2);
-
-          // 安全のため、開状態は none 再確認
-          if (state.expanded1 && more1Outer.style.maxHeight !== "none") {
-            more1Outer.style.maxHeight = "none";
-            more1Outer.dataset.state = "open";
+          function sliceByCounts() {
+            const { initial, more1 } = state.counts;
+            const first = state.cards.slice(0, initial);
+            const second = state.cards.slice(initial, initial + more1);
+            const rest = state.cards.slice(initial + more1);
+            return { first, second, rest };
           }
-          if (state.expanded2 && more2Outer.style.maxHeight !== "none") {
-            more2Outer.style.maxHeight = "none";
-            more2Outer.dataset.state = "open";
-          }
-        }
 
-        async function renderAll() {
-          await ensureData();
-          renderGrids();
-        }
+          function renderGrids() {
+            const initialWrap = $("#excellent-initial");
+            const more1Outer = $("#excellent-more1");
+            const more1Grid = $("#excellent-more1 > div");
+            const more2Outer = $("#excellent-more2");
+            const more2Grid = $("#excellent-more2 > div");
+            const btnMore = $("#btn-more");
+            const btnMore2 = $("#btn-more2");
 
-        // ---------- ボタン配線 ----------
-        function wireButtons() {
-          const more1Outer = $("#excellent-more1");
-          const more2Outer = $("#excellent-more2");
-          const btnMore  = $("#btn-more");
-          const btnMore2 = $("#btn-more2");
+            const { first, second, rest } = sliceByCounts();
 
-          // HTML側に hover クラスが残っていても除去して安定化
-          [btnMore, btnMore2].forEach((b) => {
-            b.classList.remove("hover:bg-lime-600","hover:bg-orange-600");
-            setBtnColor(b, false); // 初期は閉の緑
-          });
+            // コンテンツ差し替え
+            initialWrap.innerHTML = first.map(cardHTML).join("");
+            more1Grid.innerHTML = second.map(cardHTML).join("");
+            more2Grid.innerHTML = rest.map(cardHTML).join("");
 
-          btnMore.onclick = () => {
-            state.expanded1 = !state.expanded1;
+            // ボタンの表示／非表示
+            btnMore.classList.toggle("hidden", second.length === 0);
+            btnMore2.classList.toggle("hidden", rest.length === 0);
+
+            // アコーディオンの開閉状態を維持
             syncAccordion(more1Outer, btnMore, state.expanded1);
-          };
-          btnMore2.onclick = () => {
-            state.expanded2 = !state.expanded2;
             syncAccordion(more2Outer, btnMore2, state.expanded2);
-          };
 
-          // 中の高さが変わったら、開状態は常に none に戻す（固定）
-          new ResizeObserver(() => {
-            if (state.expanded1 && more1Outer.style.maxHeight !== "none") {
-              more1Outer.style.maxHeight = "none";
-              more1Outer.dataset.state = "open";
-            }
-          }).observe($("#excellent-more1 > div"));
+            // 開いたままのとき、リサイズで高さが変わる可能性があるので再計測
+            setTimeout(() => {
+              if (state.expanded1) expand(more1Outer);
+              if (state.expanded2) expand(more2Outer);
+            }, 0);
+          }
 
-          new ResizeObserver(() => {
-            if (state.expanded2 && more2Outer.style.maxHeight !== "none") {
-              more2Outer.style.maxHeight = "none";
-              more2Outer.dataset.state = "open";
-            }
-          }).observe($("#excellent-more2 > div"));
-        }
+          async function renderAll() {
+            await ensureData(); // JSON読み込み（1回だけ）:contentReference[oaicite:3]{index=3}
+            renderGrids(); // グリッド描画
+          }
 
-        // ---------- ブレークポイント跨ぎのみ再スライス ----------
-        function wireBreakpointReflow() {
-          state.currentSlot = state.slot();
-          const reflow = () => {
-            const next = state.slot();
-            if (next !== state.currentSlot) {
-              state.currentSlot = next;
-              state.counts = computeCounts();
-              renderGrids(); // 開閉状態は維持
-            }
-          };
-          mqSM.addEventListener("change", reflow);
-          mqLG.addEventListener("change", reflow);
-        }
+          // -------------------- Events --------------------
+          function wireButtons() {
+            const more1Outer = $("#excellent-more1");
+            const more2Outer = $("#excellent-more2");
+            const btnMore = $("#btn-more");
+            const btnMore2 = $("#btn-more2");
 
-        // ---------- Init ----------
-        if (document.getElementById("Excellent")) {
-          renderAll().then(() => {
-            wireButtons();
-            wireBreakpointReflow();
-          });
-        }
-      })();
+            btnMore.onclick = () => {
+              state.expanded1 = !state.expanded1;
+              syncAccordion(more1Outer, btnMore, state.expanded1);
+            };
+            btnMore2.onclick = () => {
+              state.expanded2 = !state.expanded2;
+              syncAccordion(more2Outer, btnMore2, state.expanded2);
+            };
+
+            // 中の内容が変わった場合も高さ再計測（フォント読み込み等に備え）
+            new ResizeObserver(() => {
+              if (state.expanded1) expand(more1Outer);
+            }).observe($("#excellent-more1 > div"));
+            new ResizeObserver(() => {
+              if (state.expanded2) expand(more2Outer);
+            }).observe($("#excellent-more2 > div"));
+          }
+
+          // 幅ブレークポイントを跨いだときのみ再レイアウト（状態は保持）
+          function wireBreakpointReflow() {
+            const reflow = () => {
+              const old = state.counts;
+              const next = computeCounts();
+              if (old.initial !== next.initial || old.more1 !== next.more1) {
+                state.counts = next;
+                renderGrids(); // 開閉状態(state.expandedX)は維持
+              }
+            };
+            mqSM.addEventListener("change", reflow);
+            mqLG.addEventListener("change", reflow);
+          }
+
+          // -------------------- Init --------------------
+          if (document.getElementById("Excellent")) {
+            // セクションがあるときのみ:contentReference[oaicite:4]{index=4}
+            renderAll().then(() => {
+              wireButtons();
+              wireBreakpointReflow();
+            });
+          }
+        })();
       </script>
-      <!-- #endregion script 実績 偏差値UP -->
-
-      <!-- #region section 本当のチカラ -->
-      <section id="chikara" class="reveal fade-up">
-        <!-- テキストエリア -->
-        <div class="text-center">
-          <!-- セクション見出し -->
-          <h2>本当のチカラを発揮させる</h2>
-          <div class="mt-2 text-gray-800 text-shadow-gray text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold">それが</div>
-          <div><span class="mt-2 text-lime-600 text-shadow-lime text-xl md:text-2xl lg:text-4xl xl:text-5xl font-bold">個別進学塾</span>
-          <span class="mt-2 text-lime-600 text-shadow-lime text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-extrabold">ipsim</span></div>
-        </div>
-
-      </section>
-      <!-- #endregion section  本当のチカラ -->
-
-    <!-- #region section 支え続けることで伸びるチカラ -->
-    <section
-      id="stories"
-      data-accordion="single"
-      class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-    >
-      <!-- 飾り文字 -->
-      <div
-        class="reveal fade-up relative mt-8 px-4 mx-auto bg-white overflow-hidden flex justify-center"
-      >
-        <figure class="mb-8">Stories</figure>
-      </div>
-      <!-- 飾り文字 -->
-
-      <!-- テキストエリア -->
-      <div class="reveal fade-up text-center">
-        <!-- セクション見出し -->
-        <h2>支え続けることで伸びるチカラ</h2>
-        <!-- セクション小見出し -->
-        <h3 class="mt-4 tracking-wider mb-8">支えと継続が実を結ぶ</h3>
-      </div>
-
-      <!-- カード container -->
-      <div class="grid grid-cols-1 gap-8 max-w-[600px] mx-auto rounded-lg">
-
-        <!-- カード1 -->
-        <div
-          class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >          
-          <!-- 画像エリア -->
-          <div class="relative">
-            <img
-              src="pics/midori.webp"
-              alt="midori"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="341"
-              class="object-cover w-full h-auto"
-            />
-            <!-- 白いフィルター -->
-            <div class="absolute inset-0 bg-white/40"></div>
-          </div>
-          <!-- テキストエリア -->
-          <div class="p-4 text-center">
-            <h3 class="text-center mb-2">10ヶ月で志望校A判定</A></h3>
-            <article class="inline-block text-left leading-relaxed">
-              中学2年生の冬からipsimで学習をスタートしました。<br />
-              当初は憧れの川西緑台高校にはまだ遠いレベルでしたが、苦手な単元を効率よく集中的に学習。<br />
-              勉強への取り組み方や学習習慣についても丁寧にアドバイスし、学ぶ姿勢から変えていきました。<br />
-              その結果、初秋の模擬試験では川西緑台高校でA判定を獲得し、さらに一つ上の尼崎稲園高校でもB判定を獲得。<br />
-              現在は、尼崎稲園高校A判定を目指して、着実に努力を続けています。
-            </article>
-          </div>
-        </div>
-
-        <!-- カード2 -->
-        <div
-          class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >          
-          <!-- 画像エリア -->
-          <div class="relative">
-            <img
-              src="pics/inazono.webp"
-              alt="inazono"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="341"
-              class="object-cover w-full h-auto"
-            />
-            <!-- 白いフィルター -->
-            <div class="absolute inset-0 bg-white/40"></div>
-          </div>
-          <!-- テキストエリア -->
-          <div class="p-4 text-center">
-            <h3 class="text-center mb-2">偏差値 46 から 75 へ</A></h3>
-            <article class="inline-block text-left leading-relaxed">
-              中学1年生の1学期からipsimで学習をスタートしました。<br />
-              夏の模擬試験では5教科の偏差値が52。<br />
-              当初は大きな目標を持っていなかったものの、もともと学習のセンスと吸収力を感じさせる生徒さんでした。<br />
-              点数を伸ばすコツや家庭での過ごし方についても丁寧にアドバイスし、「一緒に上を目指そう」と約束。<br />
-              その後はぐんぐんと成績を伸ばし、中学3年の初秋の模擬試験で尼崎稲園高校A判定を獲得しました。<br />
-              理科の偏差値は最初46でしたが、現在の偏差値は75。得意科目になりました。<br />
-              現在もさらなる得点力アップを目指して努力を続けています。
-            </article>
-          </div>
-        </div>
-
-        <!-- カード3 -->
-        <div
-          class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >          
-          <!-- 画像エリア -->
-          <div class="relative">
-            <img
-              src="pics/midori_e.webp"
-              alt="midori_e"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="341"
-              class="object-cover w-full h-auto"
-            />
-            <!-- 白いフィルター -->
-            <div class="absolute inset-0 bg-white/40"></div>
-          </div>
-          <!-- テキストエリア -->
-          <div class="p-4 text-center">
-            <h3 class="text-center mb-2">E判定からの逆転合格</h3>
-            <article class="inline-block text-left leading-relaxed">
-              中学3年生の1学期からipsimで学習をスタートしました。<br />
-              夏の模擬試験では、憧れの川西緑台高校がE判定という厳しい結果でしたが、講師が勉強内容だけでなく、学習管理や生活習慣まで丁寧にサポート。<br />
-              生徒自身も「今できることを少しずつ積み重ねよう」と前向きに努力を続け、入試直前まで集中して取り組むことができました。<br />
-              そして迎えた入試本番、見事に憧れの高校に合格しました。
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- #endregion section 支え続けることで伸びるチカラ -->
-
-    <!-- #region section why なぜ点数がアップするのか -->
-    <section
-      id="why"
-      data-accordion="single"
-      class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-    >
-      <!-- 飾り文字 -->
-      <div
-        class="reveal fade-up relative mt-8 px-4 mx-auto bg-white  flex justify-center"
-      >
-        <figure class="mb-8">Why</figure>
-      </div>
-      <!-- 飾り文字 -->
-
-      <!-- テキストエリア -->
-      <div class="reveal fade-up text-center">
-        <!-- セクション見出し -->
-        <h2>なぜ成績がこんなに上がるのか？</h2>
-        <!-- セクション小見出し -->
-        <h3 class="mt-4 tracking-wider mb-8">ipsimの３つの強み</h3>
-      </div>
-
-      <!-- カード container -->
-      <div
-        class="grid grid-cols-1 gap-8 max-w-[800px] px-4 py-6 mx-auto rounded-lg"
-      >
-        <!-- カード1 -->
-        <div
-          class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >
-          <!-- 画像エリア -->
-          <img
-            src="pics/checkmark.webp"
-            alt="pittari01"
-            loading="lazy"
-            decoding="async"
-            width="124"
-            height="122"
-            class="w-full h-40 object-contain bg-white"
-          />
-          <!-- テキストエリア -->
-          <div class="p-4 text-center">
-            <h3 class="text-center mb-2">個別カリキュラムで学習管理</h3>
-            <article class="inline-block text-left leading-relaxed">
-              お子さまの目標点数や志望校に合わせて、個別の学習カリキュラムを作成し、計画的に学習を進めていきます。<br />
-              専任講師が学習計画の立案から進捗管理までをしっかりサポート。<br />
-              定期的な確認テストで理解度をチェックし、必要に応じてフォローを行うことで、最適なレベル設定と効率的な学習を実現します。
-            </article>
-          </div>
-        </div>
-
-        <!-- カード2 -->
-        <div
-          class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >
-          <!-- 画像エリア -->
-          <img
-            src="pics/checkmark.webp"
-            alt="pittari01"
-            loading="lazy"
-            decoding="async"
-            width="124"
-            height="122"
-            class="w-full h-40 object-contain bg-white"
-          />
-          <!-- テキストエリア -->
-          <div class="p-4 text-center">
-            <h3 class="text-center mb-2">ダブル個別指導でチカラがつく</h3>
-            <article class="inline-block text-left leading-relaxed">
-              専任講師による個別指導と、全国から選抜された講師による映像授業で、定期考査対策から受験対策まで５教科に対応しています。<br />
-              体験授業を受講した生徒の 95％以上が「授業が分かりやすい！」
-              と回答。<br />
-              さらに、川西市・猪名川町エリアの教科書内容や兵庫県の高校入試に特化した独自カリキュラムをご用意しています。
-            </article>
-          </div>
-        </div>
-
-        <!-- カード3 -->
-        <div
-          class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >
-          <!-- 画像エリア -->
-          <img
-            src="pics/checkmark.webp"
-            alt="pittari01"
-            loading="lazy"
-            decoding="async"
-            width="124"
-            height="122"
-            class="w-full h-40 object-contain bg-white"
-          />
-          <!-- テキストエリア -->
-          <div class="p-4 text-center">
-            <h3 class="text-center mb-2">経験豊富なベテラン講師陣が主導</h3>
-            <article class="inline-block text-left leading-relaxed">
-              ipsimの講師は全員、大手学習塾での豊富な指導経験を持つプロフェッショナルです。
-              集団指導・個別指導のどちらにも精通しており、一人ひとりに合わせた最適な学習サポートが可能です。<br />
-              また、大阪・兵庫エリアで長年の指導実績があるため、地域の高校入試や進路指導にも自信があります。
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- #endregion section why なぜ点数がアップするのか -->
-
-      <!-- #region section ipsimがピッタリなお子さま -->
-      <section id="pittari" class="reveal fade-up py-8 bg-white">
-        <!-- テキストエリア -->
-        <div class="text-center">
-          <!-- セクション見出し -->
-          <h2>ipsimがピッタリなお子さま</h2>
-          <!-- セクション小見出し -->
-          <h4 class="mt-2">4つのポイント</h4>
-        </div>
-
-        <!-- カード container -->
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[800px] px-4 py-6 mx-auto rounded-lg"
-        >
-          <!-- カード1 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <img
-              src="pics/pittari01.webp"
-              alt="pittari01"
-              loading="lazy"
-              decoding="async"
-              width="606"
-              height="408"
-              class="w-full h-60 object-contain"
-            />
-            <!-- テキストエリア -->
-            <div class="p-4 text-center">
-              <h3 class="text-center mb-2">通知表に「３」か「４」がある</h3>
-              <article class="inline-block text-left leading-relaxed">
-                各教科ごとにレベルを設定し、平均点に届かないお子さまはまず平均点の突破を、平均点を超えているお子さまは80点・90点台を目標に指導します。<br/>
-                お子さま一人ひとりの目標に合わせた個別カリキュラムで、内申点の向上と確かな実力アップを図り、志望校合格を目指します。
-              </article>
-            </div>
-          </div>
-
-          <!-- カード2 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <img
-              src="pics/pittari02.webp"
-              alt="pittari02"
-              loading="lazy"
-              decoding="async"
-              width="606"
-              height="407"
-              class="w-full h-60 object-contain"
-            />
-            <!-- テキストエリア -->
-            <div class="p-4 text-center">
-              <h3 class="text-center mb-2">５教科で成績を上げたい</h3>
-              <article class="inline-block text-left leading-relaxed">
-                個別指導塾で５教科を学ぶのは、費用面でも時間面でも簡単なことではありません。ipsimでは、その課題を解決するための料金体系と指導形態を採用しています。
-                <br/>
-                テスト前は、追加料金なしで５教科の学習が可能です。さらに、季節講習でも低価格で５教科をしっかりと学べます。
-                <br/>
-                効率的に、そしてバランスよく。ipsimで５教科の成績を一緒に伸ばしていきましょう！
-              </article>
-            </div>
-          </div>
-
-          <!-- カード3 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <img
-              src="pics/pittari03.webp"
-              alt="pittari03"
-              loading="lazy"
-              decoding="async"
-              width="606"
-              height="407"
-              class="w-full h-60 object-contain"
-            />
-            <!-- テキストエリア -->
-            <div class="p-4 text-center">
-              <h3 class="text-center mb-2">勉強の仕方がわからない</h3>
-              <article class="inline-block text-left leading-relaxed">
-                『やる気がない』のではなく、『やり方がわからない』だけで行動に移せないお子さまを、これまでたくさん見てきました。
-                そんなお子さまも、正しい方法を知ると目を輝かせて勉強に取り組みます。
-                <br/>
-                ipsimでは、そうなれるように「勉強の仕方」をテスト前オリエンテーションで徹底的に指導します。
-                <br/>
-                暗記のコツ、ノートのまとめ方、学習計画の立て方から進め方まで、丁寧にお伝えしますのでご安心ください。
-              </article>
-            </div>
-          </div>
-
-          <!-- カード4 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <img
-              src="pics/pittari04.webp"
-              alt="pittari04"
-              loading="lazy"
-              decoding="async"
-              width="606"
-              height="408"
-              class="w-full h-60 object-contain"
-            />
-            <!-- テキストエリア -->
-            <div class="p-4 text-center">
-              <h3 class="text-center mb-2">部活や習い事が忙しい</h3>
-              <article class="inline-block text-left leading-relaxed">
-                忙しくても勉強を頑張っている姿、カッコいいと思いませんか？ipsimは、部活やクラブチーム、習い事にも全力で取り組む生徒を応援しています。
-                <br/>
-                「忙しい」というのは、「充実している」ということ。だからこそ、効率的に学ぶことで、部活も勉強も両立できます。
-                <br/>
-                これまでにも、部活を最後まで頑張りきり、引退後に驚くほど学力を伸ばした生徒をたくさん見てきました。
-                <br/>
-                どうすれば、どちらも全力で頑張れるのか、一緒に考えていきましょう。
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section ipsimがピッタリなお子さま -->
-
-      <!-- #region section 教室画像 2 -->
-      <section id="img02" class="reveal fade-up w-[400px] mx-auto px-4">
-        <!-- カード -->
-        <div
-          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
-        >
-          <!-- 画像エリア -->
-          <img src="pics/room03.webp"
-          alt="room03"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="682"
-          class="reveal fade-up object-cover w-full" />
-          <!-- 白いフィルター -->
-          <div class="absolute inset-0 bg-white/40"></div>
-        </div>
-      </section>
-      <!-- #endregion section 教室画像 2 -->
-
-      <!-- #region section mini CTA -->
-      <section id="minicta1" class="reveal fade-up  max-w-[400px] mx-auto py-8 bg-white">
-        <!-- セクション見出し（視覚非表示だが意味付け） -->
-        <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
-        <!-- カード1 -->
-        <div
-          class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >
-          <div class="p-4">
-            <!-- テキストエリア -->
-            <h5 class="text-center">
-              お気軽にご連絡ください<br />
-              <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
-            </h5>
-            <!-- ボタンエリア -->
-            <div class="mt-4 flex flex-col items-center gap-3">
-              <!-- 山下 ボタン -->
-              <a
-                href="https://lin.ee/sqkGCPT"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-              >山下教室</a>
-              <!-- 猪名川 ボタン -->
-              <a
-                href="https://lin.ee/22k8QXA"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-              >猪名川パークプラザ教室</a>
-            </div>
-            <!-- テキストエリア -->
-            <h6 class="mt-3 text-center">
-              ぜひLINEでお問い合わせください
-            </h6>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section mini CTA -->
-      
-      <!-- #region section 7つの理由 -->
-      <section
-        id="reasons"
-        data-accordion="single"
-        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-      >     
-
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white  flex justify-center"
-        >
-          <figure class="mb-4">Seven Reasons</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- テキストエリア -->
-        <div class="text-center mt-4 mb-8">
-          <h3 class="reveal fade-up">成果を生む7つの理由</h3>
-        </div>
-
-        <!-- ====== 1 ====== -->
-        <article id="panel-01"
-          class="reveal slide-left delay-[100ms] acc-item border bg-lime-50/30 overflow-hidden"
-        >
-          <!-- ボタン画像 -->
-          <button
-            class="acc-trigger w-full text-left"
-            aria-expanded="false"
-            aria-controls="panel-01"
-          >
-            <img
-              src="pics/toku01.webp"
-              alt="toku01"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="197"
-              class="block w-full mx-auto max-w-[700px] h-auto object-cover"
-            />
-          </button>
-          <!-- テキストエリア -->
-          <div
-            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
-          >
-            <div class="max-w-[700px] mx-auto">
-              <h4 class="mt-4">
-                新しい個別指導塾の形
-              </h4>
-              <article
-                class="mt-2 leading-relaxed space-y-2"
-              >
-                最新の学習システムを採用し、映像によるわかりやすい解説と、教室のプロ講師による個別指導を両立しています。
-                <br/>
-                講師ごとのムラをなくし、効率的に学力を定着。受講は何度でも可能で、つまずきはその場で解消。
-                <br/>
-                「わかるまで」丁寧にサポートします。
-              </article>
-            </div>
-          </div>
-        </article>
-
-        <!-- ====== 2 ====== -->
-        <article id="panel-02"
-          class="reveal slide-left delay-[200ms] acc-item border bg-lime-50/30 overflow-hidden"
-        >
-          <!-- ボタン画像 -->
-          <button
-            class="acc-trigger w-full text-left"
-            aria-expanded="false"
-            aria-controls="panel-02"
-          >
-            <img
-              src="pics/toku02.webp"
-              alt="toku02"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="197"
-              class="block w-full mx-auto max-w-[700px] h-auto object-cover"
-            />
-          </button>
-          <!-- テキストエリア -->
-          <div
-            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
-          >
-            <div class="max-w-[700px] mx-auto">
-              <h4 class="mt-4">
-                学びホーダイ・低価格で定額
-              </h4>
-              <article
-                class="mt-2 leading-relaxed space-y-2"
-              >
-                個別指導塾では実現が難しい、低価格での複数科目指導を行っています。
-                <br/>
-                ipsimでは『学びホーダイ』システムを採用しており、お申し込みいただいた科目については通塾回数に制限がありません。
-                <br/>
-                テスト前の追加受講も追加料金なしで可能です。
-                <br/>
-                さらに、定期テスト・実力テスト・高校受験の各対策において、年間の塾費用は一般的な個別指導塾の約半額。
-                <br/>
-                安心して長く通っていただけるように、入会時に年間費用を明確にご説明しています。
-              </article>
-            </div>
-          </div>
-        </article>
-
-        <!-- ====== 3 ====== -->
-        <article id="panel-03"
-          class="reveal slide-left delay-[300ms] acc-item border bg-lime-50/30 overflow-hidden"
-        >
-          <!-- ボタン画像 -->
-          <button
-            class="acc-trigger w-full text-left"
-            aria-expanded="false"
-            aria-controls="panel-03"
-          >
-            <img
-              src="pics/toku03.webp"
-              alt="toku03"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="197"
-              class="block w-full mx-auto max-w-[700px] h-auto object-cover"
-            />
-          </button>
-          <!-- テキストエリア -->
-          <div
-            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
-          >
-            <div class="max-w-[700px] mx-auto">
-              <h4 class="mt-4">
-                特定の公立中学校限定・テスト対策3週間プログラム
-              </h4>
-              <article
-                class="mt-2 leading-relaxed space-y-2"
-              >
-                定期テストの3週間前から、徹底したテスト対策を実施します。
-                <br/>
-                5教科すべての指導に加え、テスト勉強法オリエンテーション、定期テストの予想問題演習、そして学校の宿題の進捗確認まで行います。
-                <br/>
-                テスト期間中の通塾時間は、通常時の2倍以上。
-                <br/>
-                ここまで徹底したサポートができるのは、中学生指導に特化したipsimだからこそです。
-              </article>
-            </div>
-          </div>
-        </article>
-
-        <!-- ====== 4 ====== -->
-        <article id="panel-04"
-          class="reveal slide-left delay-[400ms] acc-item border bg-lime-50/30 overflow-hidden"
-        >
-          <!-- ボタン画像 -->
-          <button
-            class="acc-trigger w-full text-left"
-            aria-expanded="false"
-            aria-controls="panel-04"
-          >
-            <img
-              src="pics/toku04.webp"
-              alt="toku04"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="197"
-              class="block w-full mx-auto max-w-[700px] h-auto object-cover"
-            />
-          </button>
-          <!-- テキストエリア -->
-          <div
-            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
-          >
-            <div class="max-w-[700px] mx-auto">
-              <h4 class="mt-4">
-                小中高一貫教育
-              </h4>
-              <article
-                class="mt-2 leading-relaxed space-y-2"
-              >
-                ipsimでは、小学5年生から高校3年生まで、成長に合わせた学習コースをご用意しています。
-                <br/>
-                小学生は中学を見据えて、基礎をしっかりと。
-                中学生は高校につながる力を育てながら、志望校合格を目指します。
-                <br/>
-                同じ教室で安心して長く通える環境を整え、長期通塾割引もございます。
-              </article>
-            </div>
-          </div>
-        </article>
-
-        <!-- ====== 5 ====== -->
-        <article id="panel-05"
-          class="reveal slide-left acc-item border bg-lime-50/30 overflow-hidden"
-        >
-          <!-- ボタン画像 -->
-          <button
-            class="acc-trigger w-full text-left"
-            aria-expanded="false"
-            aria-controls="panel-05"
-          >
-            <img
-              src="pics/toku05.webp"
-              alt="toku05"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="197"
-              class="block w-full mx-auto max-w-[700px] h-auto object-cover"
-            />
-          </button>
-          <!-- テキストエリア -->
-          <div
-            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
-          >
-            <div class="max-w-[700px] mx-auto">
-              <h4 class="mt-4">
-                無理のない教室運営
-              </h4>
-              <article
-                class="mt-2 leading-relaxed space-y-2"
-              >
-                各学年ごとに定員を設け、指導対象を限定することで、一人ひとりに行き届いた質の高い学習サポートを提供しています。
-                <br/>
-                教室内の席にも余裕をもたせているため、自習の利用や当日の急な欠席振り替えにも柔軟に対応できます。
-              </article>
-            </div>
-          </div>
-        </article>
-
-        <!-- ====== 6 ====== -->
-        <article id="panel-06"
-          class="reveal slide-left delay-[600ms] acc-item border bg-lime-50/30 overflow-hidden"
-        >
-          <!-- ボタン画像 -->
-          <button
-            class="acc-trigger w-full text-left"
-            aria-expanded="false"
-            aria-controls="panel-06"
-          >
-            <img
-              src="pics/toku06.webp"
-              alt="toku06"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="197"
-              class="block w-full mx-auto max-w-[700px] h-auto object-cover"
-            />
-          </button>
-          <!-- テキストエリア -->
-          <div
-            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
-          >
-            <div class="max-w-[700px] mx-auto">
-              <h4 class="mt-4">
-                保護者面談の実施
-              </h4>
-              <article
-                class="mt-2 leading-relaxed space-y-2"
-              >
-                面談の頻度や内容はご要望を伺いながら柔軟に対応し、学習や進路に関するご相談を定期的に行っています。
-                <br/>
-                また、授業での理解度や小テストの結果などは、毎回メールやLINEでご報告いたします。
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- ====== 7 ====== -->
-        <article id="panel-07"
-          class="reveal slide-left delay-[700ms] acc-item border bg-lime-50/30 overflow-hidden"
-        >
-          <!-- ボタン画像 -->
-          <button
-            class="acc-trigger w-full text-left"
-            aria-expanded="false"
-            aria-controls="panel-07"
-          >
-            <img
-              src="pics/toku07.webp"
-              alt="toku07"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="197"
-              class="block w-full mx-auto max-w-[700px] h-auto object-cover"
-            />
-          </button>
-          <!-- テキストエリア -->
-          <div
-            class="panel max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out px-4 mb-4"
-          >
-            <div class="max-w-[700px] mx-auto">
-              <h4 class="mt-4">
-                安心と安全
-              </h4>
-              <article
-                class="mt-2 leading-relaxed space-y-2"
-              >
-                清掃の徹底や空気清浄機の設置など、
-                感染予防をはじめとした快適で安全な学習環境づくりに努めています。
-                <br/>
-                さらに、お子さまの入室・退室時にはメールやLINEでお知らせし、安心して通塾していただけます。
-              </article>
-            </div>
-          </div>
-        </article>
-      </section>
-      <!-- #endregion section 7つの理由 -->
-
-      <!-- #region section 安全で快適 -->
-      <section
-        id="comfort"
-        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-      >
-     
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white flex justify-center"
-        >
-          <figure class="mb-4">Comfort & Safety</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- テキストエリア -->
-        <div class="text-center mt-4 mb-8">
-          <h3 class="reveal fade-up">安全で快適な環境づくり</h3>
-        </div>
-
-        <!-- カード container -->
-        <div class="grid grid-cols-1 gap-8 max-w-[600px] px-4 py-6 mx-auto rounded-lg"
-        >
-          <!-- カード1 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <img src="pics/safe01.webp"
-              alt="safe01"
-              loading="lazy"
-              decoding="async"
-              width="570"
-              height="370"
-              class="w-full h-60 object-contain" />
-            <!-- テキストエリア -->
-            <div class="p-4 text-center">
-              <article class="inline-block text-left leading-relaxed">
-                授業の「開始」「終了」をメールと LINE で通知。
-                <br class="hidden md:block"/>
-                学習内容と小テスト結果もお知らせします。
-              </article>
-            </div>
-          </div>
-
-          <!-- カード2 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <img src="pics/safe02.webp" alt="safe02"
-              loading="lazy"
-              decoding="async"
-              width="570"
-              height="370"
-              class="w-full h-60 object-contain" />
-            <!-- テキストエリア -->
-            <div class="p-4 text-center">
-              <article class="inline-block text-left leading-relaxed">
-                年2回の懇談会では、ご家庭でのお子さまの様子を伺いながら、
-                <br class="hidden md:block"/>
-                学習の進み具合や模試の結果、入試に向けた見通しを丁寧にお伝えします。
-              </article>
-            </div>
-          </div>
-
-          <!-- カード3 -->
-          <div
-            class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <!-- 画像エリア -->
-            <img
-              src="pics/safe04.webp"
-              alt="safe04"
-              loading="lazy"
-              decoding="async"
-              width="570"
-              height="370"
-              class="w-full h-60 object-contain"
-            />
-            <!-- テキストエリア -->
-            <div class="p-4 text-center">
-              <article class="inline-block text-left leading-relaxed">
-                教室の予定表は、保護者のスマートフォンやタブレットからいつでもご確認いただけます。
-                <br class="hidden md:block"/>
-                ご家庭でも一部のオンライン教材をご利用いただけるため、授業内容の復習やテスト前の学習にも役立ちます。
-              </article>
-            </div>
-
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section 安全で快適 -->
-
-      <!-- #region section mini CTA 2 -->
-      <section id="minicta2" class="reveal fade-up  max-w-[400px] mx-auto py-8 bg-white">
-        <!-- セクション見出し（視覚非表示だが意味付け） -->
-        <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
-        <!-- カード1 -->
-        <div
-          class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >
-          <div class="p-4">
-            <!-- テキストエリア -->
-            <h5 class="text-center">
-              お気軽にご連絡ください<br />
-              <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
-            </h5>
-            <!-- ボタンエリア -->
-            <div class="mt-4 flex flex-col items-center gap-3">
-              <!-- 山下 ボタン -->
-              <a
-                href="https://lin.ee/sqkGCPT"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-              >山下教室</a>
-              <!-- 猪名川 ボタン -->
-              <a
-                href="https://lin.ee/22k8QXA"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-              >猪名川パークプラザ教室</a>
-            </div>
-            <!-- テキストエリア -->
-            <h6 class="mt-3 text-center">
-              ぜひLINEでお問い合わせください
-            </h6>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section mini CTA 2 -->
-      
-      <!-- #region section 教室画像 3 -->
-      <section id="img03" class="reveal fade-up w-[400px] mx-auto px-4">
-        <!-- カード -->
-        <div
-          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
-        >
-          <!-- 画像エリア -->
-          <img src="pics/room06.webp"
-          alt="room06"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="682"
-          class="reveal fade-up object-cover w-full" />
-          <!-- 白いフィルター -->
-          <div class="absolute inset-0 bg-white/40"></div>
-        </div>
-      </section>
-      <!-- #endregion section 教室画像 3 -->
-
-      <!-- #region section コース・料金 -->
-      <section
-        id="courseandprice"
-        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-      >
-      
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white flex justify-center"
-        >
-          <figure class="mb-4">Course and Price</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- セクション枠 -->
-        <div class="p-4 bg-white border-2 rounded-xl">
-        <!-- 見出し -->
-        <div class="text-center mb-8">
-          <h3>コース・料金</h3>
-
-          <!-- 説明 -->
-          <h6
-            class="mt-2 leading-relaxed text-center"
-          >
-            授業料は税込・教材費等別（月額）です。<br/>学年・通塾回数・時期により変動します。
-          </h6>
-
-          <!-- コースカード：2枚横並び（md〜） -->
-          <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- 中学生コース -->
-            <article id="JuniorHigh"
-              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border"
-            >
-              <!-- カード見出し -->
-              <header
-                class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
-              >
-                <svg
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M12 4l8 4-8 4-8-4 8-4z" />
-                  <path d="M4 12l8 4 8-4" />
-                  <path d="M4 16l8 4 8-4" />
-                </svg>
-                <h3>中学生コース</h3>
-              </header>
-              <div class="px-4 pb-4">
-                <!-- 説明 -->
-                <article
-                  class="leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3 text-left"
-                >
-                  5科目の基礎から応用まで。学校内容の定着から難関高校入試対策まで対応しています。
-                </article>
-                <!-- 料金 -->
-                <dl class="mt-3 text-gray-900">
-                  <h5>高校入試対策講座</h5>
-                  <div class="grid grid-cols-2 gap-y-1 items-end">
-                    <article
-                      class="text-blue-600 text-base md:text-lg font-bold"
-                    >
-                      週1回（数学）
-                    </article>
-                    <article
-                      class="text-right text-red-600 text-base md:text-lg font-bold"
-                    >
-                      ¥12,100〜
-                    </article>
-
-                    <article
-                      class="text-blue-600 text-base md:text-lg font-bold"
-                    >
-                      週2回（5科目）
-                    </article>
-                    <article
-                      class="text-right text-red-600 text-base md:text-lg font-bold"
-                    >
-                      ¥20,900〜
-                    </article>
-
-                    <article class="text-gray-900">週4回（5科目）</article>
-                    <article class="text-right">¥27,500〜</article>
-                  </div>
-                </dl>
-                <!-- 補足 -->
-                <div
-                  class="px-4 py-3 mt-6 bg-white rounded-xl border border-gray-200 
-                        max-w-[400px] mx-auto text-left flex justify-center"
-                >
-                  <h6 class="text-left">週2回以上の受講で<br/>
-                  週末テスト対策に参加できます</h6>
-                </div>
-              </div>
-            </article>
-
-            <!-- 小学生コース -->
-            <article id="Elementary"
-              class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden border"
-            >
-              <!-- カード見出し -->
-              <header
-                class="px-4 pt-4 pb-2 flex items-center gap-2 text-lime-600"
-              >
-                <svg
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M12 4l8 4-8 4-8-4 8-4z" />
-                  <path d="M4 12l8 4 8-4" />
-                  <path d="M4 16l8 4 8-4" />
-                </svg>
-                <h3>小学生コース</h3>
-              </header>
-              <div class="px-4 pb-4">
-                <!-- 説明 -->
-                <article
-                  class="leading-relaxed bg-lime-400/10 rounded-lg px-3 py-3 text-left"
-                >
-                  算数・英語・国語の基礎から応用まで。学校内容の定着から中学受験対策まで幅広く対応しています。
-                </article>
-
-                <!-- 料金（2ブロック） -->
-                <div class="mt-3 space-y-4">
-
-                  <!-- 入学準備 -->
-                  <section>
-                    <h5>中学入学準備講座</h5>
-                    <div
-                      class="mt-2 grid grid-cols-2 gap-y-1 items-end text-gray-900"
-                    >
-                      <article class="font-bold text-blue-600">週1回（算数）</article>
-                      <article class="font-bold text-right text-red-600">
-                        ¥6,600〜
-                      </article>
-                      <article class="font-bold text-blue-600">週2回（算/英）</article>
-                      <article class="font-bold text-right text-red-600">
-                        ¥12,100〜
-                      </article>
-                      <article class="">週2回（算/国）</article>
-                      <article class="text-right">¥12,100〜</article>
-                    </div>
-                  </section>
-
-                </div>
-              </div>
-            </article>
-          </div>
-          <!-- 注意書き（共通） -->
-          <div
-            class="px-4 py-3 mt-6 bg-white rounded-xl border border-gray-200 
-                  max-w-[400px] mx-auto text-left flex justify-center"
-          >
-            <h6 class="text-left">入会金・教材費・模試代<br/>
-            季節講習（春・夏・冬）は別途必要<br/>兄弟姉妹割引あり</h6>
-          </div>
-      </section>
-      <!-- #endregion section コース・料金 -->
-
-      <!-- #region section 教室画像 4 -->
-      <section id="img04" class="reveal fade-up w-[400px] mx-auto px-4">
-        <div
-          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
-        >
-          <img src="pics/high1.webp"
-          alt="room06"
-              loading="lazy"
-              decoding="async"
-              width="1024"
-              height="576"
-              class="reveal fade-up object-cover w-full" />
-          <div class="absolute inset-0 bg-white/40"></div>
-        </div>
-      </section>
-      <!-- #endregion section 教室画像 4 -->
-
-      <!-- #region section CTA -->
-      <section
-        id="cta"
-        class="reveal fade-up relative w-full max-w-[800px] mx-auto p-8"
-      >
-      
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white  flex justify-center"
-        >
-          <figure class="mb-4">Enrollment Steps</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- 見出し -->
-        <div class="text-center mb-8">
-          <h2 class="text-lg md:text-xl font-bold text-lime-600 text-shadow-lime">
-            無料体験・三者面談のご案内
-          </h2>
-        </div>
-
-        <!-- 文章カード：2枚（md以上で横並び） -->
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto px-4"
-        >
-          <!-- カード1：無料相談 -->
-          <article
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <div class="p-4 sm:p-16 md:p-4">
-              <div class="flex items-start gap-3">
-                <div class="shrink-0 rounded-full bg-lime-100 p-2">
-                  <!-- chat icon -->
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6 text-lime-600"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z"
-                    />
-                  </svg>
-                </div>
-                <div class="text-gray-900 text-base md:text-lg leading-relaxed">
-                  <p class="font-semibold">無料体験で学び方を体感</p>
-                  <ul
-                    class="mt-2 list-disc pl-5 text-gray-700 text-sm md:text-base space-y-1"
-                  >
-                    <li>演習＋プロ講師の解説</li>
-                    <li>現状の確認と課題の整理</li>
-                    <li>つまずきの可視化・弱点診断</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- カード2：無料体験 -->
-          <article
-            class="reveal fade-up bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <div class="p-4 sm:p-16 md:p-4">
-              <div class="flex items-start gap-3">
-                <div class="shrink-0 rounded-full bg-lime-100 p-2">
-                  <!-- book/plan icon -->
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6 text-lime-600"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path d="M4 19h16M4 15h16M7 11h10M10 7h4M12 3v4" />
-                  </svg>
-                </div>
-                <div class="text-gray-900 text-base md:text-lg leading-relaxed">
-                  <p class="font-semibold">三者面談で方向性のご提案</p>
-                  <ul
-                    class="mt-2 list-disc pl-5 text-gray-700 text-sm md:text-base space-y-1"
-                  >
-                    <li>ご家庭での声かけのポイント</li>
-                    <li>方向性のご提案（費用・通塾イメージ）</li>
-                    <li>お子さまに最適な学習計画をご提案</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <!-- CTAカード -->
-        <div class="reveal fade-up max-w-[800px] mx-auto px-4 mt-6">
-          <div
-            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-          >
-            <div class="p-4">
-              <p
-                class="text-gray-900 text-base md:text-lg leading-relaxed text-center"
-              >
-                まずは
-                <span class="text-[#06c755] font-semibold"
-                  >LINE公式アカウント</span
-                >
-                からお気軽にご連絡ください。
-              </p>
-              <div class="mt-4 flex flex-col items-center gap-3">
-                <a
-                  href="https://lin.ee/sqkGCPT"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px]"
-                  >山下教室</a
-                >
-                <a
-                  href="https://lin.ee/22k8QXA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px]"
-                  >猪名川パークプラザ教室</a
-                >
-              </div>
-              <p class="mt-3 text-center text-gray-500 text-sm">
-                ※ LINEで「体験希望」「相談希望」とお送りください。
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section CTA 1（カード2枚＋CTA下配置） -->
-
-      <!-- #region section アクセス 山下 -->
-      <section
-        id="yamashita"
-        class="reveal slide-left delay-[1000ms] w-full bg-white relative"
-      >
-      
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white  flex justify-center"
-        >
-          <figure class="mb-4">Access to Yamashita</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- 全体を左右中央揃え -->
-        <div class="flex justify-center">
-          <div
-            class="p-4 bg-white border-2 rounded-xl flex flex-col items-start max-w-[600px] w-full"
-          >
-            <!-- タイトル：左揃え -->
-            <h2
-              class="flex items-center gap-2 text-lime-600 text-lg md:text-xl font-bold pl-2"
-            >
-              <svg
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
-              山下教室
-            </h2>
-
-            <!-- 住所 -->
-            <p class="text-gray-900 text-base md:text-lg mt-1 pl-2 text-left">
-              〒666-0105<br />
-              兵庫県川西市見野2-35-6<br />
-              IBS 山下駅前ビル2F<br />
-              能勢電鉄 山下駅 徒歩2分
-            </p>
-
-            <!-- googleマップ リンク -->
-            <a
-              class="text-blue-600 text-base md:text-lg underline mt-2 pl-2"
-              href="https://maps.google.com/?q=34.8931642,135.4109987"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Googleマップで見る</a
-            >
-
-            <!-- googleマップ iframe -->
-            <div class="mt-3 overflow-hidden border rounded-xl w-full">
-              <iframe
-                title="ipsim 山下教室の地図"
-                class="w-full aspect-[4/3]"
-                style="border: 0"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps?q=34.8931642,135.4109987&hl=ja&z=15&output=embed"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section アクセス 山下 -->
-
-      <!-- #region section アクセス 猪名川 -->
-      <section
-        id="inagawa"
-        class="reveal slide-left delay-[1000ms] w-full bg-white relative"
-      >
-      
-        <!-- 飾り文字 -->
-        <div
-          class="reveal fade-up relative mt-8 px-4 mx-auto bg-white  flex justify-center"
-        >
-          <figure class="mb-4">Access to Inagawa</figure>
-        </div>
-        <!-- 飾り文字 -->
-
-        <!-- 全体を左右中央揃え -->
-        <div class="flex justify-center">
-          <div
-            class="p-4 bg-white border-2 rounded-xl flex flex-col items-start max-w-[600px] w-full"
-          >
-            <!-- タイトル：左揃え -->
-            <h2
-              class="flex items-center gap-2 text-lime-600 text-lg md:text-xl font-bold pl-2"
-            >
-              <svg
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
-              猪名川パークプラザ教室
-            </h2>
-
-            <!-- 住所 -->
-            <p class="text-gray-900 text-base md:text-lg mt-1 pl-2 text-left">
-              〒666-0251<br />
-              兵庫県川辺郡猪名川町若葉1-39-1<br />
-              パークプラザB棟2号室<br />
-              猪名川パークプラザ内 / 駐車場あり
-            </p>
-
-            <!-- googleマップ リンク -->
-            <a
-              class="text-blue-600 text-base md:text-lg underline mt-2 pl-2"
-              href="https://maps.google.com/?q=34.8969108,135.3685999"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Googleマップで見る</a
-            >
-
-            <!-- googleマップ iframe -->
-            <div class="mt-3 overflow-hidden border rounded-xl w-full">
-              <iframe
-                title="ipsim 猪名川パークプラザ教室の地図"
-                class="w-full aspect-[4/3]"
-                style="border: 0"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps?q=34.8969108,135.3685999&hl=ja&z=15&output=embed"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section アクセス 猪名川 -->
-
-      <!-- #region section 教室画像 5 -->
-      <section id="img05" class="reveal fade-up w-[400px] mx-auto px-4">
-        <div
-          class="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition relative"
-        >
-          <img src="pics/students.webp"
-          alt="students"
-              loading="lazy"
-              decoding="async"
-              width="826"
-              height="549"
-          class="reveal fade-up object-cover w-full" />
-          <div class="absolute inset-0 bg-white/40"></div>
-        </div>
-      </section>
-      <!-- #endregion section 教室画像 5 -->
-
-      <!-- #region section mini CTA 3 -->
-      <section id="minicta3" class="reveal fade-up  max-w-[400px] mx-auto py-8 bg-white">
-        <!-- セクション見出し（視覚非表示だが意味付け） -->
-        <h2 class="sr-only">LINE公式アカウントへのお問い合わせ</h2>
-        <!-- カード1 -->
-        <div
-          class="reveal fade-up bg-lime-50/30 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-        >
-          <div class="p-4">
-            <!-- テキストエリア -->
-            <h5 class="text-center">
-              お気軽にご連絡ください<br />
-              <span class="text-[#06c755] font-bold text-shadow-lime">LINE公式アカウント</span>
-            </h5>
-            <!-- ボタンエリア -->
-            <div class="mt-4 flex flex-col items-center gap-3">
-              <!-- 山下 ボタン -->
-              <a
-                href="https://lin.ee/sqkGCPT"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-              >山下教室</a>
-              <!-- 猪名川 ボタン -->
-              <a
-                href="https://lin.ee/22k8QXA"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-block rounded-full bg-[#06c755] border border-[#06c755] px-5 py-3 text-white text-[16px] font-semibold w-full text-center max-w-[300px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#06c755]"
-              >猪名川パークプラザ教室</a>
-            </div>
-            <!-- テキストエリア -->
-            <h6 class="mt-3 text-center">
-              ぜひLINEでお問い合わせください
-            </h6>
-          </div>
-        </div>
-      </section>
-      <!-- #endregion section mini CTA 3 -->
-      
+      <!-- #endregion script 偏差値UP -->
     </main>
 
     <!-- #region footer -->
-<footer id="footer" class="mt-12 w-full bg-cyan-950 text-white">
-  <!-- 中央寄せ・最大幅800px・内側余白 -->
-  <div class="mx-auto max-w-[800px] px-8 py-8">
-    <p class="text-sm md:text-base">岡村ゼミナールグループ</p>
-    <p class="text-xl md:text-2xl font-bold mb-4 tracking-[4px]">
-      <span>個別進学塾 ipsim </span>
-      <span class="text-lg md:text-xl">(イプシム)</span>
-    </p>
+    <footer id="footer" class="mt-12 w-full bg-cyan-950 text-white">
+      <!-- 中央寄せ・最大幅800px・内側余白 -->
+      <div class="mx-auto max-w-[800px] px-8 py-8">
+        <p class="text-sm md:text-base">岡村ゼミナールグループ</p>
+        <p class="text-xl md:text-2xl font-bold mb-4 tracking-[4px]">
+          <span>個別進学塾 ipsim </span>
+          <span class="text-lg md:text-xl">(イプシム)</span>
+        </p>
 
-    <ul class="flex flex-col lg:flex-row justify-between gap-8 text-lg md:text-xl leading-relaxed">
-      <!-- 山下教室 -->
-      <li class="flex-1">
-        <strong class="flex items-center gap-2">
-          <!-- …SVG… -->
-          山下教室
-        </strong>
-        <div class="text-sm md:text-base px-4 mt-1">
-          〒666-0105<br />
-          兵庫県川西市見野2-35-6<br />
-          IBS 山下駅前ビル2F<br />
-          能勢電鉄 山下駅 徒歩2分<br />
-          TEL <a class="text-blue-300 text-base" href="tel:0727676537">072-767-6537</a><br />
-          MAIL
-          <a class="text-blue-300 text-base" href="mailto:kawanishi@oksemi.co.jp"
-             aria-label="ipsim 山下教室 メールアドレス">kawanishi@oksemi.co.jp</a>
-        </div>
-        <div class="text-base md:text-lg px-4 flex items-center gap-1 mt-1">
-          <!-- …ピンSVG… -->
-          <a class="underline text-lime-400 hover:text-lime-500 transition"
-             href="https://maps.google.com/?q=34.8931642,135.4109987"
-             target="_blank" rel="noopener noreferrer">Googleマップで見る</a>
-        </div>
-      </li>
+        <ul
+          class="flex flex-col lg:flex-row justify-between gap-8 text-lg md:text-xl leading-relaxed"
+        >
+          <!-- 山下教室 -->
+          <li class="flex-1">
+            <strong class="flex items-center gap-2">
+              <!-- …SVG… -->
+              山下教室
+            </strong>
+            <div class="text-sm md:text-base px-4 mt-1">
+              〒666-0105<br />
+              兵庫県川西市見野2-35-6<br />
+              IBS 山下駅前ビル2F<br />
+              能勢電鉄 山下駅 徒歩2分<br />
+              TEL
+              <a class="text-blue-300 text-base" href="tel:0727676537"
+                >072-767-6537</a
+              ><br />
+              MAIL
+              <a
+                class="text-blue-300 text-base"
+                href="mailto:kawanishi@oksemi.co.jp"
+                aria-label="ipsim 山下教室 メールアドレス"
+                >kawanishi@oksemi.co.jp</a
+              >
+            </div>
+            <div class="text-base md:text-lg px-4 flex items-center gap-1 mt-1">
+              <!-- …ピンSVG… -->
+              <a
+                class="underline text-lime-400 hover:text-lime-500 transition"
+                href="https://maps.google.com/?q=34.8931642,135.4109987"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Googleマップで見る</a
+              >
+            </div>
+          </li>
 
-      <!-- 猪名川パークプラザ教室 -->
-      <li class="flex-1">
-        <strong class="flex items-center gap-2">
-          <!-- …SVG… -->
-          猪名川パークプラザ教室
-        </strong>
-        <div class="text-sm md:text-base px-4 mt-1">
-          〒666-0251<br />
-          兵庫県川辺郡猪名川町若葉1-39-1<br />
-          パークプラザB棟2号室<br />
-          TEL <a class="text-blue-300 text-base" href="tel:0727686410">072-768-6410</a><br />
-          MAIL
-          <a class="text-blue-300 text-base" href="mailto:inagawa@oksemi.co.jp"
-             aria-label="ipsim 猪名川パークプラザ教室 メールアドレス">inagawa@oksemi.co.jp</a>
-        </div>
-        <div class="text-base md:text-lg px-4 flex items-center gap-1 mt-1">
-          <!-- …ピンSVG… -->
-          <a class="underline text-lime-400 hover:text-lime-500 transition"
-             href="https://maps.google.com/?q=34.8969108,135.3685999"
-             target="_blank" rel="noopener noreferrer">Googleマップで見る</a>
-        </div>
-      </li>
-    </ul>
+          <!-- 猪名川パークプラザ教室 -->
+          <li class="flex-1">
+            <strong class="flex items-center gap-2">
+              <!-- …SVG… -->
+              猪名川パークプラザ教室
+            </strong>
+            <div class="text-sm md:text-base px-4 mt-1">
+              〒666-0251<br />
+              兵庫県川辺郡猪名川町若葉1-39-1<br />
+              パークプラザB棟2号室<br />
+              TEL
+              <a class="text-blue-300 text-base" href="tel:0727686410"
+                >072-768-6410</a
+              ><br />
+              MAIL
+              <a
+                class="text-blue-300 text-base"
+                href="mailto:inagawa@oksemi.co.jp"
+                aria-label="ipsim 猪名川パークプラザ教室 メールアドレス"
+                >inagawa@oksemi.co.jp</a
+              >
+            </div>
+            <div class="text-base md:text-lg px-4 flex items-center gap-1 mt-1">
+              <!-- …ピンSVG… -->
+              <a
+                class="underline text-lime-400 hover:text-lime-500 transition"
+                href="https://maps.google.com/?q=34.8969108,135.3685999"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Googleマップで見る</a
+              >
+            </div>
+          </li>
+        </ul>
 
-    <!-- 岡村ゼミナール -->
-    <div class="px-4 mt-8 text-base md:text-lg">
-      岡村ゼミナール株式会社
-      <div class="text-sm md:text-base px-4">
-        〒670-0877<br />
-        兵庫県姫路市北八代1-7-2<br />
-        TEL <a class="text-blue-300 text-base" href="tel:0792840253">079-284-0253</a><br />
-        <a class="text-blue-300 text-base" href="https://oksemi.co.jp"
-           target="_blank" rel="noopener noreferrer">https://oksemi.co.jp</a>
+        <!-- 岡村ゼミナール -->
+        <div class="px-4 mt-8 text-base md:text-lg">
+          岡村ゼミナール株式会社
+          <div class="text-sm md:text-base px-4">
+            〒670-0877<br />
+            兵庫県姫路市北八代1-7-2<br />
+            TEL
+            <a class="text-blue-300 text-base" href="tel:0792840253"
+              >079-284-0253</a
+            ><br />
+            <a
+              class="text-blue-300 text-base"
+              href="https://oksemi.co.jp"
+              target="_blank"
+              rel="noopener noreferrer"
+              >https://oksemi.co.jp</a
+            >
+          </div>
+        </div>
+
+        <div class="text-xs md:text-sm mt-4 px-4 py-4">
+          LINEまたはメールにて お問い合わせください。
+        </div>
+
+        <small class="block text-center mt-4 text-sm mb-8">
+          © ipsim / OKAMURA Seminar. All rights reserved.
+        </small>
       </div>
-    </div>
-
-    <div class="text-xs md:text-sm mt-4 px-4 py-4">
-      LINEまたはメールにて お問い合わせください。
-    </div>
-
-    <small class="block text-center mt-4 text-sm mb-8">
-      © ipsim / OKAMURA Seminar. All rights reserved.
-    </small>
-  </div>
-</footer>
-<!-- #endregion footer -->
-
-    <!-- #region script Google Map 近づいたらロード開始 -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // 対象となるすべての地図iframeを取得
-        const iframes = document.querySelectorAll(
-          "#yamashita iframe, #inagawa iframe"
-        );
-        if (iframes.length === 0) return;
-
-        // 各iframeに遅延読み込み処理を設定
-        iframes.forEach((iframe) => {
-          const mapSrc = iframe.getAttribute("src");
-          iframe.removeAttribute("src");
-
-          const loadIframe = () => {
-            if (iframe.dataset.loaded === "1") return;
-            iframe.dataset.loaded = "1";
-            iframe.src = mapSrc;
-          };
-
-          // IntersectionObserver: 400px 手前で発火
-          if ("IntersectionObserver" in window) {
-            const io = new IntersectionObserver(
-              (entries, obs) => {
-                entries.forEach((entry) => {
-                  if (entry.isIntersecting) {
-                    loadIframe();
-                    obs.unobserve(entry.target);
-                  }
-                });
-              },
-              { root: null, rootMargin: "400px", threshold: 0.01 }
-            );
-            io.observe(iframe);
-          } else {
-            // 古いブラウザ用フォールバック
-            loadIframe();
-          }
-        });
-      });
-    </script>
-    <!-- #endregion script Google Map 近づいたらロード開始 -->
-
-    <!-- #region script 7つの理由 -->
-    <script>
-      (function () {
-        const root = document.getElementById("reasons");
-        const singleMode = root?.dataset.accordion === "single";
-        const items = document.querySelectorAll(".acc-item");
-
-        function closeAll(except = null) {
-          items.forEach((it) => {
-            if (it === except) return;
-            const btn = it.querySelector(".acc-trigger");
-            const panel = it.querySelector(".panel");
-            if (!btn || !panel) return;
-            btn.setAttribute("aria-expanded", "false");
-            panel.classList.remove("open");
-            panel.style.maxHeight = "0px";
-          });
-        }
-
-        items.forEach((it, idx) => {
-          const btn = it.querySelector(".acc-trigger");
-          const panel = it.querySelector(".panel");
-          if (!btn || !panel) return;
-
-          // ボタンを「疑似ボタン」ではなく標準ボタンとして扱う
-          btn.type = "button";
-
-          function toggle() {
-            const expanded = btn.getAttribute("aria-expanded") === "true";
-            if (singleMode && !expanded) {
-              closeAll(it);
-            }
-            if (expanded) {
-              btn.setAttribute("aria-expanded", "false");
-              panel.classList.remove("open");
-              panel.style.maxHeight = "0px";
-            } else {
-              btn.setAttribute("aria-expanded", "true");
-              panel.classList.add("open");
-              // コンテンツの実高さにアニメーションで広げる
-              panel.style.maxHeight = panel.scrollHeight + "px";
-            }
-          }
-
-          btn.addEventListener("click", toggle);
-
-          // キーボード対応（Enter/Space）
-          btn.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              toggle();
-            }
-          });
-
-          // 初期は閉じる（必要なら最初だけ開くなども可能）
-          btn.setAttribute("aria-expanded", "false");
-          panel.style.maxHeight = "0px";
-        });
-
-        // ウィンドウサイズが変わったら、開いているパネルのmax-heightを再計算
-        window.addEventListener("resize", () => {
-          document.querySelectorAll(".panel.open").forEach((panel) => {
-            panel.style.maxHeight = panel.scrollHeight + "px";
-          });
-        });
-      })();
-    </script>
-    <!-- #endregion script 7つの理由 -->
-
-    <!-- #region script fade-up アニメーション -->
-    <script>
-      (function () {
-        const els = document.querySelectorAll(".reveal");
-        const BASE_DURATION = 2000; // 初期値 1200, ここを 1500, 2000 に上げれば全体をさらにゆっくり
-
-        // <!-- 基本：全体は 1500ms でゆっくり -->
-        // <div class="reveal fade-up">ゆっくり出てくる要素A</div>
-        // <!-- さらにゆっくり（要素個別に 1800ms） -->
-        //<div class="reveal fade-up" data-duration="1800">もっとゆっくりB</div>
-        // <!-- スタッガー（300ms遅らせる） -->
-        // <div class="reveal fade-up" data-delay="300">少し遅れてC</div>
-        // <!-- 画像はズーム＋フェードでゆっくり -->
-        // <img class="reveal zoom-in" data-duration="1600" src="..." alt="" />
-
-        // 初期状態を付与
-        els.forEach((el) => {
-          // 個別指定（ms）: data-duration="1600", data-delay="300"
-          const dur = Number(el.dataset.duration) || BASE_DURATION;
-          const delay = Number(el.dataset.delay) || 0;
-
-          // 初期スタイル
-          el.classList.add(
-            "opacity-0",
-            "transition",
-            // transform / opacity / filter をまとめてトランジション
-            "will-change-[transform,opacity,filter]",
-            "ease-out"
-          );
-          // 時間と遅延を直接指定（Tailwindの任意プロパティ風でもOKだがJSの方が柔軟）
-          el.style.transitionDuration = dur + "ms";
-          el.style.transitionDelay = delay + "ms";
-
-          // 種類別の初期オフセット
-          if (el.classList.contains("fade-up"))
-            el.classList.add("translate-y-6");
-          // fade-in は透明だけでOK
-          if (el.classList.contains("slide-left"))
-            el.classList.add("-translate-x-6");
-          if (el.classList.contains("zoom-in")) el.classList.add("scale-95");
-          // rotate-x は環境によって効かないことがある点に注意
-          if (el.classList.contains("flip-up"))
-            el.classList.add("rotate-x-6", "origin-bottom");
-          if (el.classList.contains("blur-in")) el.classList.add("blur-sm");
-        });
-
-        // 画面に入ったらクラスを切り替え
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              const el = entry.target;
-
-              // 非表示側のクラスを除去
-              el.classList.remove(
-                "opacity-0",
-                "translate-y-6",
-                "-translate-x-6",
-                "scale-95",
-                "rotate-x-6",
-                "blur-sm"
-              );
-              // 表示側のクラスを付与
-              el.classList.add(
-                "opacity-100",
-                "translate-y-0",
-                "translate-x-0",
-                "scale-100",
-                "rotate-x-0",
-                "blur-0"
-              );
-
-              io.unobserve(el); // 一度きり
-            });
-          },
-          // ちょっと早めに発火させて“ゆっくり”を体感しやすく
-          { threshold: 0.12, rootMargin: "0px 0px -20% 0px" }
-        );
-
-        els.forEach((el) => io.observe(el));
-
-        // 動きが苦手なユーザーへの配慮
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          els.forEach((el) => {
-            el.classList.remove("transition");
-            el.style.transition = "none";
-          });
-        }
-      })();
-    </script>
-    <!-- #endregion script fade-up アニメーション -->
-    
-  <!-- #region button script トップへ戻る -->
-<!-- トップへ戻るボタン -->
-<button
-  id="backToTop"
-  class="opacity-0 pointer-events-none fixed left-4 
-         bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] 
-         z-50 bg-lime-500 text-white font-semibold rounded-full 
-         shadow-lg px-4 py-2 transition-opacity duration-500 
-         hover:bg-lime-600 focus-visible:outline focus-visible:outline-2 
-         focus-visible:outline-offset-2 focus-visible:outline-lime-500
-         sm:hidden"
->
-  ↑ トップへ
-</button>
-
-<script>
-  const topBtn = document.getElementById("backToTop");
-
-  function isSmallScreen() {
-    return window.matchMedia("(max-width: 767px)").matches; // sm以下
-  }
-
-  function toggleButton() {
-    if (!isSmallScreen()) {
-      // ✅ md以上なら常に非表示・非作動
-      topBtn.classList.add("opacity-0", "pointer-events-none");
-      return;
-    }
-
-    // ✅ sm以下のときのみ動作
-    if (window.scrollY > 4000) {
-      topBtn.classList.remove("opacity-0", "pointer-events-none");
-      topBtn.classList.add("opacity-100");
-    } else {
-      topBtn.classList.add("opacity-0", "pointer-events-none");
-      topBtn.classList.remove("opacity-100");
-    }
-  }
-
-  window.addEventListener("scroll", toggleButton);
-  window.addEventListener("resize", toggleButton); // ✅ 画面サイズ変更にも対応
-
-  topBtn.addEventListener("click", () => {
-    if (isSmallScreen()) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  });
-</script>
-<!-- #endregion button script トップへ戻る -->
-    
+    </footer>
+    <!-- #endregion footer -->
   </body>
 </html>
