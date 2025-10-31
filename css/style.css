@@ -1,0 +1,248 @@
+/* ===== Tailwind Custom ===== */
+@font-face {
+  font-family: "PresentAnthem";
+  src: url("./fonts/PresentAnthem-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.font-present {
+  font-family: "PresentAnthem", system-ui, sans-serif;
+}
+.text-shadow-lime {
+  text-shadow: 2px 2px 4px rgba(22, 163, 74, 0.6);
+}
+.text-shadow-gray {
+  text-shadow: 2px 2px 4px rgba(75, 85, 99, 0.6);
+}
+.text-shadow-red {
+  text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.6);
+}
+.text-shadow-blue {
+  text-shadow: 2px 2px 4px rgba(37, 99, 235, 0.6);
+}
+
+@layer base {
+  /* -----------------------------
+        h1 : ヒーロー
+    ----------------------------- */
+  h1 {
+    @apply text-2xl;
+    @apply text-lime-600;
+    @apply text-shadow-lime;
+    @apply font-extrabold;
+  }
+  /* -----------------------------
+        h2 : セクションタイトル
+    ----------------------------- */
+  h2 {
+    @apply text-xl;
+    @apply text-gray-900;
+    @apply text-shadow-gray;
+    @apply font-extrabold;
+  }
+  /* -----------------------------
+        h3 : カードタイトル
+    ----------------------------- */
+  h3 {
+    @apply text-lg;
+    @apply text-lime-600;
+    @apply text-shadow-lime;
+    @apply font-bold;
+  }
+  /* -----------------------------
+        h4 : セクション小見出し
+    ----------------------------- */
+  h4 {
+    @apply text-base;
+    @apply text-lime-600;
+    @apply text-shadow-lime;
+    @apply font-bold;
+  }
+  /* -----------------------------
+        h5 : 本文段落見出し
+    ----------------------------- */
+  h5 {
+    @apply text-sm;
+    @apply text-gray-600;
+    @apply text-shadow-gray;
+    @apply font-bold;
+  }
+  /* -----------------------------
+            h6 : 本文注釈
+    ----------------------------- */
+  h6 {
+    @apply text-xs;
+    @apply text-gray-500;
+  }
+  /* -----------------------------
+            article : 本文
+    ----------------------------- */
+  article {
+    @apply text-base;
+    @apply text-gray-700;
+    @apply font-medium;
+  }
+  /* -----------------------------
+            figure : 飾り文字
+    ----------------------------- */
+  figure {
+    @apply font-present;
+    @apply text-4xl;
+    @apply text-blue-400;
+  }
+
+  /* sm（640px〜） */
+  @screen sm {
+    h1 {
+      @apply text-3xl;
+    } /* 30px */
+    h2 {
+      @apply text-2xl;
+    } /* 24px */
+    h3 {
+      @apply text-xl;
+    } /* 20px */
+    h4 {
+      @apply text-lg;
+    } /* 18px */
+    h5 {
+      @apply text-base;
+    } /* 16px */
+    h6 {
+      @apply text-sm;
+    } /* 14px */
+    article {
+      @apply text-lg;
+    } /* 18px */
+    figure {
+      @apply text-5xl;
+    }
+  }
+
+  /* md（768px〜） */
+  @screen md {
+    h1 {
+      @apply text-4xl;
+    } /* 36px */
+    h2 {
+      @apply text-3xl;
+    } /* 30px */
+    h3 {
+      @apply text-2xl;
+    } /* 24px */
+    h4 {
+      @apply text-xl;
+    } /* 20px */
+    h5 {
+      @apply text-lg;
+    } /* 18px */
+    h6 {
+      @apply text-base;
+    } /* 16px */
+    article {
+      @apply text-xl;
+    } /* 20px */
+    figure {
+      @apply text-6xl;
+    }
+  }
+
+  /* lg（1024px〜） */
+  @screen lg {
+    h1 {
+      @apply text-5xl;
+    } /* 48px */
+    h2 {
+      @apply text-4xl;
+    } /* 36px */
+    h3 {
+      @apply text-3xl;
+    } /* 30px */
+    h4 {
+      @apply text-2xl;
+    } /* 24px */
+    h5 {
+      @apply text-xl;
+    } /* 20px */
+    h6 {
+      @apply text-lg;
+    } /* 18px */
+    article {
+      @apply text-xl;
+    } /* 20px */
+    figure {
+      @apply text-6xl;
+    }
+  }
+}
+
+/* 偏差値UP カード背景を黄グラデに統一 */
+@layer utilities {
+  .ex-card {
+    @apply rounded-xl shadow p-3 bg-gradient-to-b from-white to-yellow-100;
+  }
+}
+/* h1〜h6, article, figure の @apply 内容をそのまま記述してOK */
+
+/* ===== Google Map ===== */
+.map-shell {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.map-ratio {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  background: #f3f4f6;
+}
+.map-iframe,
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.map-cta {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.65rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.map-cta:active {
+  transform: translate(-50%, -50%) scale(0.98);
+}
+
+/* ===== タップミス軽減 ===== */
+.acc-trigger {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== Zoom Out Animation ===== */
+@keyframes zoomOutCover {
+  0% {
+    transform: scale(1.7);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-zoom-out-cover {
+  animation: zoomOutCover 20s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  transform-origin: center center;
+  will-change: transform;
+}
