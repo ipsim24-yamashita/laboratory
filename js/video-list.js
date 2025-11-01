@@ -11,7 +11,7 @@ async function loadVideos() {
 
       card.innerHTML = `
         <iframe src="${video.url}" class="w-full aspect-video" allowfullscreen></iframe>
-        <div class="p-4">
+        <div class="p-4 bg-gray-100">
           <h3 class="font-semibold text-lg text-gray-700">${video.title}</h3>
           <p class="text-sm text-gray-600">${video.grade}・${video.subject}</p>
         </div>
