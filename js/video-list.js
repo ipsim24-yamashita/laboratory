@@ -7,13 +7,13 @@ async function loadVideos() {
 
     videos.forEach((video) => {
       const card = document.createElement('div');
-      card.className = 'bg-gray-100 shadow rounded-xl overflow-hidden transition hover:shadow-lg';
+      card.className = 'bg-gray-200 shadow rounded-xl overflow-hidden transition hover:shadow-lg';
 
       card.innerHTML = `
         <iframe src="${video.url}" class="w-full aspect-video" allowfullscreen></iframe>
         <div class="p-4">
           <h3 class="font-semibold text-lg text-gray-700">${video.title}</h3>
-          <p class="text-sm text-gray-600">${video.grade}・${video.subject}</p>
+          <p class="text-sm text-gray-700">${video.grade}・${video.subject}</p>
         </div>
       `;
 
